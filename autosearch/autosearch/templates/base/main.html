@@ -1,0 +1,72 @@
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-language" content="lv" />
+        <meta name="title" content="" />
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta name="author" content="termi.lv" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        {% if config.debug %}
+            <link rel="stylesheet" type="text/css" media="all" href="/design/css/clever.css" />
+<!--            <link rel="stylesheet" type="text/css" media="all" href="/design/css/layout.css" />
+            <link rel="stylesheet" type="text/css" media="all" href="/design/css/style.css" />
+            <link rel="stylesheet" type="text/css" media="all" href="/design/css/content.css" />-->
+        {% else %}
+            <link rel="stylesheet" type="text/css" media="all" href="/design/css/m.css" />
+        {% endif %}
+        
+                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.3.0/mootools-yui-compressed.js"></script>
+		<script type="text/javascript" src="/design/js/mootools-more.js"></script>
+                <script type="text/javascript">
+                    //<!--
+                    Locale.define('lv-LV', 'Search', {
+                        'Download':'{{_('Download')}}',
+                        'Link':'{{_('Link')}}',
+                        'Something goes wrong':'{{_('Something goes wrong')}}',
+                        'Loading': '{{_('Loading')}}',
+                        'Loaded': '{{_('Loaded')}}',
+                        'Voice': '{{_('Voice')}}',
+                    });
+                    Locale.use('lv-LV');
+                    //-->
+                </script>
+        {% if config.debug %}
+            <script type="text/javascript" src="/design/js/DoubleSlider.js"></script>
+            <script type="text/javascript" src="/design/js/AdvancedList.js"></script>
+            <script type="text/javascript" src="/design/js/design.js"></script>
+        {% else %}
+            <script type="text/javascript" src="/design/js/m.js"></script>
+        {% endif %}
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="cont">
+            {% block content %}{% endblock %}
+            </div>
+        </div>
+        <div id="header">
+<!--                <h1><a href="/" title=""><img alt="" src="/design/image/logo-m.png" width="60" height="60" /></a></h1>-->
+            <ul id="menu">
+                <li><a href="/help" title="Palīdzība">Palīdzība</a></li>
+                <li><a href="/about" title="Par šo vietni">Par šo vietni</a></li>
+                <li><a href="/contacts" title="Kontakti">Kontakti</a></li>
+            </ul>
+
+        </div>
+        <div id="footer">
+            <div id="footer-wrap">
+                <div id="copyright">
+                    Dorbojās uz <a href="http://termi.lv">termi</a> atbolsta
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

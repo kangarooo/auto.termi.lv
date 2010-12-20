@@ -1,0 +1,71 @@
+{% extends "base/main.html" %}
+{% block content %}
+<!--<div id="search">
+    <form action="" method="get">
+        <input type="text" name="s" />
+        <button type="submit">Meklēt</button>
+    </form>
+    <small>Piemērs: BMW x5</small>
+</div>-->
+<div class="liquid">
+    <div class="liquid-wrap">
+        <div id="objects">
+            <ol>
+                <li>
+                    <h2>Bmw x5</h2>
+                    <ul>
+                        <li>Dzinējs: 4.5D</li>
+                        <li>Cena: 450Ls</li>
+                    </ul>
+                    <p>
+                        Neliels ievades teksts
+                    </p>
+                </li>
+            </ol>
+
+        </div>
+    </div>
+
+    <div class="l" id="filter">
+        <ol>
+            <li>
+                <span class="f-name">Mark:</span>
+<!--                <ul class="advanced-list">
+                    <li>
+                        <h3><a href="/bmw/">BMW</a>:</h3>
+                        <ul>
+                            <li><a href="/bmx5/">x5</a></li>
+                            <li><a href="/bmw/x7/">x7</a></li>
+                            <li><a href="/bmw/750/">750</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h3><a href="/mers/">Mercedes</a>:</h3>
+                        <ul>
+                            <li><a href="/mers/s300/">s300</a></li>
+                            <li><a href="/mers/s400/">s400</a></li>
+                            <li><a href="/mers/s600/">s600</a></li>
+                        </ul>
+                    </li>
+                </ul>-->
+            </li>
+            <li>
+                <span class="f-name">Engine</span>
+                <ul class="slider">
+                    <li class="min">0.2</li>
+                    <li class="max">10</li>
+                </ul>
+            </li>
+            <li>
+                <span class="f-name">engine type:</span>
+                <ul class="check">
+                    <li>diesel</li>
+                    <li>gaz</li>
+                    <li>fuel</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    <div class="cl"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,3 @@
+sudo -u postgres createuser -D -A -P auto.termi.lv
+QwErT
+sudo -u postgres createdb -O auto.termi.lv auto.termi.lv

@@ -1,0 +1,3 @@
+include autosearch/config/deployment.ini_tmpl
+recursive-include autosearch/public *
+recursive-include autosearch/templates *
