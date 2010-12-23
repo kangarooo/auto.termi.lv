@@ -27,6 +27,8 @@ setup(
     #        ('public/**', 'ignore', None)]},
     zip_safe=False,
     paster_plugins=['PasteScript', 'Pylons'],
+#    [paste.paster_command]
+#    parse = autosearch.commands.
     entry_points="""
     [paste.app_factory]
     main = autosearch.config.middleware:make_app

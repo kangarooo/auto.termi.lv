@@ -21,6 +21,9 @@ def make_map(config):
     # CUSTOM ROUTES HERE
 
     map.connect('/', controller='search', action='index')
+
+    map.connect('/s/*keyword', controller='search', action='search')
+
     map.connect('/about', controller='content', action='about')
     
 #    map.connect('/{controller}/{action}')

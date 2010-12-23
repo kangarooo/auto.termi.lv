@@ -3,7 +3,7 @@
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
     <head>
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}{% endblock %} {{c.keyword}}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="content-language" content="lv" />
         <meta name="title" content="" />
@@ -26,20 +26,33 @@
 		<script type="text/javascript" src="/design/js/mootools-more.js"></script>
                 <script type="text/javascript">
                     //<!--
+                    (function(){
+                        var u = new URI(window.location);
+                        var url = (u.get('directory')+u.get('file')).substr(1);
+                        if(url.substr(0, 2)=='s/'){
+                            u.set('directory', '')
+                            .set('file', '')
+                            .set('fragment', url)
+                            .go();
+                        }
+                    })();
                     Locale.define('lv-LV', 'Search', {
-                        'Download':'{{_('Download')}}',
-                        'Link':'{{_('Link')}}',
-                        'Something goes wrong':'{{_('Something goes wrong')}}',
-                        'Loading': '{{_('Loading')}}',
-                        'Loaded': '{{_('Loaded')}}',
-                        'Voice': '{{_('Voice')}}',
+                        'Download':'{{_("Download")}}',
+                        'Link':'{{_("Link")}}',
+                        'Something goes wrong':'{{_("Something goes wrong")}}',
+                        'Loading': '{{_("Loading")}}',
+                        'Loaded': '{{_("Loaded")}}',
+                        'Voice': '{{_("Voice")}}'
                     });
                     Locale.use('lv-LV');
                     //-->
                 </script>
         {% if config.debug %}
-            <script type="text/javascript" src="/design/js/DoubleSlider.js"></script>
+            <script type="text/javascript" src="/design/js/InlineSlider.js"></script>
             <script type="text/javascript" src="/design/js/AdvancedList.js"></script>
+            <script type="text/javascript" src="/design/js/HashListener.js"></script>
+            <script type="text/javascript" src="/design/js/HistoryManager.js"></script>
+            <script type="text/javascript" src="/design/js/UrlManager.js"></script>
             <script type="text/javascript" src="/design/js/design.js"></script>
         {% else %}
             <script type="text/javascript" src="/design/js/m.js"></script>
@@ -52,13 +65,14 @@
             </div>
         </div>
         <div id="header">
+            <div id="header-wrap">
 <!--                <h1><a href="/" title=""><img alt="" src="/design/image/logo-m.png" width="60" height="60" /></a></h1>-->
-            <ul id="menu">
-                <li><a href="/help" title="Palīdzība">Palīdzība</a></li>
-                <li><a href="/about" title="Par šo vietni">Par šo vietni</a></li>
-                <li><a href="/contacts" title="Kontakti">Kontakti</a></li>
-            </ul>
-
+                <ul id="menu">
+                    <li><a href="/help" title="Palīdzība">Palīdzība</a></li>
+                    <li><a href="/about" title="Par šo vietni">Par šo vietni</a></li>
+                    <li><a href="/contacts" title="Kontakti">Kontakti</a></li>
+                </ul>
+            </div>
         </div>
         <div id="footer">
             <div id="footer-wrap">
