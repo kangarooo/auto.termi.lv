@@ -2,20 +2,13 @@
 import os
 import sys
 PATH = os.path.realpath(os.path.dirname(sys.argv[0]))
+from HtmlParser import HtmlParser
 
 
 
-import re
-import lxml.html as l
-from lxml import etree
-from lxml.html.clean import Cleaner
-import codecs
-import difflib
+#import codecs
+#import difflib
 
-allowed_tags = ['html', 'head', 'body',
-    'a', 'img', 'b', 'strong',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-]
 #                m-(mark)
 #                y-(izlaiduma gads)
 #                c-(dzinēja tilpums)
@@ -48,11 +41,13 @@ search_params = {
 #    'model': {
 #        'words': ['modelis']
 #    },
-    'year': {
-        'words': ['izlaiduma gads', 'gads']
-    },
+#    'year': {
+#        'words': ['izlaiduma gads', 'gads'],
+#        'regex': [re.compile(u"[0-9]{4}", re.IGNORECASE)]
+#    },
 #    'capacity': {
-#        'words': [u'dzinēja tilpums', 'motors']
+#        'words': [u'dzinēja tilpums', 'motors'],
+#        'regex': [re.compile(u"[0-9]{0,2}[,.]{1}[0-9]{0,2}", re.IGNORECASE)]
 #    },
 #    'gear-box': {
 #        'words': [u'ātrumu kārba'],
@@ -63,7 +58,8 @@ search_params = {
 #        'possible': ['benzīns', 'dīzelis', 'gāze', 'hibrīds']
 #    },
 #    'mileage': {
-#        'words': ['nobraukums']
+#        'words': ['nobraukums'],
+#        'regex': [re.compile(u"[0-9 ]{2,12}[^0-9 ]+", re.IGNORECASE)]
 #    },
 #    'technical': {
 #        'words': [u'tehniskā apskate']
@@ -73,75 +69,53 @@ search_params = {
 #    },
 #    'price': {
 #        'words': ['cena'],
-#
+#        'regex': [re.compile(u"[0-9 ]{2,12}[^0-9 ]+", re.IGNORECASE)]
 #    },
 }
-cleaner = Cleaner(
-    scripts = True ,
-    javascript = True ,
-    comments = True ,
-    style = False ,
-    links = True ,
-    meta = False,
-    page_structure = None ,
-    processing_instructions = True ,
-    embedded = True ,
-    frames = True ,
-    forms = True ,
-#    annoying_tags = True ,
-#    remove_tags = None ,
-#    allow_tags = allowed_tags ,
-    remove_unknown_tags = False ,
-#    safe_attrs_only = True ,
-#    add_nofollow = False ,
 
-)
-importants = {
-    'title': 1,
-    'h1': 2,
-    'h2': 3,
-    'h3': 4,
-    'h4': 4,
-    'h5': 4,
-    'h6': 4,
-    'strong': 5,
-    'b': 5,
-}
-def match_string(w, match):
-    match_text = match.lower()
-    match_ratio = 0.7+ 0.1 * abs((len(match_text)-len(w))/float(len(match_text)+len(w)))
-    return difflib.SequenceMatcher(None, match_text, w).ratio()>match_ratio
 
 for file in ['ss', 'zip']:
     print file
     HTML_STR = open(PATH+'/'+file).read()
-    
-    s = l.document_fromstring(HTML_STR)
+    html = HtmlParser(HTML_STR)
+    print html.text
+    print '----------------------------------------------------------'
+#    print html.get(['izlaiduma gads', 'gads'], "[0-9]{4}")
+#    print html.get(['cena'], "[0-9 ]{2,12}[^0-9 ]+")
+    print html.get([u'ātrumu kārba', 'ātrumkārba'], {
+        'regex': '',
+        'possible': ['automāts', 'manuāla']
+    })
+#    for i in range(words_len):
+#        for p, params in search_params.items():
+#            for w in params['words']:
+#                if 'res' in search_params[p]:
+#                    continue
+#                search = []
+#                for j in range(len(w.split(' '))):
+#                    if words_len>i+j:
+#                        search.append(words[i+j].strip())
+#                if match_string(w, ' '.join(search)):
+#                    print ' '.join(search)+' <----> '+w
+#                    search = []
+#                    for z in range(4): #max 4 words search
+#                        if(words_len>z+i+j+1):
+#                            search.append(words[z+i+j+1].strip())
+#                            print ' '.join(search)
+#                            res = params['regex'][0].findall(' '.join(search))
+#                            if(res):
+#                                search_params[p]['res'] = res[0]
+#                                break
+#                break
+#    print 'PARSED VALUES'
+#    for p, params in search_params.items():
+#        if 'res' in params:
+#            print p+' ---- '+params['res']
+#        else:
+#            print p+' ---- '
 
-    for el in s.iter():
-        el.tail = ' '
-    
-    s = cleaner.clean_html(s)
-
-    texts = []
-    for el in s.iter():
-        if el.tag=='a' and el.get('rel')=='nofollow':
-            continue
-        if el.text and el.text.strip() != '':
-            important = el.tag=='head'
-            texts.append({
-                'text': el.text.strip(),
-                'important': importants[el.tag] if el.tag in importants.keys() else 0,
-            })
-    found_texts = len(texts)
-    for i in range(found_texts):
-        for p, params in search_params.items():
-            for w in params['words']:
-                if match_string(w, texts[i]['text']):
-                    print texts[i]['text']+' <----> '+w
-                    if (i+1 < found_texts):
-                        print texts[i+1]
 
 
-    out = l.tostring(s, encoding=unicode)
-    codecs.open(PATH+'/'+file+'-parse.html', encoding='utf-8', mode='w').write(out)
+
+#    out = l.tostring(s, encoding=unicode)
+#    codecs.open(PATH+'/'+file+'-parse.html', encoding='utf-8', mode='w').write(out)
