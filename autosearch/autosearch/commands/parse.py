@@ -3,7 +3,7 @@ import os
 import sys
 PATH = os.path.realpath(os.path.dirname(sys.argv[0]))
 from HtmlParser import HtmlParser
-
+from autosearch.model.meta import Session, Base
 
 
 #import codecs
@@ -75,16 +75,23 @@ search_params = {
 
 
 for file in ['ss', 'zip']:
+    continue
     print file
     HTML_STR = open(PATH+'/'+file).read()
     html = HtmlParser(HTML_STR)
     print html.text
     print '----------------------------------------------------------'
-#    print html.get(['izlaiduma gads', 'gads'], "[0-9]{4}")
-#    print html.get(['cena'], "[0-9 ]{2,12}[^0-9 ]+")
-    print html.get([u'ātrumu kārba', 'ātrumkārba'], {
-        'regex': '',
-        'possible': ['automāts', 'manuāla']
+    print html.get(['marka'], {
+        'possible': []
+    })
+    print html.get(['izlaiduma gads', 'gads'], {
+        'regex': "[0-9]{4}"
+    })
+    print html.get(['cena'], {
+        'regex': "[0-9 ]{2,12}[^0-9 ]+"
+    })
+    print html.get([u'ātrumu kārba', u'ātrumkārba'], {
+        'possible': [u'manuāla', u'automāts']
     })
 #    for i in range(words_len):
 #        for p, params in search_params.items():

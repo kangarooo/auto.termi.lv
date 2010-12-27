@@ -10,8 +10,8 @@ class Mark(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(100))
 
-    def __init__(self, name=''):
-        self.name = name
+#    def __init__(self, name=''):
+#        self.name = name
 
     def __repr__(self):
         return "<Mark('%s')" % self.name

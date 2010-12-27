@@ -219,6 +219,5 @@ pageTracker._trackPageview();
 } catch(err) {};
 </script>
 </div>
-<banana>ā</banana>
 </BODY>
 </HTML>
