@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import re
 import lxml.html
 #from lxml import etree
@@ -29,6 +30,8 @@ class HtmlParser:
         self.total_words = len(self.words)
 
     def get(self, possible, params):
+        if 'inTag' in params:
+            return self._match_in_tag(possible, params)
         for p in possible:
             p_words = len(p.split(' '))
             for i in range(self.total_words):
@@ -36,12 +39,30 @@ class HtmlParser:
                 for j in range(p_words):
                     if i+j<self.total_words:
                         search.append(self.words[i+j])
-#                print p+'-------------'+' '.join(search).lower()
+
                 if self._match_string(' '.join(search).lower(), p):
                     match = self._match_in_text(i+j+1, params)
-                    if match!=False:
+                    if match is not False:
                         return match
         return False
+
+    def _match_in_tag(self, possible, params):
+        found = False
+        for el in self.root.iter():
+            text = el.text_content().strip()
+            if text=='':
+                continue
+            if found:
+                return text
+            for pos in possible:
+                if self._match_string(text.lower(), pos):
+                    found = True
+                    continue
+            if 'before' in params:
+                if len(text.split(' '))>3+len(params['before'].split(' ')) or len(text)-1<=len(params['before']):
+                    continue
+                if text[:len(params['before'])].lower()==params['before'].lower():
+                    return text[len(params['before']):].strip()
 
     def _match_in_text(self, position, params):
         if 'regex' in params:
@@ -57,8 +78,12 @@ class HtmlParser:
                     return res.group(0)
             if 'possible' in params:
                 for j in range(len(params['possible'])):
-                    if self._match_string(search[-1].lower(), params['possible'][j]):
-                        return params['possible'][j]
+                    possible_len = len(params['possible'][j].split(' '))
+                    if(possible_len>=len(search)):
+                        continue
+                    if self._match_string(' '.join([search[-possible_len+y-1] for y in range(possible_len)]).lower(), params['possible'][j].lower()):
+#                        return params['possible'][j]
+                        return j
         return False
     
     def _match_string(self, w, match):
@@ -69,6 +94,10 @@ class HtmlParser:
     def _remove_special_chars(self, s):
         good = re.compile(u"([^a-z0-9āčēģīķļņūšžĀČĒĢĪĶĻŅŪŠŽ., €$])+", re.IGNORECASE)
         s = good.sub(' ', s)
+        s = s.replace('.', '. ')
+        s = s.replace(u'$', u'$ ')
+        s = s.replace(u'€', u'€ ')
+        s = s.replace(',', ', ')
         spaces = re.compile("\s+")
         s = spaces.sub(' ', s)
         words = s.split(' ')

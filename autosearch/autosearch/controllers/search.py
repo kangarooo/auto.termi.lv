@@ -13,12 +13,17 @@ log = logging.getLogger(__name__)
 #                m-(mark)
 #                y-(izlaiduma gads)
 #                c-(dzinēja tilpums)
-#                g-(ātrumkārba)
 #                f-(fuel)
+#               u-(ātrumi) - feature
+#                g-(ātrumkārba)
+#               d-(piedziņa) - feature
 #                k-(Nobraukums)
 #                t-(tehniskā)
 #                o-(virsbūves tips)
+#                l-(place) - feature
+#                r-(color) - feature
 #                p-(cena)
+
 class SearchController(BaseController):
 
     def index(self):

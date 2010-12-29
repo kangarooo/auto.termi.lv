@@ -1,14 +1,72 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+
 PATH = os.path.realpath(os.path.dirname(sys.argv[0]))
+
+sys.path.append(PATH+'/../..')
+
+from paste.deploy import appconfig 
+from autosearch.config.environment import load_environment
+
+conf     = appconfig('config:'+PATH+'/../../'+('development.ini' if 1<len(sys.argv) else 'production.ini'))
+load_environment(conf.global_conf, conf.local_conf)
+
+from autosearch.model.meta import Session
+from autosearch.model.mark import Mark
+from autosearch.model.auto import *
+
 from HtmlParser import HtmlParser
-from autosearch.model.meta import Session, Base
 
+marks = [mark.name for mark in Session.query(Mark).all()]
 
-#import codecs
-#import difflib
+#print [[auto.engine_type] for auto in Session.query(Auto).all()]
 
+SEARCH_VALUES = {
+    'Gasoline': u'benzīns',
+    'Diesel': u'dīzelis',
+    'Gas': u'gāze',
+    'Hybrid': u'hibrīds',
+
+    'SUV': u'Apvidus',
+    'Hatchback': u'Hečbeks',
+    'Cabriolet': u'Kabriolets',
+    'Coupe': u'Kupeja',
+    'Minibus': u'Mikroautobuss',
+    'Minivan': u'Minivens',
+    'Pickup': u'Pikaps',
+    'Sedan': u'Sedans',
+    'Universal': u'Universāls',
+
+    'Riga': u'Rīga',
+    'Riga dis.': u'Rīgas rajons',
+    'Jurmala': u'Jūrmala',
+    'Aizkraukle dis.': u'Aizkraukles rajons',
+    'Aluksne dis.': u'Alūksnes rajons',
+    'Balvi dis.': u'Balvu rajons',
+    'Bauska dis.': u'Bauskas rajons',
+    'Cesis dis.': u'Cēsu rajons',
+    'Daugavpils dis.': u'Daugavpils rajons',
+    'Dobele dis.': u'Dobeles rajons',
+    'Gulbene dis.': u'Gulbenes rajons',
+    'Jelgava dis.': u'Jelgavas rajons',
+    'Jekabpils dis.': u'Jēkabpils rajons',
+    'Kraslava dis.': u'Krāslavas rajons',
+    'Kuldiga dis.': u'Kuldīgas rajons',
+    'Liepaja dis.': u'Liepājas rajons',
+    'Limbazi dis.': u'Limbažu rajons',
+    'Ludza dis.': u'Ludzas rajons',
+    'Madona dis.': u'Madonas rajons',
+    'Ogre dis.': u'Ogres rajons',
+    'Preili dis.': u'Preiļu rajons',
+    'Rezekne dis.': u'Rēzeknes rajons',
+    'Saldus dis.': u'Saldus rajons',
+    'Talsi dis.': u'Talsu rajons',
+    'Tukums dis.': u'Tukuma rajons',
+    'Valka dis.': u'Valkas rajons',
+    'Valmiera dis.': u'Valmieras rajons',
+    'Ventspils dis.': u'Ventspils rajons',
+}
 #                m-(mark)
 #                y-(izlaiduma gads)
 #                c-(dzinēja tilpums)
@@ -34,92 +92,50 @@ dates = {
         '12': 'decembris',
     }
 }
-search_params = {
-#    'mark': {
-#        'words': ['marka']
-#    },
-#    'model': {
-#        'words': ['modelis']
-#    },
-#    'year': {
-#        'words': ['izlaiduma gads', 'gads'],
-#        'regex': [re.compile(u"[0-9]{4}", re.IGNORECASE)]
-#    },
-#    'capacity': {
-#        'words': [u'dzinēja tilpums', 'motors'],
-#        'regex': [re.compile(u"[0-9]{0,2}[,.]{1}[0-9]{0,2}", re.IGNORECASE)]
-#    },
-#    'gear-box': {
-#        'words': [u'ātrumu kārba'],
-#        'possible': ['automāts', 'manuāla']
-#    },
-#    'fuel': {
-#        'words': ['motors'],
-#        'possible': ['benzīns', 'dīzelis', 'gāze', 'hibrīds']
-#    },
-#    'mileage': {
-#        'words': ['nobraukums'],
-#        'regex': [re.compile(u"[0-9 ]{2,12}[^0-9 ]+", re.IGNORECASE)]
-#    },
-#    'technical': {
-#        'words': [u'tehniskā apskate']
-#    },
-#    'structure': {
-#        'words': [u'visrbūves tips']
-#    },
-#    'price': {
-#        'words': ['cena'],
-#        'regex': [re.compile(u"[0-9 ]{2,12}[^0-9 ]+", re.IGNORECASE)]
-#    },
-}
+
 
 
 for file in ['ss', 'zip']:
-    continue
+#    continue
     print file
     HTML_STR = open(PATH+'/'+file).read()
     html = HtmlParser(HTML_STR)
     print html.text
     print '----------------------------------------------------------'
-    print html.get(['marka'], {
-        'possible': []
+    mark = html.get(['marka'], {
+        'possible': marks
     })
-    print html.get(['izlaiduma gads', 'gads'], {
-        'regex': "[0-9]{4}"
+    print marks[mark]
+    print html.get(['modelis'], {
+        'inTag': True,
+        'before': marks[mark],
     })
-    print html.get(['cena'], {
-        'regex': "[0-9 ]{2,12}[^0-9 ]+"
-    })
+
+#    print html.get(['izlaiduma gads', 'gads'], {
+#        'regex': "[0-9]{4}"
+#    })
+#    print html.get([u'dzinēja tilpums', 'motors'], {
+#        'regex': "[0-9,. ]{2,5}[^0-9,. ]+"
+#    })
     print html.get([u'ātrumu kārba', u'ātrumkārba'], {
-        'possible': [u'manuāla', u'automāts']
+        'possible': [u'automāts', u'manuāla']
     })
-#    for i in range(words_len):
-#        for p, params in search_params.items():
-#            for w in params['words']:
-#                if 'res' in search_params[p]:
-#                    continue
-#                search = []
-#                for j in range(len(w.split(' '))):
-#                    if words_len>i+j:
-#                        search.append(words[i+j].strip())
-#                if match_string(w, ' '.join(search)):
-#                    print ' '.join(search)+' <----> '+w
-#                    search = []
-#                    for z in range(4): #max 4 words search
-#                        if(words_len>z+i+j+1):
-#                            search.append(words[z+i+j+1].strip())
-#                            print ' '.join(search)
-#                            res = params['regex'][0].findall(' '.join(search))
-#                            if(res):
-#                                search_params[p]['res'] = res[0]
-#                                break
-#                break
-#    print 'PARSED VALUES'
-#    for p, params in search_params.items():
-#        if 'res' in params:
-#            print p+' ---- '+params['res']
-#        else:
-#            print p+' ---- '
+#    print html.get([u'motors', u'degviela'], {
+#        'possible': [SEARCH_VALUES[d] for d in EngineType().values]
+#    })
+#    print html.get([u'nobraukums'], {
+#        'regex': '[0-9 ]{2,12}[^0-9 ]+'
+#    })
+#    print html.get([u'tehniskā apskate', u'tehniskā apskate līdz'], {
+#        'regex': '[0-9]{2}[ .,]{1,2}[0-9]{4}',
+#        'possible': [u'bez apskates', u'nav']
+#    })
+#    print html.get([u'visrbūves tips', u'virsbūve'], {
+#        'possible': [u'sedans', u'universāls']
+#    })
+    
+
+
 
 
 
