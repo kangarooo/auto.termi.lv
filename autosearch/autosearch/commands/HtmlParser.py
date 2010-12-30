@@ -28,9 +28,16 @@ class HtmlParser:
 #        for p in self.words:
 #            print p
         self.total_words = len(self.words)
+    
+    def get_image(self):
+        for el in self.root.iter():
+            if el.tag=='img' and el.getparent().tag=='a':
+                src = el.get('src')
+                href = el.getparent().get('href')
+                print href
 
     def get(self, possible, params):
-        if 'inTag' in params:
+        if 'in_tag' in params:
             return self._match_in_tag(possible, params)
         for p in possible:
             p_words = len(p.split(' '))
@@ -53,7 +60,10 @@ class HtmlParser:
             if text=='':
                 continue
             if found:
-                return text
+                return {
+                    'type': 'in_tag',
+                    'result': text,
+                }
             for pos in possible:
                 if self._match_string(text.lower(), pos):
                     found = True
@@ -62,7 +72,11 @@ class HtmlParser:
                 if len(text.split(' '))>3+len(params['before'].split(' ')) or len(text)-1<=len(params['before']):
                     continue
                 if text[:len(params['before'])].lower()==params['before'].lower():
-                    return text[len(params['before']):].strip()
+                    return {
+                        'type': 'in_tag',
+                        'result': text[len(params['before']):].strip(),
+                    }
+        return False
 
     def _match_in_text(self, position, params):
         if 'regex' in params:
@@ -73,17 +87,31 @@ class HtmlParser:
                 return False
             search.append(self.words[i])
             if 'regex' in params:
-                res = reg.search(' '.join(search).lower())
+                prelam = params['prelambda'] if 'prelambda' in params else lambda x: x
+                res = reg.search(prelam(' '.join(search).lower()))
                 if res:
-                    return res.group(0)
+                    lam = params['lambda'] if 'lambda' in params else lambda x: x
+                    return {
+                        'type': 'regex',
+                        'result': lam(res.group(params['group'] if 'group' in params else 0)),
+                        'match': ' '.join(search)
+                    }
             if 'possible' in params:
                 for j in range(len(params['possible'])):
-                    possible_len = len(params['possible'][j].split(' '))
-                    if(possible_len>=len(search)):
-                        continue
-                    if self._match_string(' '.join([search[-possible_len+y-1] for y in range(possible_len)]).lower(), params['possible'][j].lower()):
-#                        return params['possible'][j]
-                        return j
+                    if type(params['possible'][j]) is not list:
+                        params['possible'][j] = [params['possible'][j]]
+                    for x in range(len(params['possible'][j])):
+                        possible_len = len(params['possible'][j][x].split(' '))
+                        if(possible_len>=len(search)):
+                            continue
+                        create_string = ' '.join([search[-possible_len+y-1] for y in range(possible_len)])
+                        if self._match_string(create_string.lower(), params['possible'][j][x].lower()):
+    #                        return params['possible'][j]
+                            return {
+                                'type': 'possible',
+                                'result': j,
+                                'match': create_string,
+                            }
         return False
     
     def _match_string(self, w, match):
@@ -92,7 +120,7 @@ class HtmlParser:
         return difflib.SequenceMatcher(None, match_text, w).ratio()>match_ratio
 
     def _remove_special_chars(self, s):
-        good = re.compile(u"([^a-z0-9āčēģīķļņūšžĀČĒĢĪĶĻŅŪŠŽ., €$])+", re.IGNORECASE)
+        good = re.compile(u"([^a-z0-9āčēģīķļņūšžĀČĒĢĪĶĻŅŪŠŽабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ\-.,/ €$])+", re.IGNORECASE)
         s = good.sub(' ', s)
         s = s.replace('.', '. ')
         s = s.replace(u'$', u'$ ')
@@ -130,6 +158,8 @@ class HtmlParser:
         for el in self.root.iter():
             if el is not None and el.text:
                 el.text = el.text+' '
+            if el is not None and el.tail:
+                el.tail = el.tail+' '
 #        remove tags
         self.root = cleaner.clean_html(self.root)
         for el in self.root.iter():

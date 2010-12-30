@@ -9,7 +9,7 @@ from autosearch.model.meta import Base
 class EngineType(TypeDecorator):
 
     impl = SmallInteger
-    values = ['Gasoline', 'Diesel', 'Gas', 'Hybrid']
+    values = ['Gas', 'Gasoline', 'Diesel', 'Hybrid']
 
     def process_result_value(self, value, dialect):
         if value is not None:
@@ -66,7 +66,14 @@ class Color(TypeDecorator):
         if value is not None:
             return self.values[value]
 
+class Currency(TypeDecorator):
 
+    impl = SmallInteger
+    values = ['LVL', 'USD', 'EUR']
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            return self.values[value]
 
 #                url:
 #                m-(mark)
@@ -95,12 +102,13 @@ class Auto(Base):
     gearbox = Column(SmallInteger(2))                   #ātrumi
     gear_type = Column(GearType(1))                     #ātrumkārba
     drive_type = Column(DriveType(1))                   #piedziņa
-    milage = Column(Integer(12))                        #nobraukums
+    mileage = Column(Integer(12))                        #nobraukums
     tehpassport = Column(Date())                        #tehniskā
     car_type = Column(CarType(2))                       #virsbūves tips
     place = Column(Place(2))                            #vieta
     color = Column(Color(2))                            #krāsa
     price = Column(Float(precision=2))#billion          #cena
+    currency = Column(Currency(1))                      #valūta
     
     telephone = Column(String(32))                      #telefons
     url_id = Column(Integer, ForeignKey('url.id'))      #saite
