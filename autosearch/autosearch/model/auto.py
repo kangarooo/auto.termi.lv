@@ -9,7 +9,7 @@ from autosearch.model.meta import Base
 class EngineType(TypeDecorator):
 
     impl = SmallInteger
-    values = ['Gas', 'Gasoline', 'Diesel', 'Hybrid']
+    values = ['Gasoline', 'Gas', 'Diesel', 'Hybrid']
 
     def process_result_value(self, value, dialect):
         if value is not None:

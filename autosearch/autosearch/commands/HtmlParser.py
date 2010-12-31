@@ -18,9 +18,10 @@ class HtmlParser:
     root = ''
 #    parsed text
     text = ''
-    def __init__(self, html):
+    def __init__(self, html, base_href):
         self.html_str = html
         self.root = lxml.html.document_fromstring(self.html_str)
+        self.root.make_links_absolute(base_href)
         self._remove_tags()
         self.text = self._get_content()
         self.text = self._remove_special_chars(self.text)
@@ -30,11 +31,15 @@ class HtmlParser:
         self.total_words = len(self.words)
     
     def get_image(self):
+        hrefs = []
+        types = ('.jpg', 'jpeg', '.png')
         for el in self.root.iter():
             if el.tag=='img' and el.getparent().tag=='a':
                 src = el.get('src')
                 href = el.getparent().get('href')
-                print href
+                if href!= '' and len(href)>4 and href[-4:].lower() in types:
+                    hrefs.append(href)
+        return hrefs if len(hrefs)>0 else False
 
     def get(self, possible, params):
         if 'in_tag' in params:
