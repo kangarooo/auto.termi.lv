@@ -1,0 +1,62 @@
+{% extends "search/main.html" %}
+{% block car_list %}
+
+    <ol>
+        {% for auto in c.auto %}
+        <li>
+            <h2>
+                <a href="{{ auto.url }}">{{ auto.mark }} {{ auto.model }}</a>
+                <span class="added">{{ auto.added }}</span>
+            </h2>
+            {% if auto.image %}
+                 <div class="images">
+                    {% for i in auto.image %}
+                        <img src="{{ i.src }}" alt="{{ auto.mark }} {{ auto.model }}" />
+                    {% endfor %}
+                 </div>
+           {% endif %}
+           <ul class="params">
+               <li>
+                   <strong class="type">{{ _('Year') }}</strong>
+                   <span class="value">{{ auto.year }}</span>
+               </li>
+               <li>
+                   <strong class="type">{{ _('Price') }}</strong>
+                   <span class="value">{{ auto.price }} {{ auto.currency }}</span>
+               </li>
+               <li>
+                   <strong class="type">{{ _('Place') }}</strong>
+                   <span class="value">{{ auto.place }}</span>
+               </li>
+               <li>
+                   <strong class="type">{{ _('Tehpassport') }}</strong>
+                   <span class="value">{{ auto.tehpassport }}</span>
+               </li>
+           </ul>
+           <ul class="additional">
+               <li><a href="">http://ss.lv/voata/...car/</a></li>
+               <li><a href="12341234">http://zip.lv/?s=1234123</a></li>
+           </ul>
+        </li>
+        {% endfor %}
+<!--                <li>
+                    <h2>Bmw x5</h2>
+                    <ul>
+                        <li class="images">
+
+                        </li>
+                        <li>
+                            <span class="type">Dzinējs:</span>
+                            <span class="var">4.5 dīzelis</span>
+                        </li>
+                        <li>
+                            <span class="type"Cena:</span>
+                            <span class="var">450Ls</span>
+                        </li>
+                    </ul>
+                    <p>
+                        Neliels ievades teksts
+                    </p>
+                </li>-->
+            </ol>
+{% endblock %}

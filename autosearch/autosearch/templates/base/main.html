@@ -24,6 +24,8 @@
         
                 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.3.0/mootools-yui-compressed.js"></script>
 		<script type="text/javascript" src="/design/js/mootools-more.js"></script>
+		<script type="text/javascript" src="/design/js/Locale.lv-LV.js"></script>
+		<script type="text/javascript" src="/design/js/filter.js"></script>
                 <script type="text/javascript">
                     //<!--
                     (function(){
@@ -36,15 +38,6 @@
                             .go();
                         }
                     })();
-                    Locale.define('lv-LV', 'Search', {
-                        'Download':'{{_("Download")}}',
-                        'Link':'{{_("Link")}}',
-                        'Something goes wrong':'{{_("Something goes wrong")}}',
-                        'Loading': '{{_("Loading")}}',
-                        'Loaded': '{{_("Loaded")}}',
-                        'Voice': '{{_("Voice")}}'
-                    });
-                    Locale.use('lv-LV');
                     //-->
                 </script>
         {% if config.debug %}

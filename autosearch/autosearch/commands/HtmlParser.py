@@ -54,9 +54,9 @@ class HtmlParser:
 
                 if self._match_string(' '.join(search).lower(), p):
                     match = self._match_in_text(i+j+1, params)
-                    if match is not False:
+                    if match is not None:
                         return match
-        return False
+        return None
 
     def _match_in_tag(self, possible, params):
         found = False
@@ -81,7 +81,7 @@ class HtmlParser:
                         'type': 'in_tag',
                         'result': text[len(params['before']):].strip(),
                     }
-        return False
+        return None
 
     def _match_in_text(self, position, params):
         if 'regex' in params:
@@ -89,7 +89,7 @@ class HtmlParser:
         search = []
         for i in range(position, position+4):
             if not i<self.total_words:
-                return False
+                return None
             search.append(self.words[i])
             if 'regex' in params:
                 prelam = params['prelambda'] if 'prelambda' in params else lambda x: x
@@ -117,15 +117,16 @@ class HtmlParser:
                                 'result': j,
                                 'match': create_string,
                             }
-        return False
+        return None
     
     def _match_string(self, w, match):
         match_text = match.lower()
-        match_ratio = 0.7+ 0.1 * abs((len(match_text)-len(w))/float(len(match_text)+len(w)))
+        match_ratio = 0.75+ 0.3 * abs((len(match_text)-len(w))/float(len(match_text)+len(w)))
+#        print difflib.SequenceMatcher(None, match_text, w).ratio(), match_ratio
         return difflib.SequenceMatcher(None, match_text, w).ratio()>match_ratio
 
     def _remove_special_chars(self, s):
-        good = re.compile(u"([^a-z0-9āčēģīķļņūšžĀČĒĢĪĶĻŅŪŠŽабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ\-.,/ €$])+", re.IGNORECASE)
+        good = re.compile(u"([^a-z0-9āčēģīķļņūšžĀČĒĢĪĶĻŅŪŠŽабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ\-+.,/ €$])+", re.IGNORECASE)
         s = good.sub(' ', s)
         s = s.replace('.', '. ')
         s = s.replace(u'$', u'$ ')

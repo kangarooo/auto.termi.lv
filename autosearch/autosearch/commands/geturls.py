@@ -73,7 +73,7 @@ class Fetch:
     def parse_rss(self, url):
         parse = self.get_content(url)
         if parse['code'] is not 200:
-            self._console('error: '+parse['code']+parse['content'])
+            self._console('error: '+str(parse['code'])+parse['content'])
             return False
         rss = lxml.html.fromstring(parse['content'])
         for item in rss.xpath("./channel/item"):

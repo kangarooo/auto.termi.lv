@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Auto model"""
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import TypeDecorator, Integer, SmallInteger, Float, String, DateTime, Date
+from sqlalchemy.types import TypeDecorator, Boolean, Integer, SmallInteger, Float, String, DateTime, Date
 from sqlalchemy.orm import relation, backref
 
 from autosearch.model.meta import Base
@@ -103,6 +103,7 @@ class Auto(Base):
     gear_type = Column(GearType(1))                     #ātrumkārba
     drive_type = Column(DriveType(1))                   #piedziņa
     mileage = Column(Integer(12))                        #nobraukums
+    tehpassport_is = Column(Boolean())                  #tehniskā ir/nav
     tehpassport = Column(Date())                        #tehniskā
     car_type = Column(CarType(2))                       #virsbūves tips
     place = Column(Place(2))                            #vieta

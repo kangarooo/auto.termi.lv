@@ -10,36 +10,16 @@
 <div class="liquid">
     <div class="liquid-wrap">
         <div id="objects">
-            <ol>
-                <li>
-                    <h2>Bmw x5</h2>
-                    <ul>
-                        <li class="images">
-                            
-                        </li>
-                        <li>
-                            <span class="type">Dzinējs:</span>
-                            <span class="var">4.5 dīzelis</span>
-                        </li>
-                        <li>
-                            <span class="type"Cena:</span>
-                            <span class="var">450Ls</span>
-                        </li>
-                    </ul>
-                    <p>
-                        Neliels ievades teksts
-                    </p>
-                </li>
-            </ol>
-
+            {% block car_list %}{% endblock %}
+            
         </div>
     </div>
 
     <div class="l" id="filter">
-        <ol>
+        <ol style="display:none">
             <li class="url-m">
                 <span class="f-name">Modeļi</span>
-                <ul class="advanced-list">
+<!--                <ul class="advanced-list">
                     <li>
                         <h3><a href="/bmw/">BMW</a></h3>
                         <ul>
@@ -56,7 +36,7 @@
                             <li><a href="/mers/s600/">s600</a></li>
                         </ul>
                     </li>
-                </ul>
+                </ul>-->
             </li>
             <li class="url-y">
                 <span class="f-name">Izlaiduma gads</span>
@@ -130,9 +110,9 @@
                 </ul>
             </li>
         </ol>
-        <div id="search-button">
+<!--        <div id="search-button">
             Atlasīt <span>(20)</span>
-        </div>
+        </div>-->
     </div>
     <div class="cl"></div>
 </div>

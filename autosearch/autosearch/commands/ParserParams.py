@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import time
+import datetime
 
-from autosearch.model.auto import *
+from autosearch.model.auto import EngineType, GearType, DriveType, CarType, Place, Color, Currency
 
 SEARCH_VALUES = {
+
+    'Mercedes-Benz': [u'Mercedes-Benz', u'Mercedes'],
+
     'Gasoline': u'benzīns',
     'Diesel': u'dīzelis',
     'Gas': [u'benzīns/gāze', u'gāze'],
@@ -88,25 +91,26 @@ SEARCH_PARAMS = [{
                 'possible': [u'modelis'],
                 'params': {
                     'in_tag': True,
-                    'before': 'results[-1]["match"]'
                 },
-                'eval': 'params.before'
+                'eval': 'params.before',
+                'eval_string': 'results[-1]["match"]'
             }, {
                 'name': 'year',
                 'critical': False,
                 'possible': [u'izlaiduma gads', u'gads'],
                 'params': {
-                    'regex': "[0-9]{4}"
+                    'regex': "[0-9]{4}",
+                    'lambda': lambda x: datetime.datetime.strptime(x, '%Y').date(),
                 }
             }, {
                 'name': 'engine',
                 'critical': False,
                 'possible': [u'dzinēja tilpums', 'motors'],
                 'params': {
-                    'regex': "([0-9.]{2,4})[^0-9.]+",
+                    'regex': "([0-9]{1,2}[.]?[0-9]{0,2})[^0-9.]+",
                     'group': 1,
                     'prelambda': lambda x: x.replace(' ', '').replace(',', '.'),
-                    'lambda': lambda x: float(x),
+                    'lambda': lambda x: round(float(x), 2),
                 }
             }, {
                 'name': 'engine_type',
@@ -134,7 +138,7 @@ SEARCH_PARAMS = [{
             }, {
                 'name': 'drive_type',
                 'critical': False,
-                'possible': [u'piedziņa'],
+                'possible': [u'pilnpiedziņa', u'piedziņa'],
                 'params': {
                     'possible': [SEARCH_VALUES[d] for d in DriveType().values]
                 }
@@ -156,7 +160,7 @@ SEARCH_PARAMS = [{
                     'possible': [[u'bez apskates', u'nav']],
                     'regex': '[0-9]{2}[.]{1}[0-9]{4}',
                     'prelambda': lambda x: x.replace(' ', '').replace(',', '.').replace('/', '.'),
-                    'lambda': lambda x: time.strptime(x, '%m.%Y'),
+                    'lambda': lambda x: datetime.datetime.strptime(x, '%m.%Y').date(),
                 }
             }, {
                 'name': 'car_type',
