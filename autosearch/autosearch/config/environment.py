@@ -21,7 +21,7 @@ def load_environment(global_conf, app_conf):
     paths = dict(root=root,
                  controllers=os.path.join(root, 'controllers'),
                  static_files=os.path.join(root, 'public'),
-                 image_cache_files=os.path.join('c-img'),
+                 image_cache_files=os.path.join('i'),
                  templates=[os.path.join(root, 'templates')])
 
     # Initialize config with the basic options

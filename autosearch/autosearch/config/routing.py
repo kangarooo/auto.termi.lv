@@ -24,8 +24,10 @@ def make_map(config):
 
     map.connect('/search/params.{type}', controller='search', action='params', requirements=dict(type='json'))
     
-    map.connect('/s/*keyword', controller='search', action='search')
 
+    map.connect('/c/s/*keyword', controller='search', action='total')
+    map.connect('/s/*keyword', controller='search', action='search')
+    
     map.connect('/about', controller='content', action='about')
     
 #    map.connect('/{controller}/{action}')

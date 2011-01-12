@@ -22,13 +22,12 @@ setup(
     include_package_data=True,
     test_suite='nose.collector',
     package_data={'autosearch': ['i18n/*/LC_MESSAGES/*.mo']},
-    #message_extractors={'autosearch': [
-    #        ('**.py', 'python', None),
-    #        ('public/**', 'ignore', None)]},
+    message_extractors={'autosearch': [
+            ('**.py', 'python', None),
+            ('templates/**', 'jinja2', None),
+            ('public/**', 'ignore', None)]},
     zip_safe=False,
     paster_plugins=['PasteScript', 'Pylons'],
-#    [paste.paster_command]
-#    parse = autosearch.commands.
     entry_points="""
     [paste.app_factory]
     main = autosearch.config.middleware:make_app
