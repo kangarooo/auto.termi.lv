@@ -14,11 +14,11 @@ class Parser:
     _delimiter = []
     _variables = []
     
-    def __init__(self, delimiter = ['/', '-', ';', '(.*)\((.*)\)', ',']):
+    def __init__(self, variables, delimiter = ['/', '-', ';', '(.*)\((.*)\)', ',']):
+        self._variables = variables
         self._delimiter = delimiter
 
-    def parse_url(self, url, variables):
-        self._variables = variables
+    def parse_url(self, url):
         return self._extract_url(url)
 
     def _type_mark(self, variable, str, type):
@@ -49,7 +49,7 @@ class Parser:
                 'sub': sub
             })
         if len(ids)!=len(result):
-            raise UrlError(', '.join([type+'-'+str, 'not much all']))
+            raise UrlError(', '.join([type, 'not much all']))
         return ids if len(ids)>0 else None
                             
 
@@ -80,7 +80,9 @@ class Parser:
 
     def _type_chooser(self, variable, str, type):
         str_v = str.split(self._delimiter[2])
-        res = [variable.index(v) for v in variable for s in str_v if s.lower()==v.lower()]
+        res = []
+        [res.append(variable.index(v)) for v in variable for s in str_v if variable.index(v) not in res and s.lower()==v.lower()]
+
         if len(res)!=len(str_v):
             raise UrlError(', '.join([type+'-'+str, 'not much all']))
         return res

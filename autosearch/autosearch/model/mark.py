@@ -14,4 +14,4 @@ class Mark(Base):
 #        self.name = name
 
     def __repr__(self):
-        return "<Mark('%s')" % self.name
+        return ("<Mark('%s')" % self.name).encode('utf-8')

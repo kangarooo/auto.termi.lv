@@ -36,7 +36,7 @@ class TestParser(unittest.TestCase):
                 ]
             }
         ]
-
+        p = Parser(params)
         self.assertEquals([{
                     'url': 'm',
                     'value': [
@@ -44,7 +44,7 @@ class TestParser(unittest.TestCase):
                         {'main': 12, 'sub': [50, 52]}
                 ]
             }],
-            Parser().parse_url('m-BMW;Mercedes(s5,28)', params))
+            p.parse_url('m-BMW;Mercedes(s5,28)'))
 
         self.assertEquals([{
                     'url': 'm',
@@ -52,7 +52,7 @@ class TestParser(unittest.TestCase):
                         {'main': 10, 'sub': None},
                 ]
             }],
-            Parser().parse_url('m-BMW', params))
+            p.parse_url('m-BMW'))
 
         self.assertEquals([{
                     'url': 'm',
@@ -61,7 +61,7 @@ class TestParser(unittest.TestCase):
                         {'main': 12, 'sub': [52]}
                 ]
             }],
-            Parser().parse_url('m-BMW;Mercedes(28)', params))
+            p.parse_url('m-BMW;Mercedes(28)'))
             
         self.assertEquals([{
                     'url': 'm',
@@ -69,68 +69,97 @@ class TestParser(unittest.TestCase):
                         {'main': 12, 'sub': [50, 52]}
                 ]
             }],
-            Parser().parse_url('m-Mercedes(s5,28)', params))
+            p.parse_url('m-Mercedes(s5,28)'))
 
         self.assertRaises(UrlError,
-            Parser().parse_url('m-', params), 'm-, not much all')
+            p.parse_url, 'm-')
+
+        self.assertRaises(UrlError,
+            p.parse_url, 'm')
+
+#        test slider
+#        error test
+        self.assertRaises(UrlError,
+            p.parse_url, 't')
+
+        self.assertRaises(UrlError,
+            p.parse_url, 't-')
+
+        self.assertRaises(UrlError,
+            p.parse_url, 't--1-')
+
+        self.assertRaises(UrlError,
+            p.parse_url, 't-0-30')
+
+        self.assertRaises(UrlError,
+            p.parse_url, 't-5-4')
+
+#            other tests
+        self.assertEquals([{
+            'url': 't',
+            'value': {
+                'min': None,
+                'max': None
+            }
+        }],
+            p.parse_url('t-0-12'))
+
+        self.assertEquals([{
+            'url': 't',
+            'value': {
+                'min': None,
+                'max': None
+            }
+        }],
+            p.parse_url('t-0-'))
+
+        self.assertEquals([{
+            'url': 't',
+            'value': {
+                'min': None,
+                'max': None
+            }
+        }],
+            p.parse_url('t--12'))
+
+        self.assertEquals([{
+            'url': 't',
+            'value': {
+                'min': 1,
+                'max': None
+            }
+        }],
+            p.parse_url('t-1-12'))
+
+        self.assertEquals([{
+            'url': 't',
+            'value': {
+                'min': 1,
+                'max': 5
+            }
+        }],
+            p.parse_url('t-1-5'))
 
 
-#        for url in [
-##            marks tests
-#                {
-#                    'url': 'm-BMW;Mercedes(s5,28)',
-#                    'result': [
-#                            {
-#                                'url': 'm',
-#                                'value': [
-#                                    {'main': 10, 'sub': None},
-#                                    {'main': 12, 'sub': [50, 52]}
-#                                ]},
-#                ]},
-#                {
-#                    'url': 'm-BMW;Mercedes',
-#                    'result': [
-#                            {
-#                                'url': 'm',
-#                                'value': [
-#                                    {'main': 10, 'sub': None},
-#                                    {'main': 12, 'sub': None}
-#                                ]},
-#                ]},
-#                {
-#                    'url': 'm-Mercedes(28)',
-#                    'result': [
-#                            {
-#                                'url': 'm',
-#                                'value': [
-#                                    {'main': 12, 'sub': [52]}
-#                                ]},
-#                ]},
-##                slider tests
-#                {
-#                    'url': 't-1-5',
-#                    'result': [
-#                            {
-#                                'url': 't',
-#                                'value': {'min': 1, 'max': 5}
-#                            },
-#                ]},
-#                {
-#                    'url': 't-0-30',
-#                    'result': [
-#                            {
-#                                'url': 't',
-#                                'value': {'min': 0, 'max': None}
-#                            },
-#                ]},
-#                {
-#                    'url': 't-2-30',
-#                    'result': [
-#                            {
-#                                'url': 't',
-#                                'value': {'min': 2, 'min': 12}
-#                            },
-#                ]},
-#            ]:
-#            p = Parser()
-#            self.assertEquals(url['result'], p.parse_url(url['url'], params))
+#            chooser test
+        self.assertRaises(UrlError,
+            p.parse_url, 'f-')
+
+        self.assertRaises(UrlError,
+            p.parse_url, 'f-baf')
+
+        self.assertRaises(UrlError,
+            p.parse_url, 'f-ban;ban')
+
+        self.assertEquals([{
+            'url': 'f',
+            'value': [1]
+        }],
+            p.parse_url('f-ban2'))
+
+        self.assertEquals([{
+            'url': 'f',
+            'value': [0,1]
+        }],
+            p.parse_url('f-ban;ban2'))
+
