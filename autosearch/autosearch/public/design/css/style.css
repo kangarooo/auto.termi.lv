@@ -1,0 +1,284 @@
+#header ul, #header li:
+    $resetspace    
+#header ul:
+    list-style: none
+    padding: 0 $pageSitePadding
+    li:
+        float: left
+        margin-right: 20px
+        a:
+            font-size: 14px
+            line-height: $headerHeight
+/*footer*/
+#copyright:
+    padding: 0 $pageSitePadding
+    font-size: 12px
+    line-height: $footerHeight
+
+#filter:
+    margin-top: $pageSitePadding
+    border-right: 1px solid $colorBase2
+    ol:
+        $resetspace
+        list-style: none
+        padding: 0 $pageSitePadding
+        
+        >li:
+            position: relative
+            padding-bottom: $pageSitePadding/2
+            .f-name:
+                font-size: 16px
+                line-height: 1.5
+                font-weight: bold
+                display: block
+                
+
+/*filter*/
+#filter:
+    width: $navigationWidth
+
+.slider, .slider li:
+    $resetspace
+.slider:
+    list-style: none
+    width: $navigationWidth-$pageSitePadding*3
+    position: relative
+    background: $colorBase4
+    $borderRadiusSmall
+    margin-left: $pageSitePadding
+    height: 18px
+    li:
+        width: 10px
+        height: 18px
+    .max, .min:
+        position: absolute
+        width: 55px
+        top: 0
+        background: $colorBase2
+        color: #fff
+        $borderRadiusSmall
+        cursor: move
+        font-size: 14px
+        line-height: 18px
+        text-align: center
+    .dragging:
+        background: $colorBase3
+    .max:
+        margin-top: 0px
+    .decor:
+        position: absolute
+        top: 6px
+        background: $colorBase2
+        height: 6px
+/*chooser*/
+.chooser, chooser li:
+    $resetspace
+.chooser:
+    list-style: none
+    margin-left: $pageSitePadding
+    width: 100%
+    overflow: hidden
+    li:
+        float: left
+        width: 49%
+        font-size: 14px
+/*objects*/
+#objects:
+    margin-left: $navigationWidth
+
+.button:
+    width: 140px
+    padding: 10px
+    margin: $pageSitePadding auto
+    font-size: 20px
+    color: #fff
+    background-color: $colorBase1
+    $borderRadiusSmall
+    cursor: pointer
+    text-align: center
+    position:relative
+    &:hover:
+        background-color: $colorBase3
+    span:
+        color: #fff
+        
+    .loader:
+        position:absolute
+        top:0
+        left:0
+        width:100%
+        height:100%
+        $borderRadiusSmall
+        background: $colorBase4 url('img/loader.gif') no-repeat center center
+        display: none
+        cursor: default
+ 
+.button-next:
+    width: 300px
+ 
+ 
+.loading, .inactive:
+    &:hover:
+        background-color: $colorBase1
+ 
+ 
+.loading .loader:
+    display: block
+ 
+.inactive .loader:
+    background: $colorBase4
+    display: block
+
+
+   
+/*advanced list*/
+.active-decor:
+    background: $colorBase2
+    color: #fff
+    padding: 0 10px
+    font-size: 14px
+    margin-left: $pageSitePadding
+    $borderRadiusSmall
+    cursor: pointer
+    display: inline-block
+    &:hover:
+        background: $colorBase3
+    
+.filter:
+    display: none
+    position: absolute
+    top: 30px
+    left: 0
+    width: 700px
+    z-index: 999
+    background: #fff
+    $borderShadowOther
+    $borderRadiusSmall
+    border: 5px solid $colorBase1
+    padding: $pageSitePadding
+    margin: $pageSitePadding
+    ul, ul li:
+        $resetspace
+    ul:
+        list-style: none
+        width: 100%
+        overflow: hidden
+        li:
+            float: left
+            width: 33%
+            color: $colorBase1s
+
+            .adit:
+                font-size: 12px
+            .fil-name-sub:
+                cursor: pointer
+                color: $colorBase2
+                &:hover:
+                    text-decoration: underline
+            ul:
+                display: none
+                position: absolute
+                width: 400px
+                padding: $pageSitePadding
+                margin: 40px 0 0 -20px
+                border: 5px solid $colorBase3
+                background: #fff
+                $borderShadow
+                $borderRadiusSmall
+        .t-active:
+            color: $colorBase1
+        li.close:
+            position: absolute
+            top: 5px
+            right: 5px
+            width: 25px
+            height: 25px
+
+            line-height: 25px
+            font-size: 16px
+            font-weight: bold
+            text-align: center
+            text-transform: uppercase
+            cursor: pointer
+            color: #fff
+            background: $colorBase3
+            $borderRadiusNormal
+            &:hover:
+                background: $colorBase2
+
+
+#objects ol:
+    $resetspace
+    $fullwidth
+    list-style: none
+
+    >li:
+        float: left
+        margin: $pageSitePadding 0 0 $pageSitePadding
+        width: 350px
+        border: 1px solid $colorBase4
+        $borderRadiusSmall
+        
+        h2:
+            margin: $pageSitePadding/2
+            padding: 0
+            font-size: 22px
+            
+            .added:
+                font-size: 12px
+                font-weight: normal
+                display: block
+                
+        .images:
+            position: relative
+            float: left
+            width: 160px
+            height: 120px
+            
+            img:
+                display: none
+                margin-left: $pageSitePadding/2
+                
+                &:first-child:
+                    display: inline
+        ul.params:
+            list-style: none
+            $resetspace
+            float: left
+            width: 180px
+            margin-top: 0px
+            li:
+                margin: 0 $pageSitePadding/2
+                padding: 0
+                line-height: 1.2
+                font-size: 12px
+                
+                strong:
+                    color: $colorBase3
+                    margin-right: 5px
+                    font-weight: normal
+
+                
+               
+                    
+        ul.additional:
+            clear: both
+            list-style: none
+            margin: 0
+            padding: $pageSitePadding/2
+            li:
+                display: inline
+                margin-right: $pageSitePadding/2
+                
+                a:
+                    font-size: 11px
+                    
+                    
+
+                    
+
+
+
+
+            
+

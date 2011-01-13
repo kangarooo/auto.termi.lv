@@ -1,0 +1,51 @@
+html, body:
+    $resetspace
+    text-align: left
+    height: 100%
+    margin: 0
+    padding: 0
+    background: $colorBase4
+
+
+#wrap:
+    min-height: 100%
+    position: relative
+    top: auto
+    left: auto
+    $minMaxWidth
+    margin: 0 auto
+    background: #fff
+
+#cont:
+    padding: $headerHeight 0 $footerHeight 0
+    padding: 0 0 $pageSitePadding 0
+
+#header:
+    display: none
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    min-width: $pageMinWidth
+    height: $headerHeight
+    background:#fff
+    border-bottom: 1px solid $colorBase2
+    #header-wrap:
+        $minMaxWidth
+        margin: 0 auto
+    
+#footer:
+    display: none
+    margin: -$footerHeight 0 0 0
+    position: relative
+    height: $footerHeight
+    width: 100%
+    min-width: $pageMinWidth
+    background: $colorBase1
+    color: #fff
+    a:
+        color: #fff
+    #footer-wrap:
+        $minMaxWidth
+        margin: 0 auto
+    
