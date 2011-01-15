@@ -4,7 +4,7 @@ body:
         size: 16px
         family: arial
     line-height: 1.2
-    color: #333
+    color: $textColor
 .col:
     width: 100%
     overflow: hidden
@@ -35,4 +35,12 @@ a:
         outline: none
     &:visited:
         color: $colorBase1s
+p:
+    margin: 20px 0
+    padding: 0
+h1:
+    margin: 30px 0 20px 0
+    padding: 0
+    color: $colorBase1
+    font-size: 46px
 

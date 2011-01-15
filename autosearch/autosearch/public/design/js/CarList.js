@@ -62,6 +62,10 @@ var CarList = new Class({
                 }.bind(this)
             }
         }).inject(this.options.el);
+        this.buttonTxt = new Element('span').inject(this.button);
+        new Element('div', {'class': 'loader', 'styles': {
+            'opacity': .9
+        }}).inject(this.button);
         this.diactiveButton();
         this.params = this.options.params;
         this.rebild();
@@ -71,7 +75,7 @@ var CarList = new Class({
         });
         //params temlapte
         this.registerTemplate('param', function(data){
-            li(
+            li({'class': data['class']},
                 strong({'class': 'type'}, data['type']),
                 span({'class': 'value'}, data['value'])
             );
@@ -98,11 +102,18 @@ var CarList = new Class({
         });
     },
     diactiveButton: function(){
+        this.stopLoadingNext();
         this.button.setStyle('display', 'none');
     },
     activateNext: function(t){
         this.button.setStyle('display', 'block');
-        this.button.set('html', this.options.lang['next'].substitute({'total': t}));
+        this.buttonTxt.set('html', this.options.lang['next'].substitute({'total': t}));
+    },
+    loadingNext: function(){
+        this.button.addClass('loading');
+    },
+    stopLoadingNext: function(){
+        this.button.removeClass('loading');
     },
     rebild: function(){
         var ol = this.options.el.getElement('ol');
@@ -110,6 +121,13 @@ var CarList = new Class({
             ol.destroy();
         this.ol = new Element('ol').inject(this.options.el, 'top');
         return this.ol;
+    },
+    loading: function(){
+        this.options.el.addClass('car-list-loading');
+    },
+    stopLoading: function(){
+        this.stopLoadingNext();
+        this.options.el.removeClass('car-list-loading');
     },
     addObjects: function(data){
         this.render(data);
@@ -138,9 +156,11 @@ var CarList = new Class({
     renderParams: function(data){
         var render_data = [];
         this.params.each(function(p){
+            var res = this.prepareValue(p['value'], data);
             render_data.include({
                'type': p['name'],
-               'value': this.prepareValue(p['value'], data)
+               'value': res,
+               'class': res==this.options.lang['no value'] ? 'empty-value': ''
             });
         }.bind(this));
         return this.renderTemplate('param', render_data);
@@ -162,60 +182,69 @@ var CarList = new Class({
         return this.renderTemplate('url', render_data);
     },
     prepareValue: function(type, value){
+        var check = function(type, value){
+            if(value[type]&&value[type]!='None')
+                return true;
+            return false;
+        };
         var formatter = {
             'year': function(type, value){
-                if(!value[type])
-                    return this.options.lang['no value'];
-                return value[type];
+                if(check(type, value))
+                    return value[type];
+                return this.options.lang['no value'];
             }.bind(this),
             'engine': function(type, value){
-                if(!value[type])
-                    return this.options.lang['no value'];
-                return value[type].format({
-                    'decimal': ".",
-                    'decimals': 1
-                })+' '+value['engine_type'];
+                if(check(type, value))
+                    return value[type].format({
+                        'decimal': ".",
+                        'decimals': 1
+                    })+' '+value['engine_type'];
+                return this.options.lang['no value'];
             }.bind(this),
             'gearbox': function(type, value){
-                if(!value[type]&&!value['gear_type'])
-                    return this.options.lang['no value'];
-                if(value[type]&&!value['gear_type'])
+                if(check(type, value)&&check('gear_type', value))
+                    return value[type]+' '+value['gear_type'];
+                if(check(type, value))
                     return value[type]+' '+this.options.lang['gears'];
-                if(!value[type]&&value['gear_type'])
-                    return value['gear_type'];
-                return value[type]+' '+value['gear_type'];
+                if(check('gear_type', value))
+                    return this.options.lang['no value'];
+                return this.options.lang['no value'];
             }.bind(this),
             'mileage': function(type, value){
-                if(!value[type])
-                    return this.options.lang['no value'];
-                return value[type].format({
-                    'group': ' '
-                })+' km.';
+                if(check(type, value))
+                    return value[type].format({
+                        'group': ' ',
+                        'suffix': ' km'
+                    });
+                return this.options.lang['no value'];
             }.bind(this),
             'tehpassport': function(type, value){
                 if(value['tehpassport_is']===false)
                     return this.options.lang['none'];
-                if(value[type]){
+                if(check(type, value)){
                     var m = Date.parse(value[type]).diff(new Date(), 'month');
                     if(m>=0)
                         return this.options.lang['one month'];
                     m = -1*m;
-                    return m+' '+this.options.lang['months'.substr(m==1 ? -1 : 0)]
+                    return m+' '+this.options.lang['months'.substr(0, m==1 ? 5 : 6)]
                 }
                 return this.options.lang['no value'];
             }.bind(this),
+//            'car_type': function(type, value){
+//
+//            }.bind(this),
             'price': function(type, value){
-                if(!value[type])
-                    return this.options.lang['no value'];
-                return value[type].format({
-                    'decimal': ".",
-                    'group': ' ',
-                    'decimals': 0
-                })+' '+value['currency'];
+                if(check(type, value))
+                    return value[type].format({
+                        'decimal': ".",
+                        'group': ' ',
+                        'decimals': 0
+                    })+' '+value['currency'];
+                return this.options.lang['no value'];
             }
         }
         if(formatter[type])
             return formatter[type](type, value);
-        return value[type] ? value[type] : this.options.lang['no value'];
+        return check(type, value) ? value[type] : this.options.lang['no value'];
     }
 });

@@ -18,7 +18,7 @@ html, body:
 
 #cont:
     padding: $headerHeight 0 $footerHeight 0
-    padding: 0 0 $pageSitePadding 0
+    padding: 0 0 $pageSitePadding+$footerHeight 0
 
 #header:
     display: none
@@ -35,16 +35,16 @@ html, body:
         margin: 0 auto
     
 #footer:
-    display: none
     margin: -$footerHeight 0 0 0
+    border-top: 1px solid $colorBase2
     position: relative
     height: $footerHeight
     width: 100%
     min-width: $pageMinWidth
-    background: $colorBase1
-    color: #fff
+    background: #fff
+    color: $colorBase1
     a:
-        color: #fff
+        color: $colorBase1
     #footer-wrap:
         $minMaxWidth
         margin: 0 auto

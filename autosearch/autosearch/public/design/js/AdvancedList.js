@@ -229,9 +229,10 @@ var AdvancedList = new Class({
 
     checkUrl: function(){
         var newUrl = this.getActiveText();
-        if(this.url==undefined){
-            this.url = newUrl;
-        } else if (this.url!=newUrl) {
+//        if(this.url==undefined){
+//            this.url = newUrl;
+//        } else
+            if (this.url!=newUrl) {
             this.url = newUrl;
             this.fireEvent('change', newUrl);
             this.fireEvent('changeName', this.getActiveText(true));

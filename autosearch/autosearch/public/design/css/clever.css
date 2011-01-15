@@ -22,7 +22,7 @@ body {
 
 #cont {
   padding: 30px 0 20px 0;
-  padding: 0 0 20px 0;
+  padding: 0 0 40px 0;
 }
 
 #header {
@@ -44,18 +44,18 @@ body {
 }
 
 #footer {
-  display: none;
   margin: -20px 0 0 0;
+  border-top: 1px solid #039cd8;
   position: relative;
   height: 20px;
   width: 100%;
   min-width: 680px;
-  background: #03578b;
-  color: #ffffff;
+  background: #ffffff;
+  color: #03578b;
 }
 
 #footer a {
-  color: #ffffff;
+  color: #03578b;
 }
 
 #footer #footer-wrap {
@@ -83,6 +83,11 @@ body {
 #header ul li a {
   font-size: 14px;
   line-height: 30px;
+}
+
+#content {
+  font-size: 150%;
+  padding: 20px;
 }
 
 #copyright {
@@ -115,6 +120,10 @@ body {
   display: block;
 }
 
+#filter ol >li .clickable:hover {
+  cursor: pointer;
+}
+
 #filter {
   width: 300px;
 }
@@ -145,7 +154,7 @@ body {
 .slider .max,
 .slider .min {
   position: absolute;
-  width: 55px;
+  width: 40px;
   top: 0;
   background: #039cd8;
   color: #ffffff;
@@ -173,6 +182,16 @@ body {
   height: 6px;
 }
 
+.filter-item-k .slider .max,
+.filter-item-k .slider .min {
+  width: 70px;
+}
+
+.filter-item-p .slider .max,
+.filter-item-p .slider .min {
+  width: 60px;
+}
+
 .chooser,
 chooser li {
   margin: 0;
@@ -190,6 +209,12 @@ chooser li {
   float: left;
   width: 49%;
   font-size: 14px;
+  line-height: 1.4;
+}
+
+.chooser li input {
+  margin: -2px 5px 0 0;
+  vertical-align: middle;
 }
 
 #objects {
@@ -197,10 +222,11 @@ chooser li {
 }
 
 .button {
-  width: 140px;
-  padding: 10px;
+  width: 160px;
+  height: 50px;
   margin: 20px auto;
   font-size: 20px;
+  line-height: 50px;
   color: #ffffff;
   background-color: #03578b;
   -webkit-border-radius: 5px;
@@ -228,7 +254,7 @@ chooser li {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  background: #e9f1e3 url('img/loader.gif') no-repeat center center;
+  background: #e9f1e3 url('img/loader-bb.gif') no-repeat center center;
   display: none;
   cursor: default;
 }
@@ -361,6 +387,10 @@ chooser li {
   background: #039cd8;
 }
 
+#objects {
+  min-height: 200px;
+}
+
 #objects ol {
   margin: 0;
   padding: 0;
@@ -413,7 +443,7 @@ chooser li {
   padding: 0;
   float: left;
   width: 180px;
-  margin-top: 0px;
+  margin-top: -3px;
 }
 
 #objects ol >li ul.params li {
@@ -427,6 +457,14 @@ chooser li {
   color: #3b8b02;
   margin-right: 5px;
   font-weight: normal;
+}
+
+#objects ol >li ul.params .empty-value {
+  color: #dddddd;
+}
+
+#objects ol >li ul.params .empty-value strong {
+  color: #bfd8a6;
 }
 
 #objects ol >li ul.additional {
@@ -443,6 +481,25 @@ chooser li {
 
 #objects ol >li ul.additional li a {
   font-size: 11px;
+}
+
+.car-list-loading {
+  background: url('img/loader-car-long.gif') no-repeat center bottom;
+}
+
+#f-menu,
+#f-menu li {
+  margin: 0;
+  padding: 0;
+}
+
+#f-menu {
+  text-align: left;
+}
+
+#f-menu li {
+  display: inline;
+  margin: 0 20px;
 }
 
 body {
@@ -501,4 +558,16 @@ a:active {
 
 a:visited {
   color: #aec9da;
+}
+
+p {
+  margin: 20px 0;
+  padding: 0;
+}
+
+h1 {
+  margin: 30px 0 20px 0;
+  padding: 0;
+  color: #03578b;
+  font-size: 46px;
 }

@@ -9,6 +9,10 @@
         a:
             font-size: 14px
             line-height: $headerHeight
+
+#content:
+    font-size: 150%
+    padding: $pageSitePadding
 /*footer*/
 #copyright:
     padding: 0 $pageSitePadding
@@ -31,6 +35,9 @@
                 line-height: 1.5
                 font-weight: bold
                 display: block
+            .clickable:
+                &:hover:
+                    cursor: pointer
                 
 
 /*filter*/
@@ -52,7 +59,7 @@
         height: 18px
     .max, .min:
         position: absolute
-        width: 55px
+        width: 40px
         top: 0
         background: $colorBase2
         color: #fff
@@ -70,6 +77,15 @@
         top: 6px
         background: $colorBase2
         height: 6px
+/*small correction for elements*/
+.filter-item-k:
+    .slider:
+        .max, .min:
+            width: 70px
+.filter-item-p:
+    .slider:
+        .max, .min:
+            width: 60px
 /*chooser*/
 .chooser, chooser li:
     $resetspace
@@ -82,15 +98,20 @@
         float: left
         width: 49%
         font-size: 14px
+        line-height: 1.4
+        input:
+            margin: -2px 5px 0 0
+            vertical-align: middle
 /*objects*/
 #objects:
     margin-left: $navigationWidth
 
 .button:
-    width: 140px
-    padding: 10px
+    width: 160px
+    height: 50px
     margin: $pageSitePadding auto
     font-size: 20px
+    line-height: 50px
     color: #fff
     background-color: $colorBase1
     $borderRadiusSmall
@@ -109,7 +130,7 @@
         width:100%
         height:100%
         $borderRadiusSmall
-        background: $colorBase4 url('img/loader.gif') no-repeat center center
+        background: $colorBase4 url('img/loader-bb.gif') no-repeat center center
         display: none
         cursor: default
  
@@ -206,72 +227,88 @@
             &:hover:
                 background: $colorBase2
 
+#objects:
+    min-height: 200px
+    ol:
+        $resetspace
+        $fullwidth
+        list-style: none
 
-#objects ol:
-    $resetspace
-    $fullwidth
-    list-style: none
-
-    >li:
-        float: left
-        margin: $pageSitePadding 0 0 $pageSitePadding
-        width: 350px
-        border: 1px solid $colorBase4
-        $borderRadiusSmall
-        
-        h2:
-            margin: $pageSitePadding/2
-            padding: 0
-            font-size: 22px
-            
-            .added:
-                font-size: 12px
-                font-weight: normal
-                display: block
-                
-        .images:
-            position: relative
+        >li:
             float: left
-            width: 160px
-            height: 120px
+            margin: $pageSitePadding 0 0 $pageSitePadding
+            width: 350px
+            border: 1px solid $colorBase4
+            $borderRadiusSmall
             
-            img:
-                display: none
-                margin-left: $pageSitePadding/2
-                
-                &:first-child:
-                    display: inline
-        ul.params:
-            list-style: none
-            $resetspace
-            float: left
-            width: 180px
-            margin-top: 0px
-            li:
-                margin: 0 $pageSitePadding/2
+            h2:
+                margin: $pageSitePadding/2
                 padding: 0
-                line-height: 1.2
-                font-size: 12px
+                font-size: 22px
                 
-                strong:
-                    color: $colorBase3
-                    margin-right: 5px
+                .added:
+                    font-size: 12px
                     font-weight: normal
-
-                
-               
+                    display: block
                     
-        ul.additional:
-            clear: both
-            list-style: none
-            margin: 0
-            padding: $pageSitePadding/2
-            li:
-                display: inline
-                margin-right: $pageSitePadding/2
+            .images:
+                position: relative
+                float: left
+                width: 160px
+                height: 120px
                 
-                a:
-                    font-size: 11px
+                img:
+                    display: none
+                    margin-left: $pageSitePadding/2
+                    
+                    &:first-child:
+                        display: inline
+            ul.params:
+                list-style: none
+                $resetspace
+                float: left
+                width: 180px
+                margin-top: -3px
+                li:
+                    margin: 0 $pageSitePadding/2
+                    padding: 0
+                    line-height: 1.2
+                    font-size: 12px
+                    strong:
+                        color: $colorBase3
+                        margin-right: 5px
+                        font-weight: normal
+                .empty-value:
+                    color: $textColorInactive
+                    strong:
+                        color: $colorBase5
+                        
+
+                    
+                   
+                        
+            ul.additional:
+                clear: both
+                list-style: none
+                margin: 0
+                padding: $pageSitePadding/2
+                li:
+                    display: inline
+                    margin-right: $pageSitePadding/2
+                    
+                    a:
+                        font-size: 11px
+
+.car-list-loading:
+    background: url('img/loader-car-long.gif') no-repeat center bottom
+    
+#f-menu, #f-menu li:
+    $resetspace
+#f-menu:
+    text-align: left
+    li:
+        display: inline
+        margin: 0 $pageSitePadding
                     
                     
 

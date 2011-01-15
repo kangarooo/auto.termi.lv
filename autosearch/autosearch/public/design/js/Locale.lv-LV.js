@@ -32,7 +32,7 @@ Locale.define('lv-LV', 'Object', {
     'Next':'Nākamie {total} rezultāti',
     'None':'Nav',
     'Months':'mēneši',
-    'Month':'menesis',
+    'Month':'mēnesis',
     'Less the month':'Mazāk par mēnesi',
     'gears':'ātrumi',
 });

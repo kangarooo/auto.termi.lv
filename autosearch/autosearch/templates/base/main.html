@@ -33,7 +33,7 @@
                     (function(){
                         var u = new URI(window.location);
                         var url = (u.get('directory')+u.get('file')).substr(1);
-                        if(url.substr(0, 2)=='s/'&&url.substr(-4)!='json'){
+                        if(url.substr(0, 1)=='s'&&url.substr(-4)!='json'){
                             u.set('directory', '')
                             .set('file', '')
                             .set('fragment', url)
@@ -72,7 +72,10 @@
         <div id="footer">
             <div id="footer-wrap">
                 <div id="copyright">
-                    Dorbojās uz <a href="http://termi.lv">termi</a> atbolsta
+                    <ul id="f-menu">
+                        <li><a href="/feedback" title="{{_('Feedback')}}">{{_('Feedback')}}</a></li>
+                        <li><a href="/about" title="{{_('About')}}">{{_('About')}}</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

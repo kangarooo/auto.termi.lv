@@ -55,7 +55,7 @@ class Parser:
 
     def _type_slider(self, variable, str, type):
         try:
-            min, max = str.split(self._delimiter[1])
+            min, max = str.split(self._delimiter[1], 1)
         except ValueError:
             raise UrlError(', '.join([type+'-'+str, 'need 2 parametrs']))
         
@@ -63,8 +63,13 @@ class Parser:
             min=variable['min']
         if max=='':
             max=variable['max']
-        min = int(min)
-        max = int(max)
+        if 'type' in variable:
+            if variable['type']=='float':
+                min = float(min)
+                max = float(max)
+        else:
+            min = int(min)
+            max = int(max)
         if min>max:
             raise UrlError(', '.join([type+'-'+str, 'max less then min']))
         if max<min:

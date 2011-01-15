@@ -1,6 +1,6 @@
 window.addEvent('domready', function(){
     Locale.use('lv-LV');
-   
+    var window_scroll = new Fx.Scroll(window);
    
     var car_list = new CarList({
         'el': document.id('objects'),
@@ -23,23 +23,41 @@ window.addEvent('domready', function(){
             'months': Locale.get('Object.Months'),
             'month': Locale.get('Object.Month'),
             'one month': Locale.get('Object.Less the month'),
-            'gears': Locale.get('Object.gears'),
+            'gears': Locale.get('Object.gears')
         },
         onNext: function(n){
+            car_list.loadingNext();
             req.send('objects', {'url': '/next/'+n+(SU.lastUrl=='' ? '/s' : SU.lastUrl)+'.json'});
         }
     });
 //    //url manager
+    var req_delay = {
+        'objects_count': 0
+    };
     var SU = new UrlManager({
         'blank_page': '/design/html/blank.html',
 //        'currentHash': new URI(window.location).get('fragment'),
         'variables': ['m', 'y', 'c', 'f', 'g', 'k', 't', 'o', 'l', 'p'],
         'prefix': '/s/',
         onChange: function(d){
+            //lets leave this two line for lazy loading
+            window.clearTimeout(req_delay['objects_count']);
+            req.cancel('objects_count');
+            
+            filter.deactiveCount();
+            car_list.rebild();
+            car_list.diactiveButton();
+            car_list.loading();
+            window_scroll.toTop();
             req.send('objects', {'url': ''+(d=='' ? '/s' : d)+'.json'});
         },
         onNewHash: function(d){
-            req.send('objects_count', {'url': '/c'+(d=='' ? '/s' : d)+'.json'});
+            window.clearTimeout(req_delay['objects_count']);
+            req.cancel('objects_count');
+            filter.loading();
+            req_delay['objects_count'] = function(){
+                req.send('objects_count', {'url': '/c'+(d=='' ? '/s' : d)+'.json'});
+            }.delay(1000);
         }
     });
     var filter = new Filter({
@@ -55,6 +73,8 @@ window.addEvent('domready', function(){
         requests: {
             filter: new Request.JSON({
                 url: '/search/params.json',
+                method: 'get',
+                link: 'cancel',
                 onSuccess: function(f){
                     filter.draw({
                         'mark': {
@@ -126,9 +146,11 @@ window.addEvent('domready', function(){
                 }
             }),
             objects_count: new Request.JSON({
-                onRequest: function() {
-                    filter.loading();
-                },
+                method: 'get',
+//                link: 'cancel',
+//                onRequest: function() {
+////                    filter.loading();
+//                },
                 onSuccess: function(n){
                     filter.stopLoading();
                     if(n['error']){
@@ -143,11 +165,13 @@ window.addEvent('domready', function(){
                 
             }),
             objects: new Request.JSON({
-                onRequest: function(){
-                    car_list.rebild();
-                    car_list.diactiveButton();
-                },
+                method: 'get',
+//                link: 'cancel',
+//                onRequest: function(){
+//
+//                },
                 onSuccess: function(o){
+                    car_list.stopLoading();
                     if(o['error']){
                         
                     } else {
@@ -155,9 +179,11 @@ window.addEvent('domready', function(){
                             car_list.addObjects(o['auto']);
                             if(o['total']>12){
                                 car_list.activateNext(o['total']-12);
+                            } else {
+                                car_list.diactiveButton();
                             }
-                            filter.updateCount(o['total']);
-                            filter.deactiveCount();
+//                            filter.updateCount(o['total']);
+//                            filter.deactiveCount();
                         }
                     }
                 }

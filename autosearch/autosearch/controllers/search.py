@@ -5,6 +5,9 @@ import random
 
 import logging
 
+from dateutil.relativedelta import relativedelta
+from simplejson import dumps
+
 from pylons import request, response, session, tmpl_context as c, url
 from pylons import config
 from pylons.controllers.util import abort, redirect
@@ -21,8 +24,10 @@ from autosearch.model.mark import Mark
 
 from sqlalchemy import desc
 from sqlalchemy.orm import eagerload
+from sqlalchemy import and_, or_
 
-from simplejson import dumps
+
+
 
 log = logging.getLogger(__name__)
 
@@ -51,7 +56,7 @@ class SearchController(BaseController):
             .filter(Auto.added > datetime.date.today() - datetime.timedelta(7))
         self.mark_q = Session.query(Mark).options(eagerload('model'))
 
-    def index(self):
+    def index(self, keyword = None):
         # Return a rendered template
         #return render('/search.mako')
         # or, return a response
@@ -59,15 +64,17 @@ class SearchController(BaseController):
 #        c.auto = self._prepare_auto(self.auto_q.order_by(desc(Auto.added)).limit(20))
         return render('search/main.html')
 
-    def search(self, keyword):
-        if keyword[1:-5]=='':
+    def search(self, keyword=None):
+#        import time
+#        time.sleep(20)
+        if keyword is None or keyword[1:]=='':
             return dumps({
                 'total': self.auto_q.count(),
                 'auto': self._prepare_auto(self.auto_q.limit(12))
             })
 
         try:
-            params = self._parse_params(keyword[1:-5])
+            params = self._parse_params(keyword[1:])
         except UrlError as msg:
             return dumps({'error': 'UrlError', 'msg': msg})
 
@@ -80,17 +87,48 @@ class SearchController(BaseController):
         else:
             print '-------------------------------------------------'
             return dumps({
-                'o': False
+                'total': 0,
+                'auto': False
             })
 
-    def total(self, keyword):
-        if keyword[1:-5]=='':
+    def next(self, id, keyword=None):
+#        import time
+#        time.sleep(10)
+        if keyword is None or keyword[1:]=='':
+            query = self.auto_q.filter(Auto.id>id)
+            return dumps({
+                'total': query.count(),
+                'auto': self._prepare_auto(query.limit(12))
+            })
+
+        try:
+            params = self._parse_params(keyword[1:])
+        except UrlError as msg:
+            return dumps({'error': 'UrlError', 'msg': msg})
+
+        query = self._create_query(self.auto_q, params).filter(Auto.id>id)
+        if query:
+            return dumps({
+                'total': query.count(),
+                'auto': self._prepare_auto(query.limit(12))
+            })
+        else:
+            print '-------------------------------------------------'
+            return dumps({
+                'total': 0,
+                'auto': False
+            })
+
+    def total(self, keyword=None):
+#        import time
+#        time.sleep(3)
+        if keyword is None or keyword[1:]=='':
             return dumps({
                 't': self.auto_q.count()
             })
         
         try:
-            params = self._parse_params(keyword[1:-5])
+            params = self._parse_params(keyword[1:])
         except UrlError as msg:
             return dumps({'error': 'UrlError', 'msg': msg})
 
@@ -108,11 +146,44 @@ class SearchController(BaseController):
     def _create_query(self, query, params):
         par = dict([name, {
             'type': v['type'],
-            'value': p['value']
+            'value': p['value'],
+            'name': v['name']
         }] for name, v in self._params.iteritems() for p in params if p['url']==v['url'])
         for p, v in par.iteritems():
-            if v['type']=='chooser':
-                query = query.filter(getattr(Auto, 'place').in_(v['value']))
+            if v['type']=='mark':
+                query = query.join(Model).join(Mark)
+                filter = []
+                for sub in v['value']:
+                    if sub['sub']:
+                        filter.append(and_(Mark.id==sub['main'], Model.id.in_(sub['sub'])))
+                    else:
+                        filter.append(Mark.id==sub['main'])
+
+                query = query.filter(or_(*filter))
+            elif v['name']=='year':
+                if v['value']['min']:
+                    query = query.filter(getattr(Auto, v['name'])>=datetime.date(year=v['value']['min'], month=1, day=1))
+                if v['value']['max']:
+                    query = query.filter(getattr(Auto, v['name'])<=datetime.date(year=v['value']['max'], month=1, day=1))
+            elif v['name']=='tehpassport':
+#                tehpassport slider, this is important, so i put it here
+                if v['value']['min']:
+                    query = query.filter(Auto.tehpassport>=(datetime.date.today()+relativedelta(months=+v['value']['min'])))
+                    if v['value']['max']:
+                        query = query.filter(Auto.tehpassport<=(datetime.date.today()+relativedelta(months=+v['value']['max'])))
+                elif v['value']['max']==0:
+                    query = query.filter(Auto.tehpassport_is==False)
+                elif v['value']['max']:
+                    query = query.filter(or_(Auto.tehpassport_is==False, Auto.tehpassport<=(datetime.date.today()+relativedelta(months=+v['value']['max']))))
+
+            elif v['type']=='chooser':
+                query = query.filter(getattr(Auto, v['name']).in_(v['value']))
+                
+            elif v['type']=='slider':
+                if v['value']['min']:
+                    query = query.filter(getattr(Auto, v['name'])>=v['value']['min'])
+                if v['value']['max']:
+                    query = query.filter(getattr(Auto, v['name'])<=v['value']['max'])
         return query
             
 
@@ -121,7 +192,11 @@ class SearchController(BaseController):
         parse search params
         """
         self._load_params()
-        self._parser = Parser([v for name, v in self._params.iteritems()])
+        params = self._params
+        for i, p in enumerate(params['mark']['value']):
+            params['mark']['value'][i]['sub'] = p['models']
+            del params['mark']['value'][i]['models']
+        self._parser = Parser([v for name, v in params.iteritems()])
         return self._parser.parse_url(url)
 
     def params(self):
@@ -156,7 +231,8 @@ class SearchController(BaseController):
                     'type': 'slider',
                     'value': {
                         'min': .2,
-                        'max': 8
+                        'max': 8,
+                        'type': 'float'
                     },
                 },
                 'engine_type': {
@@ -176,8 +252,8 @@ class SearchController(BaseController):
                     'url': 'k',
                     'type': 'slider',
                     'value': {
-                        'min': 1000,
-                        'max': 100000
+                        'min': 10000,
+                        'max': 1000000
                     },
                 },
                 'tehpassport': {
@@ -186,7 +262,8 @@ class SearchController(BaseController):
                     'type': 'slider',
                     'value': {
                         'min': 0,
-                        'max': 12
+                        'max': 12,
+                        'min_str': _('none')
                     },
                 },
                 'car_type': {
@@ -207,12 +284,13 @@ class SearchController(BaseController):
                     'type': 'slider',
                     'value': {
                         'min': 100,
-                        'max': 10000
+                        'max': 15000
                     },
                 },
                 'currency': {
                     'name': 'currency',
                     'url': 'p',
+                    'type': 'select',
                     'value': [_(d) for d in Currency().values]
                 },
             }
@@ -220,6 +298,7 @@ class SearchController(BaseController):
     def _prepare_auto(self, auto):
         
         return [{
+            'id': a.id,
             'mark': a.model.mark.name,
             'model': a.model.name,
             'url': a.url.url,

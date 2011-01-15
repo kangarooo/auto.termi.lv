@@ -18,9 +18,17 @@ var Filter = new Class({
     draw: function(filter){
         var list = this.list;
         Object.each(filter, function(item, index){
-            var c = new Element('li').inject(list);
+            var c = new Element('li', {
+                'class': 'filter-item-'+item['url']
+            }).inject(list);
             var name = new Element('span', {'class': 'f-name', 'html': item['name']}).inject(c);
-            this[item['type']](c, item, this.options.SU);
+            var next = this[item['type']](c, item, this.options.SU);
+            if (['l', 'o'].contains(item['url']))
+                name.addClass('clickable').addEvents({
+                    'click': function(){
+                        next.get('reveal').toggle();
+                    }
+                }).fireEvent('click');
         }.bind(this));
         this.drawButton();
     },
@@ -33,7 +41,7 @@ var Filter = new Class({
         this.button_text = new Element('span', {'html': this.options.button}).inject(this.button);
         this.button_counter = new Element('span').inject(this.button);
         this.loader = new Element('div', {'class': 'loader', 'styles': {
-                'opacity': .8
+                'opacity': .9
             }
         }).inject(this.button);
     },
@@ -110,6 +118,7 @@ var Filter = new Class({
             advancedList.setActiveUrl('');
         });
         this.activateList(c);
+        return view;
     },
     slider: function(c, item, SU){
         var slider = new Element('ul', {'class': 'slider'}).inject(c);
@@ -121,11 +130,11 @@ var Filter = new Class({
         var url = '';
         var numberFormats = {
             'c': {
-                precision: -1
+                precision: 1
             },
             'k': {
                 group: ' ',
-                precision: -3,
+                precision: -4,
                 scientific: false
             },
             'p': {
@@ -173,6 +182,7 @@ var Filter = new Class({
             updateSum(minValue, maxValue, true);
         });
         this.activateList(c);
+        return slider;
     },
     chooser: function(c, item, SU){
         var allElements = [];
@@ -233,5 +243,6 @@ var Filter = new Class({
             c.fireEvent('mouseleave');
         });
         this.activateList(c);
+        return list;
     }
 });

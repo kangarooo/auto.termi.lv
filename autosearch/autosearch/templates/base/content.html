@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
+<!--
+    User Interface created http://puh.termi.lv
+-->
+    <head>
+        <title>{{c.title}}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-language" content="lv" />
+        <meta name="title" content="" />
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        {% if config['debug'] %}
+            <link rel="stylesheet" type="text/css" media="all" href="/design/css/clever.css" />
+        {% else %}
+            <link rel="stylesheet" type="text/css" media="all" href="/design/css/m.css" />
+        {% endif %}
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="cont">
+                <div id="content">
+                    <div id="back-button">&larr; <a href="/" title="{{_('Back to filter')}}">{{_('Back to filter')}}</a></div>
+                    <h1>{{c.title}}</h1>
+                    {{c.content}}
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div id="footer-wrap">
+                <div id="copyright">
+                    <ul id="f-menu">
+                        <li><a href="/feedback" title="{{_('Feedback')}}">{{_('Feedback')}}</a></li>
+                        <li><a href="/about" title="{{_('About')}}">{{_('About')}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
