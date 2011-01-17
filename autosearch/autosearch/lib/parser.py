@@ -14,7 +14,7 @@ class Parser:
     _delimiter = []
     _variables = []
     
-    def __init__(self, variables, delimiter = ['/', '-', ';', '(.*)\((.*)\)', ',']):
+    def __init__(self, variables, delimiter = ['/', '-', ';', '^([^(]+)\((.*?)\)$', ',']):
         self._variables = variables
         self._delimiter = delimiter
 

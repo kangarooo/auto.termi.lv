@@ -90,7 +90,7 @@ var CarList = new Class({
         this.registerTemplate('auto', function(auto) {
             li(
                 h2(
-                    a({ href: auto['url']}, auto['mark']+' '+auto['model']),
+                    a({ href: auto['url'], 'target': '_blank'}, auto['mark']+' '+auto['model']),
                     span({ 'class': 'added'}, auto['added'])
                 ),
                 auto['image'] ? div({'class': 'images'},
@@ -137,6 +137,7 @@ var CarList = new Class({
             auto['added'] = Date.parse(auto['added']).timeDiffInWords();
             auto['image'] = auto['image'] ? this.renderImages(auto) : false;
             auto['params'] = this.renderParams(auto);
+            auto['url'] = auto['urls'][0];
             auto['urls'] = this.renderUrl(auto['urls']);
             this.last_id = auto['id'];
             this.renderTemplate('auto', auto).inject(this.ol);
@@ -172,7 +173,7 @@ var CarList = new Class({
             u = new URI(p);
             end = u.get('directory')+u.get('file')+u.get('query')+u.get('fragment');
             if(end.length>25){
-                end = end.substr(1, 10)+'...'+end.substr(-8);
+                end = end.substr(1, 10)+'...'+end.substr(end.length-8);
             }
             render_data.include({
                'href': p,

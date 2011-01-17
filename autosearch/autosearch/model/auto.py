@@ -5,6 +5,7 @@ from sqlalchemy.types import TypeDecorator, Boolean, Integer, SmallInteger, Floa
 from sqlalchemy.orm import relation, backref
 
 from autosearch.model.meta import Base
+from autosearch.model.types import Currency
 
 class EngineType(TypeDecorator):
 
@@ -66,14 +67,14 @@ class Color(TypeDecorator):
         if value is not None:
             return self.values[value]
 
-class Currency(TypeDecorator):
-
-    impl = SmallInteger
-    values = ['LVL', 'USD', 'EUR']
-
-    def process_result_value(self, value, dialect):
-        if value is not None:
-            return self.values[value]
+#class Currency(TypeDecorator):
+#
+#    impl = SmallInteger
+#    values = ['LVL', 'USD', 'EUR']
+#
+#    def process_result_value(self, value, dialect):
+#        if value is not None:
+#            return self.values[value]
 
 #                url:
 #                m-(mark)
@@ -112,10 +113,10 @@ class Auto(Base):
     currency = Column(Currency(1))                      #valūta
     
     telephone = Column(String(32))                      #telefons
-    url_id = Column(Integer, ForeignKey('url.id'))      #saite
+#    url_id = Column(Integer, ForeignKey('url.id'))      #saite
 
     model = relation('Model', backref=backref('auto', order_by=id))
-    url = relation('Url', backref=backref('auto', order_by=id))
+#    url = relation('Url', backref=backref('auto', order_by=id))
 
 #    def __repr__(self):
 #        return "<Auto('%s')" % self.name

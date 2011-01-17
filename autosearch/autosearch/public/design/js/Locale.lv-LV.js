@@ -34,7 +34,23 @@ Locale.define('lv-LV', 'Object', {
     'Months':'mēneši',
     'Month':'mēnesis',
     'Less the month':'Mazāk par mēnesi',
-    'gears':'ātrumi',
+    'gears':'ātrumi'
+});
+Locale.define('lv-LV', 'Error', {
+    'Error': 'Notikusi nenovēršama kļūda!',
+    'Error simple text': 'Saņēmām <strong>{status}</strong> kļūdu,\n\
+        ja tas jums neko neizsaka, tad mēs iesakām atjaunot lapu\n\
+        (nospiežot pogu atjaunot - refresh),\n\
+         savādāk jūs varat novērot negaidītus rezultātus',
+    'Warning': 'Šī ir pagaidu versija!',
+    'Warning message': 'Pagaidu versijā var tikt novērotas kļūdas. Mes būsim ļoti pateicīgi,\n\
+    ja jūs atradīsiet laiku paziņot mums par šīm kļūdām un nepilnībām. Ka arī gaidam jūsu ieteikumus.<br />\n\
+    Sazināties ar mums var <a href="/feedback">šeit.</a>.',
+
+    'Browser error': 'Pārlūka problēma!',
+    'Browser error text': 'Diemžēl mums nācas secināt, ka mūsu lapa netiek\n\
+     atbalstīta uz jūsu pārlūka. Lai novērst šo problēmu, mēs iesakām\n\
+    sazināties ar datormeistaru.'
 });
 
 Locale.define('en-US', 'Date', {

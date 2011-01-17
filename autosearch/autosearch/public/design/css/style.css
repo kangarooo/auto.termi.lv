@@ -100,7 +100,7 @@
         font-size: 14px
         line-height: 1.4
         input:
-            margin: -2px 5px 0 0
+            margin: -2px 3px 0 2px
             vertical-align: middle
 /*objects*/
 #objects:
@@ -156,7 +156,7 @@
 .active-decor:
     background: $colorBase2
     color: #fff
-    padding: 0 10px
+    padding: 2px 10px
     font-size: 14px
     margin-left: $pageSitePadding
     $borderRadiusSmall
@@ -166,18 +166,16 @@
         background: $colorBase3
     
 .filter:
-    display: none
     position: absolute
-    top: 30px
-    left: 0
-    width: 700px
+    top: -1030px
+    left: 0px
+    width: 650px
     z-index: 999
     background: #fff
-    $borderShadowOther
-    $borderRadiusSmall
-    border: 5px solid $colorBase1
-    padding: $pageSitePadding
-    margin: $pageSitePadding
+
+    $borderRadiusNormal
+    border: 6px solid $colorBase1s
+    padding: $pageSitePadding/2
     ul, ul li:
         $resetspace
     ul:
@@ -187,27 +185,28 @@
         li:
             float: left
             width: 33%
-            color: $colorBase1s
+            color: $textColorInactive
 
             .adit:
                 font-size: 12px
             .fil-name-sub:
                 cursor: pointer
-                color: $colorBase2
+                color: $colorBase1s
                 &:hover:
                     text-decoration: underline
             ul:
-                display: none
                 position: absolute
                 width: 400px
                 padding: $pageSitePadding
-                margin: 40px 0 0 -20px
-                border: 5px solid $colorBase3
+                margin: 23px 0 0 -20px
+                border: 5px solid $colorBase5
                 background: #fff
-                $borderShadow
-                $borderRadiusSmall
+                
+                $borderRadiusNormal
         .t-active:
-            color: $colorBase1
+            color: $textColor
+            .fil-name-sub:
+                color: $colorBase1
         li.close:
             position: absolute
             top: 5px
@@ -227,6 +226,7 @@
             &:hover:
                 background: $colorBase2
 
+
 #objects:
     min-height: 200px
     ol:
@@ -238,13 +238,16 @@
             float: left
             margin: $pageSitePadding 0 0 $pageSitePadding
             width: 350px
+            height: 220px
             border: 1px solid $colorBase4
             $borderRadiusSmall
+            overflow: hidden
+            position: relative
             
             h2:
                 margin: $pageSitePadding/2
                 padding: 0
-                font-size: 22px
+                font-size: 24px
                 
                 .added:
                     font-size: 12px
@@ -256,6 +259,7 @@
                 float: left
                 width: 160px
                 height: 120px
+                overflow: hidden
                 
                 img:
                     display: none
@@ -288,28 +292,107 @@
                    
                         
             ul.additional:
-                clear: both
+                position: absolute
+                left: 0
+                bottom: 0
+                width: 100%
                 list-style: none
                 margin: 0
                 padding: $pageSitePadding/2
                 li:
                     display: inline
-                    margin-right: $pageSitePadding/2
+                    padding: 0
+                    margin: 0 $pageSitePadding/2 0 0
                     
                     a:
                         font-size: 11px
 
+.popup-window:
+    position: absolute
+    z-index: 1000
+    top: 0
+    left: 0
+    $borderRadiusNormal
+    border: 10px solid $colorBase1s
+    width: 600px
+    .popup-window-content:
+        background: #fff
+        padding: $pageSitePadding
+        h2:
+            margin: $pageSitePadding
+            padding: 0
+        p:
+            margin: $pageSitePadding
+            padding: 0
+        form:
+            margin: 0
+            padding: 0
+            label:
+                display: block
+                margin: $pageSitePadding/2
+                padding: 0
+                span:
+                    display:block
+                    float:left
+                    width:100px
+                input, textarea:
+                    margin: 0 0 0 $pageSitePadding/2
+                    width: 300px
+                textarea:
+                    height: 100px
+    .popup-window-close:
+        position: absolute
+        top: 5px
+        right: 5px
+        width: 25px
+        height: 25px
+
+        line-height: 25px
+        font-size: 16px
+        font-weight: bold
+        text-align: center
+        text-transform: uppercase
+        cursor: pointer
+        color: #fff
+        background: $colorBase3
+        $borderRadiusNormal
+        &:hover:
+            background: $colorBase2
+
 .car-list-loading:
     background: url('img/loader-car-long.gif') no-repeat center bottom
+    
+.spinner, .mask:
+	position: absolute
+	$opacityHalf
+	z-index: 999
+	background: $colorBase4
+.spinner:
+    $borderRadiusNormal
+    z-index: 1010
+.spinner-msg:
+	text-align: center
+	font-weight: bold
+.spinner-img:
+	background: url('img/loader-car-long.gif') no-repeat
+	width: 216px
+	height: 27px
+	margin: 0 auto
+
     
 #f-menu, #f-menu li:
     $resetspace
 #f-menu:
     text-align: left
+    width: 30%
+    float: left
     li:
         display: inline
         margin: 0 $pageSitePadding
-                    
+#f-other:
+    width: 20%
+    float: right
+    text-align: right 
                     
 
                     

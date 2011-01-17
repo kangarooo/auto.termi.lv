@@ -20,7 +20,7 @@ var UrlManager = new Class({
         var url = [];
         this.options.variables.each(function(v){
             if(d[v])
-                url.include(v+'-'+d[v]);
+                url.include(v+'-'+encodeURIComponent(d[v]));
         });
         return url.length>0 ? this.options.prefix+url.join('/') : '';
     },
@@ -32,7 +32,7 @@ var UrlManager = new Class({
         d.split('/').each(function(url){
             var v = url.split('-', 2);
             if(v.length>1)
-                obj[v[0]] = url.substr(v[0].length+1);
+                obj[v[0]] = decodeURIComponent(url.substr(v[0].length+1));
             else
                 obj[url] = '';
         });

@@ -1,0 +1,24 @@
+Models remove () from parents
+Remove Citi, cita, citas from models
+(done)create year convertation on server
+(done)tehpassport, create None value.
+(done)tehpassport, make to date convertation
+
+(done)Car type, Place hide from main filter values (maybe)
+(done)for empty values in object make less tone
+(done)Price filter, correct with currency
+
+Make tips on some filters (future)
+
+Show fresh objects of filter (future)
+
+(skip)create about 
+(skip)create send form if popup
+
+(done)create footer with links
+
+(party)test on other browsers, test on fucking browsers
+
+(party)translate all strings to latvian and russian
+(done)make relation to urls, leave possible to create results relative to many urls
+(done)library to fetch new currency

@@ -1,7 +1,44 @@
 window.addEvent('domready', function(){
     Locale.use('lv-LV');
     var window_scroll = new Fx.Scroll(window);
-   
+    var popup = new Popup({
+//        'onFeedback': function(form){
+//            console.info(form);
+//            req.send('feedback', {
+//                'url': form.get('action'),
+////                'data': {
+////                    'name': form.getElement('input').get('value'),
+////                    'text': form.getElement('textarea').get('value')
+////                }
+//            });
+//        }
+    });
+    $$('a').each(function(a){
+        if(a.get('href')=='#wrap')
+            a.addEvent('click', function(){
+                window_scroll.toTop();
+                return false;
+            });
+    });
+    var showError = function(xhr){
+        popup.showText(Locale.get('Error.Error'), Locale.get('Error.Error simple text').substitute({'status': xhr.status}));
+    }
+//    popup.showText('Kļūda', 'Notikusi nenovēršama kļūda, mēs atvainojamies par neērtībām - atjaunojiet lūdzu mājaslapu');
+    
+//    (function(){
+//        $$('a.json').each(function(el){
+//            var href = el.get('href');
+//            el.addEvent('click', function(e){
+////                e.stop();
+//                popup.showFeedback('Pievieno savu atsauksmi!',
+//                'Ja tev ir idejas, ieteikumi tad raksti mums',
+//                href+'.json');
+////                req.send('content', {'url': href+'.json'});
+//                return false;
+//            });
+//        });
+//    })();
+//    return;
     var car_list = new CarList({
         'el': document.id('objects'),
         'params': [
@@ -14,7 +51,7 @@ window.addEvent('domready', function(){
             {'name': Locale.get('Object.'+'Car type'), 'value': 'car_type'},
             {'name': Locale.get('Object.'+'Place'), 'value': 'place'},
 //            {'name': Locale.get('Object.'+'Color'), 'value': 'color'},
-            {'name': Locale.get('Object.'+'Price'), 'value': 'price'},
+            {'name': Locale.get('Object.'+'Price'), 'value': 'price'}
         ],
         'lang': {
             'no value': '-',
@@ -74,7 +111,9 @@ window.addEvent('domready', function(){
             filter: new Request.JSON({
                 url: '/search/params.json',
                 method: 'get',
+                noCache: true,
                 link: 'cancel',
+                onFailure: showError,
                 onSuccess: function(f){
                     filter.draw({
                         'mark': {
@@ -147,10 +186,12 @@ window.addEvent('domready', function(){
             }),
             objects_count: new Request.JSON({
                 method: 'get',
+                noCache: true,
 //                link: 'cancel',
 //                onRequest: function() {
 ////                    filter.loading();
 //                },
+                onFailure: showError,
                 onSuccess: function(n){
                     filter.stopLoading();
                     if(n['error']){
@@ -166,10 +207,12 @@ window.addEvent('domready', function(){
             }),
             objects: new Request.JSON({
                 method: 'get',
+                noCache: true,
 //                link: 'cancel',
 //                onRequest: function(){
 //
 //                },
+                onFailure: showError,
                 onSuccess: function(o){
                     car_list.stopLoading();
                     if(o['error']){
@@ -188,6 +231,16 @@ window.addEvent('domready', function(){
                     }
                 }
             })
+//            feedback: new Request.JSON({
+//                method: 'post',
+////                link: 'cancel',
+//                onRequest: function(){
+//                    popup.popupSpinner();
+//                },
+//                onSuccess: function(o){
+//                    popup.hide();
+//                }
+//            })
         }
     });
     req.send('filter');
@@ -210,4 +263,9 @@ window.addEvent('domready', function(){
 //
 //        }).fireEvent('mouseleave');
 //    });
+    //ie6 patchs
+    (function(){
+        if(Browser.ie6)
+            popup.showText(Locale.get('Error.Browser error'), Locale.get('Error.Browser error text'));
+    })();
 });

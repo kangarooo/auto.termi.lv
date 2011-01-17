@@ -40,11 +40,11 @@ var AdvancedList = new Class({
 //                'top': pos.y,
 //                'left': pos.x
 //            }
-        }).inject('cont');
+        }).inject('cont');//.set('morph', {transition: Fx.Transitions.Back.easeOut});
         new Drag(this.content);
         var mark_intro = this.drawListIntro(this.content, this.content);
         this.mark_intro = mark_intro;
-        mark_intro['all_input'].set('checked', 'checked').addEvent('change', function(){
+        mark_intro['all_input'].set('checked', 'checked').addEvent('click', function(){
             if(mark_intro['all_input'].get('checked')){
                 this.disableMarks();
             } else {
@@ -64,16 +64,19 @@ var AdvancedList = new Class({
                 mark['models'].each(function(model, j){
                     var model_content = this.drawListContent(model_intro['ul'], model['name']);
                     this.menu[i]['models'][j]['content'] = model_content;
-                    model_content['input'].addEvent('change', function(){
+                    model_content['input'].addEvent('click', function(){
                         this.modelStatus(i, j, model_content['input'].get('checked'));
                         this.checkUrl();
                     }.bind(this));
                 }.bind(this));
                 mark_content['text'].addClass('fil-name-sub').addEvent('click', function(){
-                    model_intro['ul'].toggle();
+//                    model_intro['ul'].reveal();
+                    model_intro['ul'].setStyle('display', 'block').morph({
+                        'top': model_intro['ul'].startPosition
+                    });
                 }.bind(this));
                 //pressed model all button
-                model_intro['all_input'].addEvent('change', function(){
+                model_intro['all_input'].addEvent('click', function(){
                     if(model_intro['all_input'].get('checked')){
                         this.disableModels(i);
                         this.markStatus(i, true);
@@ -83,19 +86,33 @@ var AdvancedList = new Class({
                     this.checkUrl();
                 }.bind(this));
             }
-            mark_content['input'].addEvent('change', function(){
+            mark_content['input'].addEvent('click', function(){
                 this.markStatus(i, mark_content['input'].get('checked'));
                 this.checkUrl();
             }.bind(this));
         }.bind(this));
     },
     drawListIntro: function(el, hide){
-        var ul = new Element('ul').inject(el)
-            .setStyle('top', el.getPosition('wrap').y);
+        var ul = new Element('ul').inject(el);
+        ul.startPosition = el.getPosition('wrap').y+1000;
+        var el = hide ? hide : ul;
+        el.setStyles({
+            'top': -1000,
+            'left': el.getPosition('wrap').x
+        });
+        if(hide==undefined)
+            el.setStyle('display', 'none');
         new Element('li', {'class': 'close', 'html': 'x'})
             .inject(ul)
             .addEvent('click', function(){
-                (hide ? hide : ul).dissolve();
+//                if(hide)
+                    el.morph({
+                        'top': -1000
+                    }).get('morph').chain(function(){
+                        el.setStyle('display', 'none');
+                    });
+//                else
+//                    ul.dissolve();
             }.bind(this));
         var all_li = new Element('li', {
             'html': '<span class="fil-name">'+this.options.lang['all']+'</span>'
@@ -277,7 +294,7 @@ var AdvancedList = new Class({
                 return;
             var mark = str;
             var models = [];
-            var regex = /(.*)\((.*)\)/.exec(str);
+            var regex = /^([^(]+)\((.*?)\)$/.exec(str);
             if(regex){
                 mark = regex[1];
                 regex[2].split(this.options.delimiters[1]).each(function(model){
@@ -309,7 +326,7 @@ var AdvancedList = new Class({
                 }
             }.bind(this));
         }.bind(this));
-    },
+    }
 
 
 

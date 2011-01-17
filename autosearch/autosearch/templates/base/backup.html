@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xml:lang="lv" lang="lv">
+<!--
+    User Interface created http://puh.termi.lv
+-->
+    <head>
+        <title>{{_('Site title')}}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="keywords" content="{{_('Site keywords')}}" />
+        <meta name="description" content="{{_('Site description')}}" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        {% block styles %}{% endblock %}
+        {% block scripts %}{% endblock %}
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="cont">
+            {% block content %}{% endblock %}
+            </div>
+        </div>
+        {*<div id="header">
+            <div id="header-wrap">
+<!--                <h1><a href="/" title=""><img alt="" src="/design/image/logo-m.png" width="60" height="60" /></a></h1>-->
+                <ul id="menu">
+                    <li><a href="/help" title="Palīdzība">Palīdzība</a></li>
+                    <li><a href="/about" title="Par šo vietni">Par šo vietni</a></li>
+                    <li><a href="/contacts" title="Kontakti">Kontakti</a></li>
+                </ul>
+            </div>
+        </div>*}
+        <div id="footer">
+            <div id="footer-wrap">
+                <div id="copyright">
+                    <ul id="f-menu">
+                        <li><a href="/feedback" title="{{_('Feedback')}}">{{_('Feedback')}}</a></li>
+<!--                        <li><a href="/about" title="{{_('About')}}">{{_('About')}}</a></li>-->
+                    </ul>
+                    <div id="f-other">
+                        <a href="#wrap" title="{{_('Back to top')}}">{{_('Back to top')}}</a> &uarr;
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if not config['debug'] %}
+            <script type="text/javascript">
+              var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', 'UA-20807015-1']);
+              _gaq.push(['_trackPageview']);
+
+              (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              })();
+
+            </script>
+        {% endif %}
+    </body>
+
+</html>

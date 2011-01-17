@@ -9,211 +9,287 @@ msgstr ""
 "Project-Id-Version: autosearch 0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2011-01-04 22:01+0200\n"
-"PO-Revision-Date: 2011-01-06 01:38+0200\n"
+"PO-Revision-Date: 2011-01-17 22:20+0200\n"
 "Last-Translator: Vaļuks <termilv@gmail.com>\n"
-"Language-Team: latvian <termilv@gmail.com>\n"
+"Language-Team: Latvian <termilv@gmail.com>\n"
 "Plural-Forms: true\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: utf-8\n"
 "Generated-By: Babel 0.9.5\n"
 
-#: autosearch/controllers/search.py:122
+#: autosearch/controllers/content.py:22
+msgid "About title"
+msgstr "Par vietni"
+
+#: autosearch/controllers/content.py:23
+msgid "About content page"
+msgstr ""
+"<p>\n"
+"Internetā ir daudz sludinājumu portālu, tieši tāpēc mēs esam apvienojuši "
+"visus sludinājumus vienā vietā. Mēs esam izveidojuši ērtus meklēšanas "
+"filtrus.\n"
+"</p>"
+
+#: autosearch/controllers/content.py:27
+msgid "Feedback title"
+msgstr "Atsauksmēm"
+
+#: autosearch/controllers/content.py:28
+msgid "Feedback content page"
+msgstr ""
+"<p>\n"
+"Ja jūs esat pamanījuši kļūdu, tad mēs būsim pateicīgi, ja jūs atradīsiet "
+"laiku mums par to pastāstīt. Mūsu epasta adrese ir <a href=\"mailto:"
+"auto@termi.lv\">auto@termi.lv</a>. Mēs arī būsim priecīgi saņemt ieteikumus "
+"mājas lapas uzlabošanai.\n"
+"</p>"
+
+#: autosearch/controllers/search.py:295
+msgid "none"
+msgstr "nav"
+
+#: autosearch/controllers/search.py:376
 msgid "Gasoline"
-msgstr ""
+msgstr "Benzīns"
 
-#: autosearch/controllers/search.py:122
+#: autosearch/controllers/search.py:376
 msgid "Gas"
-msgstr ""
+msgstr "Gāze"
 
-#: autosearch/controllers/search.py:122
+#: autosearch/controllers/search.py:376
 msgid "Diesel"
-msgstr ""
+msgstr "Dīzelis"
 
-#: autosearch/controllers/search.py:122
+#: autosearch/controllers/search.py:376
 msgid "Hybrid"
-msgstr ""
+msgstr "Hibrīds"
 
-#: autosearch/controllers/search.py:123
+#: autosearch/controllers/search.py:377
 msgid "Manual"
 msgstr "Manuāla"
 
-#: autosearch/controllers/search.py:123
+#: autosearch/controllers/search.py:377
 msgid "Auto"
 msgstr "Automātiska"
 
-#: autosearch/controllers/search.py:124
+#: autosearch/controllers/search.py:378
 msgid "Rear"
-msgstr ""
+msgstr "Priekšēja"
 
-#: autosearch/controllers/search.py:124
+#: autosearch/controllers/search.py:378
 msgid "Front"
-msgstr ""
+msgstr "Aizmugures"
 
-#: autosearch/controllers/search.py:124
+#: autosearch/controllers/search.py:378
 msgid "Four"
-msgstr ""
+msgstr "Pilnpiedziņa"
 
-#: autosearch/controllers/search.py:125
+#: autosearch/controllers/search.py:379
 msgid "SUV"
-msgstr ""
+msgstr "Apvidus"
 
-#: autosearch/controllers/search.py:125
+#: autosearch/controllers/search.py:379
 msgid "Hatchback"
-msgstr ""
+msgstr "Hečbeks"
 
-#: autosearch/controllers/search.py:125
+#: autosearch/controllers/search.py:379
 msgid "Cabriolet"
-msgstr ""
+msgstr "Kabriolets"
 
-#: autosearch/controllers/search.py:126
+#: autosearch/controllers/search.py:380
 msgid "Coupe"
-msgstr ""
+msgstr "Kupeja"
 
-#: autosearch/controllers/search.py:126
+#: autosearch/controllers/search.py:380
 msgid "Minibus"
-msgstr ""
+msgstr "Mikroautobuss"
 
-#: autosearch/controllers/search.py:126
+#: autosearch/controllers/search.py:380
 msgid "Minivan"
-msgstr ""
+msgstr "Minivens"
 
-#: autosearch/controllers/search.py:126
+#: autosearch/controllers/search.py:380
 msgid "Pickup"
-msgstr ""
+msgstr "Pikaps"
 
-#: autosearch/controllers/search.py:126
+#: autosearch/controllers/search.py:380
 msgid "Sedan"
-msgstr ""
+msgstr "Sedans"
 
-#: autosearch/controllers/search.py:126
+#: autosearch/controllers/search.py:380
 msgid "Universal"
-msgstr ""
+msgstr "Universāls"
 
-#: autosearch/controllers/search.py:127
+#: autosearch/controllers/search.py:381
 msgid "Riga"
-msgstr ""
+msgstr "Rīga"
 
-#: autosearch/controllers/search.py:127
+#: autosearch/controllers/search.py:381
 msgid "Riga dis."
-msgstr ""
+msgstr "Rīgas raj."
 
-#: autosearch/controllers/search.py:127
+#: autosearch/controllers/search.py:381
 msgid "Jurmala dis."
-msgstr ""
+msgstr "Jūrmalas raj."
 
-#: autosearch/controllers/search.py:127
+#: autosearch/controllers/search.py:381
 msgid "Aizkraukle dis."
-msgstr ""
+msgstr "Aizkraules raj."
 
-#: autosearch/controllers/search.py:127
+#: autosearch/controllers/search.py:381
 msgid "Aluksne dis."
-msgstr ""
+msgstr "Alūksnes raj."
 
-#: autosearch/controllers/search.py:128
+#: autosearch/controllers/search.py:382
 msgid "Balvi dis."
-msgstr ""
+msgstr "Balvu raj."
 
-#: autosearch/controllers/search.py:128
+#: autosearch/controllers/search.py:382
 msgid "Bauska dis."
-msgstr ""
+msgstr "Bauskas raj."
 
-#: autosearch/controllers/search.py:128
+#: autosearch/controllers/search.py:382
 msgid "Cesis dis."
-msgstr ""
+msgstr "Cēsu raj."
 
-#: autosearch/controllers/search.py:128
+#: autosearch/controllers/search.py:382
 msgid "Daugavpils dis."
-msgstr ""
+msgstr "Daugavpils raj."
 
-#: autosearch/controllers/search.py:128
+#: autosearch/controllers/search.py:382
 msgid "Dobele dis."
-msgstr ""
+msgstr "Dobeles raj."
 
-#: autosearch/controllers/search.py:129
+#: autosearch/controllers/search.py:383
 msgid "Gulbene dis."
-msgstr ""
+msgstr "Gulbenes raj."
 
-#: autosearch/controllers/search.py:129
+#: autosearch/controllers/search.py:383
 msgid "Jelgava dis."
-msgstr ""
+msgstr "Jelgavas raj."
 
-#: autosearch/controllers/search.py:129
+#: autosearch/controllers/search.py:383
 msgid "Jekabpils dis."
-msgstr ""
+msgstr "Jēkabpils raj."
 
-#: autosearch/controllers/search.py:129
+#: autosearch/controllers/search.py:383
 msgid "Kraslava dis."
-msgstr ""
+msgstr "Krāslavas raj."
 
-#: autosearch/controllers/search.py:129
+#: autosearch/controllers/search.py:383
 msgid "Kuldiga dis."
-msgstr ""
+msgstr "Kuldīgas raj."
 
-#: autosearch/controllers/search.py:130
+#: autosearch/controllers/search.py:384
 msgid "Liepaja dis."
-msgstr ""
+msgstr "Liepājas raj."
 
-#: autosearch/controllers/search.py:130
+#: autosearch/controllers/search.py:384
 msgid "Limbazi dis."
-msgstr ""
+msgstr "Limbažu raj."
 
-#: autosearch/controllers/search.py:130
+#: autosearch/controllers/search.py:384
 msgid "Ludza dis."
-msgstr ""
+msgstr "Ludzas raj."
 
-#: autosearch/controllers/search.py:130
+#: autosearch/controllers/search.py:384
 msgid "Madona dis."
-msgstr ""
+msgstr "Madonas raj."
 
-#: autosearch/controllers/search.py:130
+#: autosearch/controllers/search.py:384
 msgid "Ogre dis."
-msgstr ""
+msgstr "Ogres raj."
 
-#: autosearch/controllers/search.py:131
+#: autosearch/controllers/search.py:385
 msgid "Preili dis."
-msgstr ""
+msgstr "Preiļu raj."
 
-#: autosearch/controllers/search.py:131
+#: autosearch/controllers/search.py:385
 msgid "Rezekne dis."
-msgstr ""
+msgstr "Rēzeknes raj."
 
-#: autosearch/controllers/search.py:131
+#: autosearch/controllers/search.py:385
 msgid "Saldus dis."
-msgstr ""
+msgstr "Saldus raj."
 
-#: autosearch/controllers/search.py:131
+#: autosearch/controllers/search.py:385
 msgid "Talsi dis."
-msgstr ""
+msgstr "Talsu raj."
 
-#: autosearch/controllers/search.py:131
+#: autosearch/controllers/search.py:385
 msgid "Tukums dis."
-msgstr ""
+msgstr "Tukuma raj."
 
-#: autosearch/controllers/search.py:132
+#: autosearch/controllers/search.py:386
 msgid "Valka dis."
-msgstr ""
+msgstr "Valkas raj."
 
-#: autosearch/controllers/search.py:132
+#: autosearch/controllers/search.py:386
 msgid "Valmiera dis."
-msgstr ""
+msgstr "Valmieras raj."
 
-#: autosearch/controllers/search.py:132
+#: autosearch/controllers/search.py:386
 msgid "Ventspils dis."
+msgstr "Ventspils raj."
+
+#: autosearch/controllers/search.py:387
+msgid "LVL"
+msgstr "Ls"
+
+#: autosearch/controllers/search.py:387
+msgid "USD"
+msgstr "$"
+
+#: autosearch/controllers/search.py:387
+msgid "EUR"
+msgstr "€"
+
+#: autosearch/templates/base/content.html:26
+msgid "Back to filter"
+msgstr "Atgriezties sākumlapā"
+
+#: autosearch/templates/base/content.html:36
+#: autosearch/templates/base/main.html:71
+msgid "Feedback"
+msgstr "Atsauksmēm"
+
+#: autosearch/templates/base/content.html:37
+#: autosearch/templates/base/main.html:72
+msgid "About"
+msgstr "Par vietni"
+
+#: autosearch/templates/base/main.html:4 autosearch/templates/base/main.html:6
+#| msgid "About title"
+msgid "Site title"
+msgstr "Auto meklētājs"
+
+#: autosearch/templates/base/main.html:7
+msgid "Site keywords"
+msgstr "auto, auto sludinājumi, auto meklētājs"
+
+#: autosearch/templates/base/main.html:8
+msgid "Site description"
 msgstr ""
+"Auto sludinājumu meklētājs - ātrākais un ērtākais veids atrast sev vēlamo "
+"automašīnu. Spied, nenožēlosi!"
+
+#: autosearch/templates/base/main.html:75
+msgid "Back to top"
+msgstr "Uz augšu"
 
 #: autosearch/templates/search/car_list.html:20
 msgid "Year"
-msgstr ""
+msgstr "Gads"
 
 #: autosearch/templates/search/car_list.html:24
 msgid "Price"
-msgstr ""
+msgstr "Cena"
 
 #: autosearch/templates/search/car_list.html:28
 msgid "Place"
-msgstr ""
+msgstr "Vieta"
 
 #: autosearch/templates/search/car_list.html:32
 msgid "Tehpassport"
-msgstr ""
+msgstr "Tehniskā"

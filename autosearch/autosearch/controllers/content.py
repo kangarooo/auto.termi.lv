@@ -2,8 +2,11 @@
 
 import logging
 
+from simplejson import dumps
 from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
+
+from pylons.i18n.translation import _
 
 from autosearch.lib.base import BaseController, render
 
@@ -18,20 +21,16 @@ class ContentController(BaseController):
         return 'Hello World'
 
     def about(self):
-        c.title = u"""Par vietni"""
-        c.content = u"""
-                <p>Mēs esam izveidojuši meklētāju, kas savāc no
-                Latvijas sludinājumu portāliem auto sludinājumus
-                </p>
-                """
+        c.title = _('About title')
+        c.content = _('About content page')
         return render('base/content.html')
 
     def feedback(self):
-        c.title = u"""Atpakaļ saite"""
-        c.content = u"""<p>
-                Ja jums ir vēlme sazināties ar lapas saimnieku, tad to var izdarīt
-                caur norādīto epast: <a href="auto@termi.lv">auto@termi.lv</a>.
-                
-                </p>
-                """
+        c.title = _('Feedback title')
+        c.content = _('Feedback content page')
         return render('base/content.html')
+
+    def feedback_submit(self):
+        return dumps({
+            'error': False
+        })

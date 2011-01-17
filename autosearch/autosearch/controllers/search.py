@@ -18,6 +18,7 @@ from autosearch.lib.base import BaseController, render
 from autosearch.lib.base import Session
 from autosearch.lib.parser import *
 
+from autosearch.model.currency_rate import Currency, CurrencyRate
 from autosearch.model.auto import *
 from autosearch.model.model import Model
 from autosearch.model.mark import Mark
@@ -53,8 +54,9 @@ class SearchController(BaseController):
 
     def __before__(self):
         self.auto_q = Session.query(Auto).options(eagerload('model')).options(eagerload('model.mark')).options(eagerload('image')).options(eagerload('url'))\
-            .filter(Auto.added > datetime.date.today() - datetime.timedelta(7))
+            .filter(Auto.added > datetime.date.today() - datetime.timedelta(7)).order_by(desc(Auto.added))
         self.mark_q = Session.query(Mark).options(eagerload('model'))
+        self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
     def index(self, keyword = None):
         # Return a rendered template
@@ -76,7 +78,7 @@ class SearchController(BaseController):
         try:
             params = self._parse_params(keyword[1:])
         except UrlError as msg:
-            return dumps({'error': 'UrlError', 'msg': msg})
+            return dumps({'error': 'UrlError', 'msg': str(msg)})
 
         query = self._create_query(self.auto_q, params)
         if query:
@@ -95,7 +97,7 @@ class SearchController(BaseController):
 #        import time
 #        time.sleep(10)
         if keyword is None or keyword[1:]=='':
-            query = self.auto_q.filter(Auto.id>id)
+            query = self.auto_q.filter(Auto.id<id)
             return dumps({
                 'total': query.count(),
                 'auto': self._prepare_auto(query.limit(12))
@@ -104,9 +106,9 @@ class SearchController(BaseController):
         try:
             params = self._parse_params(keyword[1:])
         except UrlError as msg:
-            return dumps({'error': 'UrlError', 'msg': msg})
+            return dumps({'error': 'UrlError', 'msg': str(msg)})
 
-        query = self._create_query(self.auto_q, params).filter(Auto.id>id)
+        query = self._create_query(self.auto_q, params).filter(Auto.id<id)
         if query:
             return dumps({
                 'total': query.count(),
@@ -122,6 +124,7 @@ class SearchController(BaseController):
     def total(self, keyword=None):
 #        import time
 #        time.sleep(3)
+        print keyword
         if keyword is None or keyword[1:]=='':
             return dumps({
                 't': self.auto_q.count()
@@ -130,7 +133,7 @@ class SearchController(BaseController):
         try:
             params = self._parse_params(keyword[1:])
         except UrlError as msg:
-            return dumps({'error': 'UrlError', 'msg': msg})
+            return dumps({'error': 'UrlError', 'msg': str(msg)})
 
         query = self._create_query(self.auto_q, params)
         if query:
@@ -160,11 +163,13 @@ class SearchController(BaseController):
                         filter.append(Mark.id==sub['main'])
 
                 query = query.filter(or_(*filter))
+
             elif v['name']=='year':
                 if v['value']['min']:
                     query = query.filter(getattr(Auto, v['name'])>=datetime.date(year=v['value']['min'], month=1, day=1))
                 if v['value']['max']:
                     query = query.filter(getattr(Auto, v['name'])<=datetime.date(year=v['value']['max'], month=1, day=1))
+
             elif v['name']=='tehpassport':
 #                tehpassport slider, this is important, so i put it here
                 if v['value']['min']:
@@ -176,6 +181,30 @@ class SearchController(BaseController):
                 elif v['value']['max']:
                     query = query.filter(or_(Auto.tehpassport_is==False, Auto.tehpassport<=(datetime.date.today()+relativedelta(months=+v['value']['max']))))
 
+            elif v['name']=='price':
+                """filter with currency of price"""
+                rates = self._params['currency']['rates']
+                currency = self._params['currency']['currency_id']
+                filter = []
+                for i in range(len(currency)):
+                    if v['value']['min'] and v['value']['max']:
+                        filter.append(and_(
+                            Auto.currency==i,
+                            getattr(Auto, v['name'])<=v['value']['max']/rates[currency[i]],
+                            getattr(Auto, v['name'])>=v['value']['min']/rates[currency[i]]
+                        ))
+                    elif v['value']['min']:
+                        filter.append(and_(
+                            Auto.currency==i,
+                            getattr(Auto, v['name'])>=v['value']['min']/rates[currency[i]]
+                        ))
+                    elif v['value']['max']:
+                        filter.append(and_(
+                            Auto.currency==i,
+                            getattr(Auto, v['name'])<=v['value']['max']/rates[currency[i]]
+                        ))
+                query = query.filter(or_(*filter))
+            
             elif v['type']=='chooser':
                 query = query.filter(getattr(Auto, v['name']).in_(v['value']))
                 
@@ -291,7 +320,10 @@ class SearchController(BaseController):
                     'name': 'currency',
                     'url': 'p',
                     'type': 'select',
-                    'value': [_(d) for d in Currency().values]
+                    'value': [_(d) for d in Currency().values],
+                    'currency_id': [d for d in Currency().values],
+                    'rates': dict([[r.currency, r.rate] for r in self.currency_q.all()])
+
                 },
             }
 
@@ -301,8 +333,8 @@ class SearchController(BaseController):
             'id': a.id,
             'mark': a.model.mark.name,
             'model': a.model.name,
-            'url': a.url.url,
-            'urls': [a.url.url],
+#            'url': a.url.url,
+            'urls': [url.url for url in a.url],
 #            'image': random.sample([{'src': '/'+config['pylons.paths']['image_cache_files']+'/'+i.path} for i in a.image], 1 if len(a.image)>1 else len(a.image)) if a.image else None,
             'image': [{'src': '/'+config['pylons.paths']['image_cache_files']+'/'+i.path, 'url': i.url} for i in a.image],
 #            'image': None,

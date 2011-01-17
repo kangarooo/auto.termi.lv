@@ -36,6 +36,7 @@ def make_map(config):
     
     map.connect('/about', controller='content', action='about')
     map.connect('/feedback', controller='content', action='feedback')
+#    map.connect('/feedback.{type}', controller='content', action='feedback_submit', requirements=dict(keyword='.*'))
     
 #    map.connect('/{controller}/{action}')
 #    map.connect('/{controller}/{action}/{id}')

@@ -77,12 +77,17 @@ var Filter = new Class({
     activateList: function(el){
         el.addEvents({
            'mouseenter': function(){
-               this.fade(1);
+               this.setStyle('opacity', 1);
+//               this.fade(1);
            },
            'mouseleave': function(){
+//               if(!this.activeUrl||this.activeUrl=='')
+//                   this.fade(0.3);
+//               else this.fade(1);
                if(!this.activeUrl||this.activeUrl=='')
-                   this.fade(0.3);
-               else this.fade(1);
+                   this.setStyle('opacity', .3);
+               else
+                   this.setStyle('opacity', 1);
            }
         }).fireEvent('mouseleave');
     },
@@ -91,7 +96,10 @@ var Filter = new Class({
             'class': 'active-decor',
             'html': Locale.get('Filter.All')
         }).inject(c).addEvent('click', function(){
-            document.id('mark-filter').get('reveal').toggle();
+//            document.id('mark-filter').get('reveal').toggle();
+            document.id('mark-filter').setStyle('display', 'block').morph({
+                'top': 30
+            });
         });
         var advancedList = new AdvancedList(c, {
             'menu': item['value'],
@@ -220,7 +228,7 @@ var Filter = new Class({
             var el = new Element('li').inject(list);
             var input = new Element('input', {
                 'type': 'checkbox',
-                'events': { 'change': checkStatus }
+                'events': { 'click': checkStatus }
             }).inject(el);
             new Element('span', {'html':v}).inject(el);
             allElements.include({'input': input, 'li': v});
