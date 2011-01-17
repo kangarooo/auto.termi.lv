@@ -122,7 +122,7 @@ class Parse:
             gear_type = values['gear_type'],
             drive_type = values['drive_type'],
             mileage = values['mileage'],
-            tehpassport_is = values['tehpassport_is'],
+            tehpassport_is = values['tehpassport_is'] if 'tehpassport_is' in values else None,
             tehpassport = values['tehpassport'],
             car_type = values['car_type'],
             place = values['place'],
