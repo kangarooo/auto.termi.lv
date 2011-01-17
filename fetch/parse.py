@@ -14,7 +14,7 @@ sys.path.append(PATH+'/../autosearch')
 from paste.deploy import appconfig 
 from autosearch.config.environment import load_environment
 
-conf     = appconfig('config:'+PATH+'/../autosearch/'+('development.ini' if 1<len(sys.argv) else 'production.ini'))
+conf     = appconfig('config:'+PATH+'/../autosearch/'+('development.ini' if str(sys.argv[1])=='1' else 'production.ini'))
 config = load_environment(conf.global_conf, conf.local_conf)
 
 
