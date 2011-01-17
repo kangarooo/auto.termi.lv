@@ -123,7 +123,7 @@ class Parse:
             drive_type = values['drive_type'],
             mileage = values['mileage'],
             tehpassport_is = values['tehpassport_is'] if 'tehpassport_is' in values else None,
-            tehpassport = values['tehpassport'],
+            tehpassport = values['tehpassport'] if 'tehpassport' in values else None,
             car_type = values['car_type'],
             place = values['place'],
 #            color = values['color'],
