@@ -102,7 +102,6 @@ class Fetch:
             Session.add(Url(added=datetime.datetime.now(), url=url, content=text,
                 parsed=False, fetch_code=code))
             Session.commit()
-            print url
             self._console('added: '+url)
 
     def _console(self, msg):
