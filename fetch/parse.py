@@ -191,7 +191,7 @@ parser = Parse(SEARCH_PARAMS)
 
 for url in url_q.filter_by(parsed=False,
 #    url=u'http://www.ss.lv/msg/lv/transport/cars/bmw/323/fkibo.html'
-).order_by(desc(Url.added)).limit(20):
+).order_by(desc(Url.added)).limit(5):
     parser.get_params(url)
     
 

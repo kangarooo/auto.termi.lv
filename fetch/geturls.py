@@ -47,7 +47,7 @@ class Fetch:
     url = ''
 
     def get_content(self, url):
-        time.sleep(20)
+        time.sleep(10)
         self._console('fetch: '+url)
         try:
             request = urllib2.Request(url)
@@ -109,10 +109,9 @@ class Fetch:
 
 
 fetch = Fetch()
-while True:
-    for url in (
-            'http://www.ss.lv/lv/transport/cars/rss/',
-            'http://www.zip.lv/rss/?s=4c30d1b9064a62429364da4f174ba018',
-        ):
-        fetch.parse_rss(url)
-        time.sleep(60)
+
+for url in (
+        'http://www.ss.lv/lv/transport/cars/rss/',
+        'http://www.zip.lv/rss/?s=4c30d1b9064a62429364da4f174ba018',
+    ):
+    fetch.parse_rss(url)

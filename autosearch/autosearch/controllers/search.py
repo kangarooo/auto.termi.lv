@@ -87,7 +87,6 @@ class SearchController(BaseController):
                 'auto': self._prepare_auto(query.limit(12))
             })
         else:
-            print '-------------------------------------------------'
             return dumps({
                 'total': 0,
                 'auto': False
@@ -115,7 +114,6 @@ class SearchController(BaseController):
                 'auto': self._prepare_auto(query.limit(12))
             })
         else:
-            print '-------------------------------------------------'
             return dumps({
                 'total': 0,
                 'auto': False
@@ -124,7 +122,6 @@ class SearchController(BaseController):
     def total(self, keyword=None):
 #        import time
 #        time.sleep(3)
-        print keyword
         if keyword is None or keyword[1:]=='':
             return dumps({
                 't': self.auto_q.count()
@@ -141,7 +138,6 @@ class SearchController(BaseController):
                 't': query.count()
             })
         else:
-            print '-------------------------------------------------'
             return dumps({
                 't': 0
             })
