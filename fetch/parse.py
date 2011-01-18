@@ -7,6 +7,7 @@ import Image as ImageManipulator
 import urllib
 import random
 import string
+import logging
 
 PATH = os.path.realpath(os.path.dirname(sys.argv[0]))
 

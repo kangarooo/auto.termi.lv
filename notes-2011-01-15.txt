@@ -27,3 +27,4 @@ Show fresh objects of filter (future)
 2011-01-18
 gear don't show if no gear_count
 back, forward buttons not work properly with filter, filter button
+no result show in objects
