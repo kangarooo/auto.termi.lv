@@ -65,10 +65,16 @@ class SearchController(BaseController):
 #        return 'Hello World'
 #        c.auto = self._prepare_auto(self.auto_q.order_by(desc(Auto.added)).limit(20))
         return render('search/main.html')
+    
+    def params(self):
+        response.headers['Content-Type'] = 'application/json'
+        self._load_params()
+        return dumps(self._params)
 
     def search(self, keyword=None):
 #        import time
 #        time.sleep(20)
+        response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
             return dumps({
                 'total': self.auto_q.count(),
@@ -95,6 +101,7 @@ class SearchController(BaseController):
     def next(self, id, keyword=None):
 #        import time
 #        time.sleep(10)
+        response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
             query = self.auto_q.filter(Auto.id<id)
             return dumps({
@@ -122,6 +129,7 @@ class SearchController(BaseController):
     def total(self, keyword=None):
 #        import time
 #        time.sleep(3)
+        response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
             return dumps({
                 't': self.auto_q.count()
@@ -223,10 +231,6 @@ class SearchController(BaseController):
             del params['mark']['value'][i]['models']
         self._parser = Parser([v for name, v in params.iteritems()])
         return self._parser.parse_url(url)
-
-    def params(self):
-        self._load_params()
-        return dumps(self._params)
     
     def _load_params(self):
         if self._params is None:
