@@ -32,7 +32,13 @@ from HtmlParser import HtmlParser
 
 from ParserParams import SEARCH_VALUES, SEARCH_PARAMS
 
-
+LOG_FILENAME = sys.argv[2]
+logger = logging.getLogger("get urls parser")
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler(LOG_FILENAME)
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+logger.addHandler(fh)
 
 #                m-(mark)
 #                y-(izlaiduma gads)
@@ -73,7 +79,9 @@ class Parse:
                     results.append({'result': None})
                 else:
     #                write errors
+                    logger.info('error: '+url.url+': '+(';'.join(errors)))
                     url.error = ';'.join(errors)
+                    url.parsed = True
                     Session.commit()
                     return None
             else:
@@ -93,8 +101,8 @@ class Parse:
             new_car['images'] = html.get_image()
 #        return None
         self.add_auto(new_car, url)
-
-        url.error = ';'.join(errors)
+        logger.info('parsed: '+url.url)
+        url.error = unicode(';'.join(errors))
         url.parsed = True
         Session.commit()
 
@@ -131,7 +139,7 @@ class Parse:
         Session.add(auto)
         Session.commit()
         url.auto_id = auto.id;
-        Session.commit()
+#        Session.commit()
         self.add_images(values['images'], auto)
 
     def add_images(self, images, auto):

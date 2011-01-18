@@ -12,7 +12,7 @@ class Model(Base):
     name = Column(Unicode(100))
     mark_id = Column(Integer, ForeignKey('mark.id'))
 
-    mark = relation('Mark', backref=backref('model', order_by=id))
+    mark = relation('Mark', backref=backref('model', order_by=name))
 
     def __repr__(self):
         return "<Model('%s')" % self.name

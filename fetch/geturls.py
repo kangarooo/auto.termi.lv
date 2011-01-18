@@ -92,11 +92,7 @@ class Fetch:
                 self._add_new_link(link, unicode(response['content'], response['charset']), response['code'])
 
     def _check_url(self, url):
-        try:
-            Session.query(Url).filter_by(url=url).one()
-            return True
-        except:
-            return False
+        return Session.query(Url).filter_by(url=url).count()>0
 
     def _add_new_link(self, url, text, code):
             Session.add(Url(added=datetime.datetime.now(), url=url, content=text,

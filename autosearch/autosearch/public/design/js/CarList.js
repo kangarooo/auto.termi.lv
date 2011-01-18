@@ -208,7 +208,7 @@ var CarList = new Class({
                 if(check(type, value))
                     return value[type]+' '+this.options.lang['gears'];
                 if(check('gear_type', value))
-                    return this.options.lang['no value'];
+                    return value['gear_type'];
                 return this.options.lang['no value'];
             }.bind(this),
             'mileage': function(type, value){

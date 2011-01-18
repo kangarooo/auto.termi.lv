@@ -22,3 +22,8 @@ Show fresh objects of filter (future)
 (party)translate all strings to latvian and russian
 (done)make relation to urls, leave possible to create results relative to many urls
 (done)library to fetch new currency
+
+
+2011-01-18
+gear don't show if no gear_count
+back, forward buttons not work properly with filter, filter button

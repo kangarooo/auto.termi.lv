@@ -272,7 +272,7 @@ Locale.define('lv-LV', 'Object', {
 });
 Locale.define('lv-LV', 'Error', {
     'Error': 'Notikusi nenovēršama kļūda!',
-    'Error simple text': 'Saņēmām <strong>{status}</strong> kļūdu,\n\
+    'Error simple text': 'Saņēmām <strong>{status}.</strong> kļūdu,\n\
         ja tas jums neko neizsaka, tad mēs iesakām atjaunot lapu\n\
         (nospiežot pogu atjaunot - refresh),\n\
          savādāk jūs varat novērot negaidītus rezultātus',
@@ -890,7 +890,7 @@ var CarList = new Class({
                 if(check(type, value))
                     return value[type]+' '+this.options.lang['gears'];
                 if(check('gear_type', value))
-                    return this.options.lang['no value'];
+                    return value['gear_type'];
                 return this.options.lang['no value'];
             }.bind(this),
             'mileage': function(type, value){
