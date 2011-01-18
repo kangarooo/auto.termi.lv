@@ -58,10 +58,6 @@ class Parse:
     def get_params(self, url):
         urlparams = urlparse(url.url)
         html = HtmlParser(url.content, urlparams.scheme+'://'+urlparams.netloc)
-        print html.text
-        print '----------------------------------------------------------'
-        print url.url
-        print '----------------------------------------------------------'
         errors = []
         results = []
         for i in range(len(self.search_params)):
@@ -95,7 +91,6 @@ class Parse:
             else:
                 new_car[self.search_params[r]['name']] = results[r]['result']
             new_car['images'] = html.get_image()
-#        print new_car
 #        return None
         self.add_auto(new_car, url)
 
