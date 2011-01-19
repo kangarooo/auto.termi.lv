@@ -109,7 +109,7 @@ class Fetch:
 fetch = Fetch()
 
 for url in (
-#        'http://www.ss.lv/lv/transport/cars/rss/',
+        'http://www.ss.lv/lv/transport/cars/rss/',
         'http://www.zip.lv/rss/?s=4c30d1b9064a62429364da4f174ba018',
     ):
     fetch.parse_rss(url)

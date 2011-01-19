@@ -73,8 +73,8 @@ Locale.define('en-US', 'Date', {
 		return (dayOfMonth > 3 && dayOfMonth < 21) ? 'th' : ['th', 'st', 'nd', 'rd', 'th'][Math.min(dayOfMonth % 10, 4)];
 	},
 
-	lessThanMinuteAgo: 'mazāk par minūti',
-	minuteAgo: 'minūti atpakaļ',
+	lessThanMinuteAgo: 'pirms mazāk kā minūti',
+	minuteAgo: 'pirms minūtes',
 	minutesAgo: 'pirms {delta} minūtēm',
 	hourAgo: 'pirms stundas',
 	hoursAgo: 'pirms {delta} stundām',
