@@ -146,7 +146,10 @@ class Parse:
     def add_images(self, images, auto):
         if images:
             for img in images:
-                img_path = self._save_image(img)
+                try:
+                    img_path = self._save_image(img)
+                except:
+                    continue
                 Session.add(Image(
                     added=datetime.datetime.now(),
                     auto_id=auto.id,
