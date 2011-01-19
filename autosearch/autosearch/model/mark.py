@@ -1,6 +1,6 @@
 """Mark model"""
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode
+from sqlalchemy.types import Integer, Unicode, DateTime
 
 from autosearch.model.meta import Base
 
@@ -8,6 +8,7 @@ class Mark(Base):
     __tablename__ = "mark"
 
     id = Column(Integer, primary_key=True)
+    last_added = Column(DateTime())
     name = Column(Unicode(100))
 
 #    def __init__(self, name=''):

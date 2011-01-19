@@ -28,3 +28,5 @@ Show fresh objects of filter (future)
 gear don't show if no gear_count
 back, forward buttons not work properly with filter, filter button
 no result show in objects
+filter button can be pressed then no results
+show models and marks what exists

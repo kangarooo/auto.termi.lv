@@ -55,7 +55,9 @@ class SearchController(BaseController):
     def __before__(self):
         self.auto_q = Session.query(Auto).options(eagerload('model')).options(eagerload('model.mark')).options(eagerload('image')).options(eagerload('url'))\
             .filter(Auto.added > datetime.date.today() - datetime.timedelta(7)).order_by(desc(Auto.added))
-        self.mark_q = Session.query(Mark).options(eagerload('model'))
+        self.mark_q = Session.query(Mark).options(eagerload('model'))\
+            .filter(Mark.last_added > datetime.date.today() - datetime.timedelta(7))\
+            .filter(Model.last_added > datetime.date.today() - datetime.timedelta(7))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
     def index(self, keyword = None):

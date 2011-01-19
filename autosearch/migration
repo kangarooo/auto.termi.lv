@@ -1,0 +1,4 @@
+sudo easy_install sqlalchemy-migrate
+migrate create autosearch/migration "autosearch"
+migrate manage dbmanage.py --repository=autosearch/migration --url=postgresql+psycopg2://auto.termi.lv:qwer@localhost/auto.termi.lv
+migrate manage dbmanage.py db_version --url=postgresql+psycopg2://auto.termi.lv:qwer@localhost/auto.termi.lv

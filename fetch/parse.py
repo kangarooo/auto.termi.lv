@@ -112,10 +112,14 @@ class Parse:
         mark_id = marks[values['mark']]['id']
         try:
             model = Session.query(Model).filter_by(mark_id=mark_id, name=values['model']).one()
+            model.last_added = datetime.datetime.now()
         except:
-            model = Model(mark_id=mark_id, name=values['model'])
+            model = Model(last_added=datetime.datetime.now(), name=values['model'], mark_id=mark_id)
             Session.add(model)
-            Session.commit()
+        mark = Session.query(Mark).filter_by(id=model.mark_id).one()
+        mark.last_added = datetime.datetime.now()
+
+        Session.commit()
 
         auto = Auto(
             added = datetime.datetime.now(),
