@@ -90,12 +90,13 @@ var CarList = new Class({
         this.registerTemplate('auto', function(auto) {
             li(
                 h2(
-                    a({ href: auto['url'], 'target': '_blank'}, auto['mark']+' '+auto['model']),
+                    a({ href: auto['url'], 'target': '_blank'},
+                    auto['name'].length>20 ? auto['name'].substr(0, 20)+'...' : auto['name']),
                     span({ 'class': 'added'}, auto['added'])
                 ),
                 auto['image'] ? div({'class': 'images'},
                     auto['image']
-                ) : div({'class': 'images'}),
+                ) : false,
                 ul({'class': 'params'}, auto['params']),
                 ul({'class': 'additional'}, auto['urls'])
             );
@@ -134,6 +135,7 @@ var CarList = new Class({
     },
     render: function(data) {
         data.each(function(auto){
+            auto['name'] = auto['mark']+' '+auto['model'];
             auto['added'] = Date.parse(auto['added']).timeDiffInWords();
             auto['image'] = auto['image'] ? this.renderImages(auto) : false;
             auto['params'] = this.renderParams(auto);
