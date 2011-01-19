@@ -95,6 +95,8 @@ class Fetch:
         return Session.query(Url).filter_by(url=url).count()>0
 
     def _add_new_link(self, url, text, code):
+            if self._check_url(url):
+                return False
             Session.add(Url(added=datetime.datetime.now(), url=url, content=text,
                 parsed=False, fetch_code=code))
             Session.commit()
