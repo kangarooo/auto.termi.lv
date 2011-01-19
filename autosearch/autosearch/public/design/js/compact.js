@@ -777,7 +777,7 @@ var CarList = new Class({
                 ),
                 auto['image'] ? div({'class': 'images'},
                     auto['image']
-                ) : false,
+                ) : div({'class': 'images'}),
                 ul({'class': 'params'}, auto['params']),
                 ul({'class': 'additional'}, auto['urls'])
             );
@@ -827,6 +827,10 @@ var CarList = new Class({
     },
     renderImages: function(data){
         var render_data = [];
+        if(data['image'].length==0)
+            return false;
+//        patch for one image 
+        data['image']=[data['image'][0]];
         data['image'].each(function(p){
             render_data.include({
                'src': p['src'],
@@ -877,11 +881,16 @@ var CarList = new Class({
                 return this.options.lang['no value'];
             }.bind(this),
             'engine': function(type, value){
-                if(check(type, value))
-                    return value[type].format({
+                var format = {
                         'decimal': ".",
                         'decimals': 1
-                    })+' '+value['engine_type'];
+                    }
+                if(check(type, value)&&value['engine_type'])
+                    return value[type].format(format)+' '+value['engine_type'];
+                if(check(type, value))
+                    return value[type].format(format);
+                if(value['engine_type'])
+                    return value['engine_type'];
                 return this.options.lang['no value'];
             }.bind(this),
             'gearbox': function(type, value){
@@ -924,7 +933,7 @@ var CarList = new Class({
                         'decimals': 0
                     })+' '+value['currency'];
                 return this.options.lang['no value'];
-            }
+            }.bind(this)
         }
         if(formatter[type])
             return formatter[type](type, value);
