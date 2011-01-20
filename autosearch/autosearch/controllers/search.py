@@ -22,9 +22,10 @@ from autosearch.model.currency_rate import Currency, CurrencyRate
 from autosearch.model.auto import *
 from autosearch.model.model import Model
 from autosearch.model.mark import Mark
+from autosearch.model.url import Url
 
 from sqlalchemy import desc
-from sqlalchemy.orm import eagerload
+from sqlalchemy.orm import eagerload, contains_eager
 from sqlalchemy import and_, or_
 
 
@@ -51,13 +52,31 @@ class SearchController(BaseController):
 
     _params = None
 
+#    def __before__(self):
+#        self.auto_q = Session.query(Auto)\
+#            .join(Auto.model)\
+#            .join(Model.mark)\
+#            .group_by(Auto.id)\
+#            .options(eagerload('image'))\
+#            .options(eagerload('url'))\
+#            .filter(Auto.added > datetime.date.today() - datetime.timedelta(7)).order_by(desc(Auto.added))
+#        self.mark_q = Session.query(Mark).options(eagerload('model'))\
+#            .filter(Mark.last_added > datetime.date.today() - datetime.timedelta(7))\
+#            .filter(Model.last_added > datetime.date.today() - datetime.timedelta(7))
+#        self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
+
 
     def __before__(self):
-        self.auto_q = Session.query(Auto).options(eagerload('model')).options(eagerload('model.mark')).options(eagerload('image')).options(eagerload('url'))\
-            .filter(Auto.added > datetime.date.today() - datetime.timedelta(7)).order_by(desc(Auto.added))
-        self.mark_q = Session.query(Mark).options(eagerload('model'))\
-            .filter(Mark.last_added > datetime.date.today() - datetime.timedelta(7))\
-            .filter(Model.last_added > datetime.date.today() - datetime.timedelta(7))
+        self.auto_q = Session.query(Auto)\
+            .outerjoin(Model).options(contains_eager('model'))\
+            .outerjoin(Mark).options(contains_eager('model.mark'))\
+            .options(eagerload('url'))\
+            .options(eagerload('image'))\
+            .filter(Auto.added >= datetime.date.today() - datetime.timedelta(7)).order_by(desc(Auto.added))
+        self.mark_q = Session.query(Mark)\
+            .outerjoin(Model).options(contains_eager('model'))\
+            .filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7))\
+            .filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
     def index(self, keyword = None):
@@ -160,7 +179,6 @@ class SearchController(BaseController):
         }] for name, v in self._params.iteritems() for p in params if p['url']==v['url'])
         for p, v in par.iteritems():
             if v['type']=='mark':
-                query = query.join(Model).join(Mark)
                 filter = []
                 for sub in v['value']:
                     if sub['sub']:
