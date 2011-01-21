@@ -23,6 +23,7 @@ load_environment(conf.global_conf, conf.local_conf)
 
 from autosearch.model.meta import Session
 from autosearch.model.url import Url
+from autosearch.model.url_content import UrlContent
 
 
 
@@ -87,20 +88,32 @@ class Fetch:
                 continue
 #            i don't know why, by here works only with tail (not with text)
             link = unicode(item.find('link').tail.strip())
-            if not self._check_url(link):
+            if not self._check_url(link, Session):
                 response = self.get_content(link)
                 self._add_new_link(link, unicode(response['content'], response['charset']), response['code'])
 
-    def _check_url(self, url):
-        return Session.query(Url).filter_by(url=url).count()>0
+    def _check_url(self, url, session):
+        return session.query(Url).filter_by(url=url).count()>0
 
     def _add_new_link(self, url, text, code):
-            if self._check_url(url):
+        session = Session()
+        try:
+            if self._check_url(url, session):
                 return False
-            Session.add(Url(added=datetime.datetime.now(), url=url, content=text,
-                parsed=False, fetch_code=code))
-            Session.commit()
-            self._console('added: '+url)
+            u = Url(added=datetime.datetime.now(), url=url)
+            session.add(u)
+            session.flush()
+            u_content = UrlContent(added=datetime.datetime.now(),
+                url_id=u.id,
+                content=text,
+                parsed=False, fetch_code=code)
+            session.add(u_content)
+            session.flush()
+            # Success, commit everything
+            session.commit()
+        except:
+            session.rollback()
+            raise
 
     def _console(self, msg):
         logger.info(msg)

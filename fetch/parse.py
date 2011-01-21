@@ -25,8 +25,11 @@ from autosearch.model.mark import Mark
 from autosearch.model.model import Model
 from autosearch.model.auto import *
 from autosearch.model.url import Url
+from autosearch.model.url_content import UrlContent
 from autosearch.model.image import Image
 from sqlalchemy import desc
+
+from sqlalchemy.orm import eagerload, contains_eager
 
 from urlparse import urlparse
 from HtmlParser import HtmlParser
@@ -59,12 +62,13 @@ for mark in marks:
 
 class Parse:
 
-    def __init__(self, p):
+    def __init__(self, p, session):
         self.search_params = p
+        self.session = session
 
     def get_params(self, url):
         urlparams = urlparse(url.url)
-        html = HtmlParser(url.content, urlparams.scheme+'://'+urlparams.netloc)
+        html = HtmlParser(url.url_content.content, urlparams.scheme+'://'+urlparams.netloc)
         errors = []
         results = []
         for i in range(len(self.search_params)):
@@ -81,9 +85,9 @@ class Parse:
                 else:
     #                write errors
                     logger.info('error: '+url.url+': '+(';'.join(errors)))
-                    url.error = ';'.join(errors)
-                    url.parsed = True
-                    Session.commit()
+                    url.url_content.error = ';'.join(errors)
+                    url.url_content.parsed = True
+                    self.session.flush()
                     return None
             else:
                 results.append(res)
@@ -103,23 +107,24 @@ class Parse:
 #        return None
         self.add_auto(new_car, url)
         logger.info('parsed: '+url.url)
-        url.error = unicode(';'.join(errors))
-        url.parsed = True
-        Session.commit()
+        url.url_content.error = unicode(';'.join(errors))
+        url.url_content.parsed = True
+        self.session.flush()
 
     def add_auto(self, values, url):
         values['model'] = unicode(values['model'])
         mark_id = marks[values['mark']]['id']
-        try:
-            model = Session.query(Model).filter_by(mark_id=mark_id, name=values['model']).one()
+        model_q = self.session.query(Model).filter_by(mark_id=mark_id, name=values['model'])
+        if model_q.count()>0:
+            model = model_q.one()
             model.last_added = datetime.datetime.now()
-        except:
+        else:
             model = Model(last_added=datetime.datetime.now(), name=values['model'], mark_id=mark_id)
-            Session.add(model)
-        mark = Session.query(Mark).filter_by(id=model.mark_id).one()
+            self.session.add(model)
+        mark = self.session.query(Mark).filter_by(id=model.mark_id).one()
         mark.last_added = datetime.datetime.now()
 
-        Session.commit()
+        self.session.flush()
 
         auto = Auto(
             added = datetime.datetime.now(),
@@ -141,10 +146,9 @@ class Parse:
             telephone = values['telephone'],
 #            url_id = url.id
         )
-        Session.add(auto)
-        Session.commit()
+        self.session.add(auto)
+        self.session.flush()
         url.auto_id = auto.id;
-#        Session.commit()
         self.add_images(values['images'], auto)
 
     def add_images(self, images, auto):
@@ -154,13 +158,13 @@ class Parse:
                     img_path = self._save_image(img)
                 except:
                     continue
-                Session.add(Image(
+                self.session.add(Image(
                     added=datetime.datetime.now(),
                     auto_id=auto.id,
                     url=unicode(img),
                     path=img_path
                 ))
-                Session.commit()
+                self.session.flush()
 
     def _save_image(self, url):
         extension = url.split('.')[-1]
@@ -194,17 +198,20 @@ class Parse:
 
 
 
-url_q = Session.query(Url)
+
+session = Session()
+url_q = session.query(Url).outerjoin(UrlContent).options(contains_eager('url_content'))
+
+parser = Parse(SEARCH_PARAMS, session)
 
 
-
-parser = Parse(SEARCH_PARAMS)
-
-
-for url in url_q.filter_by(parsed=False,
-#    url=u'http://www.ss.lv/msg/lv/transport/cars/bmw/323/fkibo.html'
-).order_by(desc(Url.added)).limit(5):
-    parser.get_params(url)
+for url in url_q.filter(UrlContent.parsed==False).order_by(desc(Url.added)).limit(5):
+    try:
+        parser.get_params(url)
+        session.commit()
+    except:
+        session.rollback()
+        raise
     
 
 

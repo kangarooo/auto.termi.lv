@@ -4,6 +4,8 @@ from autosearch.model.mark import Mark
 from autosearch.model.model import Model
 from autosearch.model.auto import Auto
 from autosearch.model.url import Url
+
+from autosearch.model.url_content import UrlContent
 from autosearch.model.image import Image
 from autosearch.model.currency_rate import CurrencyRate
 
