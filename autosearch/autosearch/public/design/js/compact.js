@@ -1458,11 +1458,11 @@ var CarList = new Class({
                         'decimal': ".",
                         'decimals': 1
                     }
-                if(check(type, value)&&value['engine_type'])
+                if(check(type, value)&&check('engine_type', value))
                     return value[type].format(format)+' '+value['engine_type'];
                 if(check(type, value))
                     return value[type].format(format);
-                if(value['engine_type'])
+                if(check('engine_type', value))
                     return value['engine_type'];
                 return this.options.lang['no value'];
             }.bind(this),
