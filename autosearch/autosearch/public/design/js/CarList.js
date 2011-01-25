@@ -108,7 +108,7 @@ var CarList = new Class({
     },
     activateNext: function(t){
         this.button.setStyle('display', 'block');
-        this.buttonTxt.set('html', this.options.lang['next'].substitute({'total': t}));
+        this.buttonTxt.set('html', this.options.lang['next'](t));
     },
     loadingNext: function(){
         this.button.addClass('loading');
@@ -217,7 +217,7 @@ var CarList = new Class({
                 if(check(type, value)&&check('gear_type', value))
                     return value[type]+' '+value['gear_type'];
                 if(check(type, value))
-                    return value[type]+' '+this.options.lang['gears'];
+                    return this.options.lang['gears'](value[type]);
                 if(check('gear_type', value))
                     return value['gear_type'];
                 return this.options.lang['no value'];
@@ -235,10 +235,11 @@ var CarList = new Class({
                     return this.options.lang['none'];
                 if(check(type, value)){
                     var m = Date.parse(value[type]).diff(new Date(), 'month');
-                    if(m>=0)
+                    /*if(m>=0)
                         return this.options.lang['one month'];
                     m = -1*m;
-                    return m+' '+this.options.lang['months'.substr(0, m==1 ? 5 : 6)]
+                    return m+' '+this.options.lang['months'.substr(0, m==1 ? 5 : 6)]*/
+                    return this.options.lang['month'](m);
                 }
                 return this.options.lang['no value'];
             }.bind(this),

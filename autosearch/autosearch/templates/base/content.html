@@ -2,7 +2,7 @@
 {% block title %}{{c.title}}{% endblock %}
     {% block content %}
                 <div id="content">
-                    <div id="back-button">&larr; <a href="/" title="{{_('Back to filter')}}">{{_('Back to filter')}}</a></div>
+                    <div id="back-button">&larr; <a href="{{h.home_page()}}" title="{{_('Back to filter')}}">{{_('Back to filter')}}</a></div>
                     <h1>{{c.title}}</h1>
                     {{c.content}}
                 </div>

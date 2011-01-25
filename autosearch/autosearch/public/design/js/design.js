@@ -1,5 +1,6 @@
 window.addEvent('domready', function(){
-    Locale.use('lv-LV');
+    Locale.use(['lv-LV', 'ru-LV', 'lg-LG'][lang]);
+    var path = ['', '/ru', '/lg'][lang]
     var window_scroll = new Fx.Scroll(window);
     var popup = new Popup({
 //        'onFeedback': function(form){
@@ -55,16 +56,21 @@ window.addEvent('domready', function(){
         ],
         'lang': {
             'no value': '-',
-            'next': Locale.get('Object.Next'),
+            'next': function(next){
+                return Locale.get('Object.Next', next)
+            },
             'none': Locale.get('Object.None'),
-            'months': Locale.get('Object.Months'),
-            'month': Locale.get('Object.Month'),
+            'month': function(month){
+                return Locale.get('Object.Month', month);
+            },
             'one month': Locale.get('Object.Less the month'),
-            'gears': Locale.get('Object.gears')
+            'gears': function(gear){
+                return Locale.get('Object.Gears', gear);
+            }
         },
         onNext: function(n){
             car_list.loadingNext();
-            req.send('objects', {'url': '/next/'+n+(SU.lastUrl=='' ? '/s' : SU.lastUrl)+'.json'});
+            req.send('objects', {'url': path+'/next/'+n+'/'+(SU.lastUrl=='' ? 's' : SU.lastUrl)+'.json'});
         }
     });
 //    //url manager
@@ -75,7 +81,7 @@ window.addEvent('domready', function(){
         'blank_page': '/design/html/blank.html',
 //        'currentHash': new URI(window.location).get('fragment'),
         'variables': ['m', 'y', 'c', 'f', 'g', 'k', 't', 'o', 'l', 'p'],
-        'prefix': '/s/',
+        'prefix': 's/',
         onChange: function(d){
             //lets leave this two line for lazy loading
             window.clearTimeout(req_delay['objects_count']);
@@ -86,14 +92,14 @@ window.addEvent('domready', function(){
             car_list.diactiveButton();
             car_list.loading();
             window_scroll.toTop();
-            req.send('objects', {'url': ''+(d=='' ? '/s' : d)+'.json'});
+            req.send('objects', {'url': path+'/'+(d=='' ? 's' : d)+'.json'});
         },
         onNewHash: function(d){
             window.clearTimeout(req_delay['objects_count']);
             req.cancel('objects_count');
             filter.loading();
             req_delay['objects_count'] = function(){
-                req.send('objects_count', {'url': '/c'+(d=='' ? '/s' : d)+'.json'});
+                req.send('objects_count', {'url': path+'/c/'+(d=='' ? 's' : d)+'.json'});
             }.delay(1000);
         }
     });
@@ -109,7 +115,7 @@ window.addEvent('domready', function(){
     var req = new Request.Queue({
         requests: {
             filter: new Request.JSON({
-                url: '/search/params.json',
+                url: path+'/search/params.json',
                 method: 'get',
                 noCache: true,
                 link: 'cancel',

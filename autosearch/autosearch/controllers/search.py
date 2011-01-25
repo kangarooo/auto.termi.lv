@@ -24,11 +24,11 @@ from autosearch.model.model import Model
 from autosearch.model.mark import Mark
 from autosearch.model.url import Url
 
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 from sqlalchemy.orm import eagerload, contains_eager
 from sqlalchemy import and_, or_
 
-
+#from pylons.i18n import get_lang, set_lang
 
 
 log = logging.getLogger(__name__)
@@ -76,7 +76,9 @@ class SearchController(BaseController):
         self.mark_q = Session.query(Mark)\
             .outerjoin(Model).options(contains_eager('model'))\
             .filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7))\
-            .filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7))
+            .filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7))\
+            .order_by(asc(Mark.name))\
+            .order_by(asc(Model.name))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
     def index(self, keyword = None):

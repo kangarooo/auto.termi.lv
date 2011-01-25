@@ -10,6 +10,20 @@ from routes.middleware import RoutesMiddleware
 
 from autosearch.config.environment import load_environment
 
+from autosearch.lib.helpers import detect_language
+#from pylons.i18n import get_lang
+
+class LocaleStatusCodeRedirect(StatusCodeRedirect):
+    def __init__(self, app, errors=(400, 401, 403, 404),
+                 path='/error/document'):
+        super(LocaleStatusCodeRedirect, self).__init__(app, errors, path)
+        self.init_path = self.error_path
+    def __call__(self, environ, start_response):
+        url, language = detect_language(environ['PATH_INFO'])
+        environ['pylons.language'] = language
+        return super(LocaleStatusCodeRedirect, self).__call__(environ, start_response)
+        
+
 def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
     """Create a Pylons WSGI application and return it
 
@@ -38,13 +52,13 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
 
     # The Pylons WSGI app
     app = PylonsApp(config=config)
-
     # Routing/Session Middleware
     app = RoutesMiddleware(app, config['routes.map'])
     app = SessionMiddleware(app, config)
 
     # CUSTOM MIDDLEWARE HERE (filtered by error handling middlewares)
-
+#    error_path = language_path_prefix()+'/error/document'
+#    print error_path
     if asbool(full_stack):
         # Handle Python exceptions
         app = ErrorHandler(app, global_conf, **config['pylons.errorware'])
@@ -52,9 +66,9 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
         # Display error documents for 401, 403, 404 status codes (and
         # 500 when debug is disabled)
         if asbool(config['debug']):
-            app = StatusCodeRedirect(app)
+            app = LocaleStatusCodeRedirect(app, [400, 401, 403, 404])
         else:
-            app = StatusCodeRedirect(app, [400, 401, 403, 404, 500])
+            app = LocaleStatusCodeRedirect(app, [400, 401, 403, 404, 500])
 
     # Establish the Registry for this application
     app = RegistryManager(app)

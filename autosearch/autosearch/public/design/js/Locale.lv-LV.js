@@ -1,3 +1,12 @@
+(function(){
+var pluralize = function (n, one, many){
+	var modulo10 = n % 10,
+		modulo100 = n % 100;
+	if (modulo10 == 1 && modulo100 != 11)
+		return one;
+	return many;
+};
+
 Locale.define('lv-LV', 'Filter', {
     'All':'Visi',
     'Models':'Modeļi',
@@ -29,12 +38,19 @@ Locale.define('lv-LV', 'Object', {
 
 
 
-    'Next':'Nākamie {total} rezultāti',
+    'Next': function(next){
+        return pluralize(next, 'Nākamais', 'Nākamie')+' '+next+' '+pluralize(next, 'rezultāts', 'rezultāti');
+    },
     'None':'Nav',
-    'Months':'mēneši',
-    'Month':'mēnesis',
-    'Less the month':'Mazāk par mēnesi',
-    'gears':'ātrumi'
+    'Month': function(month){
+        month = -1*month;
+        if(month<=0)
+            return 'Mazāk par mēnesi';
+        return month+' '+pluralize(month, 'mēnesis', 'meneši');
+    },
+    'Gears': function(gear){
+        return gear+' '+pluralize(gear, 'ātrums', 'ātrumi');
+    }
 });
 Locale.define('lv-LV', 'Error', {
     'Error': 'Notikusi nenovēršama kļūda!',
@@ -53,7 +69,7 @@ Locale.define('lv-LV', 'Error', {
     sazināties ar datormeistaru.'
 });
 
-Locale.define('en-US', 'Date', {
+Locale.define('lv-LV', 'Date', {
 
 	months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 	months_abbr: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -102,3 +118,4 @@ Locale.define('en-US', 'Date', {
 	yearsUntil: '{delta} years from now'
 
 });
+})();
