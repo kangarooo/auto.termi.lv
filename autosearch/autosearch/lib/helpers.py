@@ -17,6 +17,12 @@ def language_path_prefix():
         lang = 'lg'
     return '/'+lang
 
+def language():
+    lang = get_lang()[0]
+    if lang=='es':
+        return 'lg'
+    return lang
+
 def home_page():
     l = language_path_prefix()
     return '/' if l=='' else l
