@@ -28,10 +28,18 @@ from sqlalchemy import desc, asc
 from sqlalchemy.orm import eagerload, contains_eager
 from sqlalchemy import and_, or_
 
-from urllib2 import unquote
+from urllib import unquote_plus
 
 def url_decode(url):
-    return unquote(url)
+    try:
+        asc_url = url.decode('ascii')
+    except UnicodeEncodeError:
+        return url
+    else:
+        return unquote_plus(asc_url).decode('utf-8')
+
+
+    return unquote_plus(url.encode('latin1')).decode('utf-8')
 
 #from pylons.i18n import get_lang, set_lang
 
