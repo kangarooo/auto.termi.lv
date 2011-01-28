@@ -28,6 +28,11 @@ from sqlalchemy import desc, asc
 from sqlalchemy.orm import eagerload, contains_eager
 from sqlalchemy import and_, or_
 
+from urllib2 import unquote
+
+def url_decode(url):
+    return unquote(url)
+
 #from pylons.i18n import get_lang, set_lang
 
 
@@ -82,11 +87,6 @@ class SearchController(BaseController):
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
     def index(self, keyword = None):
-        # Return a rendered template
-        #return render('/search.mako')
-        # or, return a response
-#        return 'Hello World'
-#        c.auto = self._prepare_auto(self.auto_q.order_by(desc(Auto.added)).limit(20))
         return render('search/main.html')
     
     def params(self):
@@ -95,8 +95,7 @@ class SearchController(BaseController):
         return dumps(self._params)
 
     def search(self, keyword=None):
-#        import time
-#        time.sleep(20)
+        keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
             return dumps({
@@ -122,8 +121,7 @@ class SearchController(BaseController):
             })
 
     def next(self, id, keyword=None):
-#        import time
-#        time.sleep(10)
+        keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
             query = self.auto_q.filter(Auto.id<id)
@@ -150,8 +148,7 @@ class SearchController(BaseController):
             })
 
     def total(self, keyword=None):
-#        import time
-#        time.sleep(3)
+        keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
             return dumps({
