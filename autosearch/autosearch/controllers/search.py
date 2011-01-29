@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import random
+#import random
 
 import logging
 
 from dateutil.relativedelta import relativedelta
 from simplejson import dumps
 
-from pylons import request, response, session, tmpl_context as c, url
+from pylons import response
 from pylons import config
-from pylons.controllers.util import abort, redirect
+#from pylons.controllers.util import abort, redirect
 
 from pylons.i18n.translation import _
+
+from pylons.decorators.cache import beaker_cache
 
 from autosearch.lib.base import BaseController, render
 from autosearch.lib.base import Session
@@ -22,7 +24,7 @@ from autosearch.model.currency_rate import Currency, CurrencyRate
 from autosearch.model.auto import *
 from autosearch.model.model import Model
 from autosearch.model.mark import Mark
-from autosearch.model.url import Url
+#from autosearch.model.url import Url
 
 from sqlalchemy import desc, asc
 from sqlalchemy.orm import eagerload, contains_eager
@@ -94,15 +96,18 @@ class SearchController(BaseController):
             .order_by(asc(Model.name))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
-    def index(self, keyword = None):
+    @beaker_cache(expire=60*60*12, type='file')
+    def index(self, lang):
         return render('search/main.html')
-    
-    def params(self):
+
+    @beaker_cache(expire=60*30, type='file')
+    def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
         self._load_params()
         return dumps(self._params)
 
-    def search(self, keyword=None):
+    @beaker_cache(expire=60*3, type='memory')
+    def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
@@ -127,7 +132,8 @@ class SearchController(BaseController):
                 'total': 0,
                 'auto': False
             })
-
+            
+    @beaker_cache(expire=60*3, type='memory')
     def next(self, id, keyword=None):
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
@@ -155,7 +161,8 @@ class SearchController(BaseController):
                 'auto': False
             })
 
-    def total(self, keyword=None):
+    @beaker_cache(expire=60*3, type='memory')
+    def total(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
@@ -258,7 +265,7 @@ class SearchController(BaseController):
             del params['mark']['value'][i]['models']
         self._parser = Parser([v for name, v in params.iteritems()])
         return self._parser.parse_url(url)
-    
+
     def _load_params(self):
         if self._params is None:
             self._params = {

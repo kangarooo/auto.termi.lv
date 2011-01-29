@@ -66,7 +66,11 @@ Locale.define('lv-LV', 'Error', {
     'Browser error': 'Pārlūka problēma!',
     'Browser error text': 'Diemžēl mums nācas secināt, ka mūsu lapa netiek\n\
      atbalstīta uz jūsu pārlūka. Lai novērst šo problēmu, mēs iesakām\n\
-    sazināties ar datormeistaru.'
+    sazināties ar datormeistaru.',
+
+    'Nothing': 'Nekas netika atrasts!',
+    'Nothing found': 'Pēc ievadītiem parametriem nav neviena rezultāta.<br />\n\
+    Lūdzu pārbaudiet ievadītos parametrus!'
 });
 
 Locale.define('lv-LV', 'Date', {

@@ -596,7 +596,11 @@ Locale.define('lv-LV', 'Error', {
     'Browser error': 'Pārlūka problēma!',
     'Browser error text': 'Diemžēl mums nācas secināt, ka mūsu lapa netiek\n\
      atbalstīta uz jūsu pārlūka. Lai novērst šo problēmu, mēs iesakām\n\
-    sazināties ar datormeistaru.'
+    sazināties ar datormeistaru.',
+
+    'Nothing': 'Nekas netika atrasts!',
+    'Nothing found': 'Pēc ievadītiem parametriem nav neviena rezultāta.<br />\n\
+    Lūdzu pārbaudiet ievadītos parametrus!'
 });
 
 Locale.define('lv-LV', 'Date', {
@@ -736,7 +740,10 @@ Locale.define('ru-LV', 'Error', {
     'Browser error': 'Проблема программы!',
     'Browser error text': 'К сожелению эта страница\n\
      не поддерживается на вашей программе. Что бы решить эту проблему,\n\
-    мы советуем обратится к компьютерному специалисту.'
+    мы советуем обратится к компьютерному специалисту.',
+
+    'Nothing': 'Ничего не нашлось!',
+    'Nothing found': 'Проверьте введённые параметры и попробуйте ещё!'
 });
 
 Locale.define('ru-LV', 'Date', {
@@ -854,7 +861,11 @@ Locale.define('lg-LG', 'Error', {
     'Browser error': 'Puorluka klaida!',
     'Browser error text': 'Dīmžāl mīsim juosecynoj, ka mīsu lopa nateik atbalsteita uz jiusu\n\
      puorluka. Ka grybās nūvierst itū problemu,\n\
-    tod konsultejis ar datormeistaru.'
+    tod konsultejis ar datormeistaru.',
+
+    'Nothing': 'Nikuo naatrodam!',
+    'Nothing found': 'Piec taidu parametru nav nivīna rezultata.<br />\n\
+    Lyugums puorbaudēt īvadietūs parametrus!'
 });
 
 Locale.define('lg-LG', 'Date', {
@@ -2950,6 +2961,8 @@ window.addEvent('domready', function(){
                             } else {
                                 car_list.diactiveButton();
                             }
+                            if(o['total']==0)
+                                popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
 //                            filter.updateCount(o['total']);
 //                            filter.deactiveCount();
                         }

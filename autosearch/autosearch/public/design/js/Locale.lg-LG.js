@@ -66,7 +66,11 @@ Locale.define('lg-LG', 'Error', {
     'Browser error': 'Puorluka klaida!',
     'Browser error text': 'Dīmžāl mīsim juosecynoj, ka mīsu lopa nateik atbalsteita uz jiusu\n\
      puorluka. Ka grybās nūvierst itū problemu,\n\
-    tod konsultejis ar datormeistaru.'
+    tod konsultejis ar datormeistaru.',
+
+    'Nothing': 'Nikuo naatrodam!',
+    'Nothing found': 'Piec taidu parametru nav nivīna rezultata.<br />\n\
+    Lyugums puorbaudēt īvadietūs parametrus!'
 });
 
 Locale.define('lg-LG', 'Date', {

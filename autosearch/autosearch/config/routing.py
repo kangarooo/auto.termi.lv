@@ -71,22 +71,31 @@ def make_map(config):
 
     # CUSTOM ROUTES HERE
 
-    map.connect('/', controller='search', action='index')
+    map.connect('{lang}', controller='search', action='index',
+        requirements=dict(lang='(\/|\/lg|\/ru){1}'))
 
 #    return params of filter
-    map.connect('/search/params.{type}', controller='search', action='params', requirements=dict(type='json'))
+    map.connect('/{lang}search/params.{type}', controller='search', action='params',
+        requirements=dict(lang='(lg\/|ru\/)?', type='json'))
     
 #    count results
-    map.connect('/c/s*keyword.{type}', controller='search', action='total', requirements=dict(type='json', keyword='.*'))
+    map.connect('/{lang}c/s*keyword.{type}', controller='search', action='total',
+        requirements=dict(lang='(lg\/|ru\/)?', type='json', keyword='.*'))
 #    return first 12 records
-    map.connect('/s*keyword.{type}', controller='search', action='search', requirements=dict(type='json', keyword='.*'))
+    map.connect('/{lang}s*keyword.{type}', controller='search', action='search',
+        requirements=dict(lang='(lg\/|ru\/)?', type='json', keyword='.*'))
 #    get next records large id
-    map.connect('/next/{id}/s*keyword.{type}', controller='search', action='next', requirements=dict(id='\d+', type='json', keyword='.*'))
+    map.connect('/{lang}next/{id}/s*keyword.{type}', controller='search', action='next',
+        requirements=dict(lang='(lg\/|ru\/)?', id='\d+', type='json', keyword='.*'))
 #    send index template like '/'
-    map.connect('/s*keyword', controller='search', action='index', requirements=dict(keyword='.*'))
+    map.connect('/{lang}s*keyword', controller='search', action='index',
+        requirements=dict(lang='(lg\/|ru\/)?', keyword='.*'))
     
-    map.connect('/about', controller='content', action='about')
-    map.connect('/feedback', controller='content', action='feedback')
+#    map.connect('/{lang}about', controller='content', action='about',
+#        requirements=dict(lang='(lg\/|ru\/)?'))
+    map.connect('/{lang}feedback', controller='content', action='feedback',
+        requirements=dict(lang='(lg\/|ru\/)?'))
+
 #    map.connect('/feedback.{type}', controller='content', action='feedback_submit', requirements=dict(keyword='.*'))
     
 #    map.connect('/{controller}/{action}')

@@ -35,5 +35,5 @@ def detect_language(url):
         language = None
         if url and len(url)>=3 and url[1:3] in ('ru', 'lg'):
             language = url[1:3]
-            url = '/' if len(url)==3 else url[3:]
+            #url = '/' if len(url)==3 else url[3:]
         return url, language

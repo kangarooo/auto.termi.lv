@@ -231,6 +231,8 @@ window.addEvent('domready', function(){
                             } else {
                                 car_list.diactiveButton();
                             }
+                            if(o['total']==0)
+                                popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
 //                            filter.updateCount(o['total']);
 //                            filter.deactiveCount();
                         }
