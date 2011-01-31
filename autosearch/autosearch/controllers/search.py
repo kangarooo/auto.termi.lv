@@ -88,17 +88,17 @@ class SearchController(BaseController):
             .order_by(asc(Model.name))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
-    @beaker_cache(expire=60*60*12, type='file')
+#    @beaker_cache(expire=60*60*12, type='file')
     def index(self, lang):
         return render('search/main.html')
 
-    @beaker_cache(expire=60*30, type='file')
+#    @beaker_cache(expire=60*30, type='file')
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
         self._load_params()
         return dumps(self._params)
 
-    @beaker_cache(expire=60*3, type='memory')
+#    @beaker_cache(expire=60*3, type='memory')
     def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
@@ -125,8 +125,10 @@ class SearchController(BaseController):
                 'auto': False
             })
             
-    @beaker_cache(expire=60*3, type='memory')
+#    @beaker_cache(expire=60*3, type='memory')
     def next(self, id, keyword=None):
+        import time
+        time.sleep(2)
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
@@ -153,7 +155,7 @@ class SearchController(BaseController):
                 'auto': False
             })
 
-    @beaker_cache(expire=60*3, type='memory')
+#    @beaker_cache(expire=60*3, type='memory')
     def total(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'

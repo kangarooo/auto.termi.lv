@@ -41,6 +41,9 @@ Locale.define('lv-LV', 'Object', {
     'Next': function(next){
         return pluralize(next, 'Nākamais', 'Nākamie')+' '+next+' '+pluralize(next, 'rezultāts', 'rezultāti');
     },
+    'Prev': function(next){
+        return pluralize(next, 'Jaunākais', 'Jaunākie')+' '+next+' '+pluralize(next, 'rezultāts', 'rezultāti');
+    },
     'None':'Nav',
     'Month': function(month){
         month = -1*month;

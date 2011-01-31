@@ -29,7 +29,7 @@ from autosearch.model.url_content import UrlContent
 from autosearch.model.image import Image
 from sqlalchemy import desc
 
-from sqlalchemy.orm import eagerload, contains_eager
+from sqlalchemy.orm import contains_eager
 
 from urlparse import urlparse
 from HtmlParser import HtmlParser

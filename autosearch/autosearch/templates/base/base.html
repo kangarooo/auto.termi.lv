@@ -30,6 +30,7 @@
                 <div id="copyright">
                     <ul id="f-menu">
                         <li><a href="{{h.language_path_prefix()}}/feedback" title="{{_('Feedback')}}">{{_('Feedback')}}</a></li>
+                        <li><a href="http://autotermi.uservoice.com/forums/99509-general" target="_blank" onclick="UserVoice.Popin.show(uservoiceOptions); return false;">{{_('New idea')}}</a></li>
                     </ul>
                     <div id="f-other">
                         <a href="#wrap" title="{{_('Back to top')}}">{{_('Back to top')}}</a> &uarr;
@@ -51,5 +52,21 @@
 
             </script>
         {% endif %}
+        <script type="text/javascript">
+          var uservoiceOptions = {
+            key: 'autotermi',
+            host: 'autotermi.uservoice.com',
+            forum: '99509',
+            lang: 'en',
+            showTab: false
+          };
+          function _loadUserVoice() {
+            var s = document.createElement('script');
+            s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js";
+            document.getElementsByTagName('head')[0].appendChild(s);
+          }
+          _loadSuper = window.onload;
+          window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+        </script>
     </body>
 </html>

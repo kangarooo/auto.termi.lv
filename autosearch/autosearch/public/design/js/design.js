@@ -56,9 +56,14 @@ window.addEvent('domready', function(){
         ],
         'lang': {
             'no value': '-',
-            'next': function(next){
-                return Locale.get('Object.Next', next)
-            },
+            'button': [
+                function(next){
+                    return Locale.get('Object.Next', next)
+                },
+                function(prev){
+                    return Locale.get('Object.Prev', prev)
+                }
+            ],
             'none': Locale.get('Object.None'),
             'month': function(month){
                 return Locale.get('Object.Month', month);
@@ -69,8 +74,12 @@ window.addEvent('domready', function(){
             }
         },
         onNext: function(n){
-            car_list.loadingNext();
+            car_list.loadingButton(0);
             req.send('objects', {'url': path+'/next/'+n+'/'+(SU.lastUrl=='' ? 's' : SU.lastUrl)+'.json'});
+        },
+        onPrev: function(n){
+            car_list.loadingButton(1);
+            req.send('objects', {'url': path+'/prev/'+n+'/'+(SU.lastUrl=='' ? 's' : SU.lastUrl)+'.json'});
         }
     });
 //    //url manager
@@ -227,28 +236,16 @@ window.addEvent('domready', function(){
                         if(o['auto']){
                             car_list.addObjects(o['auto']);
                             if(o['total']>12){
-                                car_list.activateNext(o['total']-12);
+                                car_list.activateButton(car_list.pressedButton, o['total']-12);
                             } else {
-                                car_list.diactiveButton();
+                                car_list.diactiveButton(car_list.pressedButton);
                             }
                             if(o['total']==0)
                                 popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
-//                            filter.updateCount(o['total']);
-//                            filter.deactiveCount();
                         }
                     }
                 }
             })
-//            feedback: new Request.JSON({
-//                method: 'post',
-////                link: 'cancel',
-//                onRequest: function(){
-//                    popup.popupSpinner();
-//                },
-//                onSuccess: function(o){
-//                    popup.hide();
-//                }
-//            })
         }
     });
     req.send('filter');

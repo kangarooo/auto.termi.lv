@@ -35,3 +35,5 @@ make smaller year
 make smaller engine
 make money chooser precisation
 implement map viewer (future)
+
+rewrite model get code

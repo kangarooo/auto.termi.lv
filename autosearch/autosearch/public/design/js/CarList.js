@@ -9,13 +9,18 @@ var CarList = new Class({
             {'name': 'Tehpassport', 'value': 'tehpassport'},
         ],
         'lang': {
-            'next': 'nav',
+            'button': [],
             'none': 'nav',
             'months': 'mēneši',
             'month': 'mēnesis',
             'one month': 'mazāk par mēnesi'
         }
     },
+    //params for buttons [0 - prev button, 1 - next]
+    id: [],
+    button: [],
+    buttonTxt: [],
+    pressedButton: 0,
 //    <li>
 //        <h2>
 //            <a href="{{ auto.url }}">{{ auto.mark }} {{ auto.model }}</a>
@@ -53,20 +58,23 @@ var CarList = new Class({
 //    </li>
     initialize: function(options) {
         this.setOptions(options);
-        this.button = new Element('div', {
-            'html': '',
-            'class': 'button button-next',
-            'events': {
-                'click': function(){
-                    this.fireEvent('next', this.last_id);
-                }.bind(this)
-            }
-        }).inject(this.options.el);
-        this.buttonTxt = new Element('span').inject(this.button);
-        new Element('div', {'class': 'loader', 'styles': {
-            'opacity': .9
-        }}).inject(this.button);
-        this.diactiveButton();
+        [0, 1].each(function(i){
+            this.button[i] = new Element('div', {
+                'html': '',
+                'class': 'button button-'+['next', 'prev'][i],
+                'events': {
+                    'click': function(){
+                        this.pressedButton = i;
+                        this.fireEvent(['next', 'prev'][i], this.id[i]);
+                    }.bind(this)
+                }
+            }).inject(this.options.el, ['bottom', 'top'][i]);
+            this.buttonTxt[i] = new Element('span').inject(this.button[i]);
+            new Element('div', {'class': 'loader', 'styles': {
+                'opacity': .9
+            }}).inject(this.button[i]);
+            this.diactiveButton(i);
+        }.bind(this));
         this.params = this.options.params;
         this.rebild();
         //simple image template
@@ -102,32 +110,37 @@ var CarList = new Class({
             );
         });
     },
-    diactiveButton: function(){
-        this.stopLoadingNext();
-        this.button.setStyle('display', 'none');
+    diactiveButton: function(bt){
+        bt = bt==undefined ? 0 : bt;
+        this.stopLoadingButton(bt);
+        this.button[bt].setStyle('display', 'none');
     },
-    activateNext: function(t){
-        this.button.setStyle('display', 'block');
-        this.buttonTxt.set('html', this.options.lang['next'](t));
+    activateButton: function(bt, t){
+        bt = bt==undefined ? 0 : bt;
+        this.button[bt].setStyle('display', 'block');
+        this.buttonTxt[bt].set('html', this.options.lang['button'][bt](t));
     },
-    loadingNext: function(){
-        this.button.addClass('loading');
+    loadingButton: function(bt){
+        bt = bt==undefined ? 0 : bt;
+        this.button[bt].addClass('loading');
     },
-    stopLoadingNext: function(){
-        this.button.removeClass('loading');
+    stopLoadingButton: function(bt){
+        bt = bt==undefined ? 0 : bt;
+        this.button[bt].removeClass('loading');
     },
     rebild: function(){
         var ol = this.options.el.getElement('ol');
         if(ol)
             ol.destroy();
         this.ol = new Element('ol').inject(this.options.el, 'top');
+        this.id[1] = undefined;
         return this.ol;
     },
     loading: function(){
         this.options.el.addClass('car-list-loading');
     },
     stopLoading: function(){
-        this.stopLoadingNext();
+        this.stopLoadingButton(this.pressedButton);
         this.options.el.removeClass('car-list-loading');
     },
     addObjects: function(data){
@@ -135,13 +148,15 @@ var CarList = new Class({
     },
     render: function(data) {
         data.each(function(auto){
+            if(!this.id[1])
+                this.id[1] = auto['id'];
             auto['name'] = auto['mark']+' '+auto['model'];
             auto['added'] = Date.parse(auto['added']).timeDiffInWords();
             auto['image'] = auto['image'] ? this.renderImages(auto) : false;
             auto['params'] = this.renderParams(auto);
             auto['url'] = auto['urls'][0];
             auto['urls'] = this.renderUrl(auto['urls']);
-            this.last_id = auto['id'];
+            this.id[0] = auto['id'];
             this.renderTemplate('auto', auto).inject(this.ol);
         }.bind(this));
     },

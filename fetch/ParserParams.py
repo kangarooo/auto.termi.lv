@@ -92,6 +92,7 @@ SEARCH_PARAMS = [{
                 'possible': [u'modelis'],
                 'params': {
                     'in_tag': True,
+                    'help': [u'marka']
                 },
                 'eval': 'params.before',
                 'eval_string': 'results[-1]["match"]'
