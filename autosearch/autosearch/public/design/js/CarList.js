@@ -154,8 +154,6 @@ var CarList = new Class({
         data.each(function(auto, i, obj){
             if(!this.id[1])
                 this.id[1] = auto['id'];
-            if(type==1)
-                auto = obj[len-i-1]
             this.id[type] = auto['id'];
             auto['name'] = auto['mark']+' '+auto['model'];
             auto['added'] = Date.parse(auto['added']).timeDiffInWords();
