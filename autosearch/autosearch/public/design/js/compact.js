@@ -571,6 +571,9 @@ Locale.define('lv-LV', 'Object', {
     'Next': function(next){
         return pluralize(next, 'Nākamais', 'Nākamie')+' '+next+' '+pluralize(next, 'rezultāts', 'rezultāti');
     },
+    'Prev': function(prev){
+        return pluralize(prev, 'Jaunākais', 'Jaunākie')+' '+prev+' '+pluralize(prev, 'rezultāts', 'rezultāti');
+    },
     'None':'Nav',
     'Month': function(month){
         month = -1*month;
@@ -707,6 +710,9 @@ Locale.define('ru-LV', 'Object', {
     'Next': function(next){
         return pluralize(next, 'Следующий', 'Следующие', 'Следующие')+' '+next+' '+pluralize(next, 'результат', 'результата', 'результаты');
     },
+    'Prev': function(prev){
+        return pluralize(prev, 'Новый', 'Новые', 'Новые')+' '+prev+' '+pluralize(prev, 'результат', 'результата', 'результаты');
+    },
     'None':'Нету',
     'Month': function(month){
         month = -1*month;
@@ -835,6 +841,9 @@ Locale.define('lg-LG', 'Object', {
 
     'Next': function(next){
         return pluralize(next, 'Nuokomīs', 'Nuokomī')+' '+next+' '+pluralize(next, 'rezultats', 'rezultati');
+    },
+    'Prev': function(prev){
+        return pluralize(prev, 'Jaunuokais', 'Jaunuokī')+' '+prev+' '+pluralize(prev, 'rezultats', 'rezultati');
     },
     'None':'Nau',
     'Month': function(month){
@@ -1273,13 +1282,18 @@ var CarList = new Class({
             {'name': 'Tehpassport', 'value': 'tehpassport'},
         ],
         'lang': {
-            'next': 'nav',
+            'button': [],
             'none': 'nav',
             'months': 'mēneši',
             'month': 'mēnesis',
             'one month': 'mazāk par mēnesi'
         }
     },
+    //params for buttons [0 - prev button, 1 - next]
+    id: [],
+    button: [],
+    buttonTxt: [],
+    pressedButton: 0,
 //    <li>
 //        <h2>
 //            <a href="{{ auto.url }}">{{ auto.mark }} {{ auto.model }}</a>
@@ -1317,22 +1331,25 @@ var CarList = new Class({
 //    </li>
     initialize: function(options) {
         this.setOptions(options);
-        this.button = new Element('div', {
-            'html': '',
-            'class': 'button button-next',
-            'events': {
-                'click': function(){
-                    this.fireEvent('next', this.last_id);
-                }.bind(this)
-            }
-        }).inject(this.options.el);
-        this.buttonTxt = new Element('span').inject(this.button);
-        new Element('div', {'class': 'loader', 'styles': {
-            'opacity': .9
-        }}).inject(this.button);
-        this.diactiveButton();
+        this.ol = new Element('ol').inject(this.options.el);
+        [0, 1].each(function(i){
+            this.button[i] = new Element('div', {
+                'html': '',
+                'class': 'button button-'+['next', 'prev'][i],
+                'events': {
+                    'click': function(){
+                        this.pressedButton = i;
+                        this.fireEvent(['next', 'prev'][i], this.id[i]);
+                    }.bind(this)
+                }
+            }).inject(this.options.el, ['bottom', 'top'][i]);
+            this.buttonTxt[i] = new Element('span').inject(this.button[i]);
+            new Element('div', {'class': 'loader', 'styles': {
+                'opacity': .9
+            }}).inject(this.button[i]);
+            this.diactiveButton(i);
+        }.bind(this));
         this.params = this.options.params;
-        this.rebild();
         //simple image template
         this.registerTemplate('image', function(data){
             img({'src': data['src'], 'alt': data['alt']})
@@ -1352,7 +1369,7 @@ var CarList = new Class({
         });
         //main auto template
         this.registerTemplate('auto', function(auto) {
-            li(
+            li({'class': 'auto'},
                 h2(
                     a({ href: auto['url'], 'target': '_blank'},
                     auto['name'].length>20 ? auto['name'].substr(0, 20)+'...' : auto['name']),
@@ -1366,47 +1383,60 @@ var CarList = new Class({
             );
         });
     },
-    diactiveButton: function(){
-        this.stopLoadingNext();
-        this.button.setStyle('display', 'none');
+    diactiveButton: function(bt){
+        bt = bt==undefined ? 0 : bt;
+        this.stopLoadingButton(bt);
+        this.button[bt].setStyle('display', 'none');
     },
-    activateNext: function(t){
-        this.button.setStyle('display', 'block');
-        this.buttonTxt.set('html', this.options.lang['next'](t));
+    activateButton: function(bt, t){
+        bt = bt==undefined ? 0 : bt;
+//        this.button[bt].setStyle('display', 'block');
+        this.button[bt].reveal();
+        this.buttonTxt[bt].set('html', this.options.lang['button'][bt](t));
     },
-    loadingNext: function(){
-        this.button.addClass('loading');
+    loadingButton: function(bt){
+        bt = bt==undefined ? 0 : bt;
+        this.button[bt].addClass('loading');
     },
-    stopLoadingNext: function(){
-        this.button.removeClass('loading');
+    stopLoadingButton: function(bt){
+        bt = bt==undefined ? 0 : bt;
+        this.button[bt].removeClass('loading');
     },
     rebild: function(){
-        var ol = this.options.el.getElement('ol');
-        if(ol)
-            ol.destroy();
-        this.ol = new Element('ol').inject(this.options.el, 'top');
+        this.ol.empty();
+        [0, 1].each(function(i){
+            this.diactiveButton(i)
+            this.id[i] = undefined;
+        }.bind(this));
         return this.ol;
     },
     loading: function(){
         this.options.el.addClass('car-list-loading');
     },
     stopLoading: function(){
-        this.stopLoadingNext();
+        this.stopLoadingButton(this.pressedButton);
         this.options.el.removeClass('car-list-loading');
     },
-    addObjects: function(data){
-        this.render(data);
+    addObjects: function(data, type){
+        this.render(data, type);
     },
-    render: function(data) {
-        data.each(function(auto){
+    render: function(data, type) {
+        var len = data.length;
+        if(type==1)
+            new Element('li', {'class': 'delimiter'}).inject(this.ol, 'top')
+        data.each(function(auto, i, obj){
+            if(!this.id[1])
+                this.id[1] = auto['id'];
+            if(type==1)
+                auto = obj[len-i-1]
+            this.id[type] = auto['id'];
             auto['name'] = auto['mark']+' '+auto['model'];
             auto['added'] = Date.parse(auto['added']).timeDiffInWords();
             auto['image'] = auto['image'] ? this.renderImages(auto) : false;
             auto['params'] = this.renderParams(auto);
             auto['url'] = auto['urls'][0];
             auto['urls'] = this.renderUrl(auto['urls']);
-            this.last_id = auto['id'];
-            this.renderTemplate('auto', auto).inject(this.ol);
+            this.renderTemplate('auto', auto).inject(this.ol, type==1 ? 'top' : 'bottom');
         }.bind(this));
     },
     renderImages: function(data){
@@ -2732,6 +2762,21 @@ window.addEvent('domready', function(){
     Locale.use(['lv-LV', 'ru-LV', 'lg-LG'][lang]);
     var path = ['', '/ru', '/lg'][lang]
     var window_scroll = new Fx.Scroll(window);
+    var Title = new Class({
+        initialize: function(t){
+            this['title'] = t;
+        },
+        'set': function(t){
+            document.title = t+this['title'];
+        },
+        'new_values': function(c){
+            this.set('('+c+') ');
+        },
+        'original': function(){
+            document.title=this['title'];
+        }
+    });
+    var title = new Title(document.title);
     var popup = new Popup({
 //        'onFeedback': function(form){
 //            console.info(form);
@@ -2786,9 +2831,14 @@ window.addEvent('domready', function(){
         ],
         'lang': {
             'no value': '-',
-            'next': function(next){
-                return Locale.get('Object.Next', next)
-            },
+            'button': [
+                function(next){
+                    return Locale.get('Object.Next', next)
+                },
+                function(prev){
+                    return Locale.get('Object.Prev', prev)
+                }
+            ],
             'none': Locale.get('Object.None'),
             'month': function(month){
                 return Locale.get('Object.Month', month);
@@ -2799,13 +2849,18 @@ window.addEvent('domready', function(){
             }
         },
         onNext: function(n){
-            car_list.loadingNext();
+            car_list.loadingButton(0);
             req.send('objects', {'url': path+'/next/'+n+'/'+(SU.lastUrl=='' ? 's' : SU.lastUrl)+'.json'});
+        },
+        onPrev: function(n){
+            car_list.loadingButton(1);
+            req.send('objects', {'url': path+'/prev/'+n+'/'+(SU.lastUrl=='' ? 's' : SU.lastUrl)+'.json'});
         }
     });
 //    //url manager
     var req_delay = {
-        'objects_count': 0
+        'objects_count': 0,
+        'new_objects_count': 0
     };
     var SU = new UrlManager({
         'blank_page': '/design/html/blank.html',
@@ -2819,10 +2874,11 @@ window.addEvent('domready', function(){
             
             filter.deactiveCount();
             car_list.rebild();
-            car_list.diactiveButton();
             car_list.loading();
             window_scroll.toTop();
             req.send('objects', {'url': path+'/'+(d=='' ? 's' : d)+'.json'});
+            
+            title.original();
         },
         onNewHash: function(d){
             window.clearTimeout(req_delay['objects_count']);
@@ -2830,7 +2886,7 @@ window.addEvent('domready', function(){
             filter.loading();
             req_delay['objects_count'] = function(){
                 req.send('objects_count', {'url': path+'/c/'+(d=='' ? 's' : d)+'.json'});
-            }.delay(1000);
+            }.delay(500);
         }
     });
     var filter = new Filter({
@@ -2941,13 +2997,26 @@ window.addEvent('domready', function(){
                 }
                 
             }),
+            new_objects_count: new Request.JSON({
+                method: 'get',
+                noCache: true,
+                onFailure: showError,
+                onSuccess: function(n){
+                    if(!n['error']&&n['t']>0){
+                        title.new_values(n['t']);
+                        car_list.activateButton(1, n['t']);
+                    }
+                }
+
+            }),
             objects: new Request.JSON({
                 method: 'get',
                 noCache: true,
 //                link: 'cancel',
-//                onRequest: function(){
-//
-//                },
+                onRequest: function(){
+                    window.clearTimeout(req_delay['new_objects_count']);
+                    req.cancel('new_objects_count');
+                },
                 onFailure: showError,
                 onSuccess: function(o){
                     car_list.stopLoading();
@@ -2955,30 +3024,31 @@ window.addEvent('domready', function(){
                         
                     } else {
                         if(o['auto']){
-                            car_list.addObjects(o['auto']);
+                            var type = o['type']=='prev' ? 1 : 0;
+                            car_list.addObjects(o['auto'], type);
                             if(o['total']>12){
-                                car_list.activateNext(o['total']-12);
+                                car_list.activateButton(type, o['total']-12);
+                                if(type==1)
+                                    title.new_values(o['total']-12);
                             } else {
-                                car_list.diactiveButton();
+                                car_list.diactiveButton(type);
+                                if(type==1)
+                                    title.original();
                             }
-                            if(o['total']==0)
+                            if(o['total']==0){
                                 popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
-//                            filter.updateCount(o['total']);
-//                            filter.deactiveCount();
+                                return
+                            }
+                            window.clearTimeout(req_delay['new_objects_count']);
+                            req.cancel('new_objects_count');
+                            req_delay['new_objects_count'] = function(){
+                                if(car_list.id[1])
+                                    req.send('new_objects_count', {'url': path+'/new/'+car_list.id[1]+'/'+(SU.lastUrl=='' ? 's' : SU.lastUrl)+'.json'});
+                            }.periodical(3*60*1000);
                         }
                     }
                 }
             })
-//            feedback: new Request.JSON({
-//                method: 'post',
-////                link: 'cancel',
-//                onRequest: function(){
-//                    popup.popupSpinner();
-//                },
-//                onSuccess: function(o){
-//                    popup.hide();
-//                }
-//            })
         }
     });
     req.send('filter');

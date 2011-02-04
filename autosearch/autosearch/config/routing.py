@@ -63,7 +63,7 @@ def make_map(config):
                  always_scan=config['debug'])
     map.minimization = False
     map.explicit = False
-
+    lang_check = '(lg\/|ru\/)?'
     # The ErrorController route (handles 404/500 error pages); it should
     # likely stay at the top, ensuring it can always be resolved
     map.connect('/error/{action}', controller='error')
@@ -76,25 +76,31 @@ def make_map(config):
 
 #    return params of filter
     map.connect('/{lang}search/params.{type}', controller='search', action='params',
-        requirements=dict(lang='(lg\/|ru\/)?', type='json'))
+        requirements=dict(lang=lang_check, type='json'))
     
 #    count results
     map.connect('/{lang}c/s*keyword.{type}', controller='search', action='total',
-        requirements=dict(lang='(lg\/|ru\/)?', type='json', keyword='.*'))
+        requirements=dict(lang=lang_check, type='json', keyword='.*'))
+#    count new results
+    map.connect('/{lang}new/{id}/s*keyword.{type}', controller='search', action='total_new',
+        requirements=dict(lang=lang_check, id='\d+', type='json', keyword='.*'))
 #    return first 12 records
     map.connect('/{lang}s*keyword.{type}', controller='search', action='search',
-        requirements=dict(lang='(lg\/|ru\/)?', type='json', keyword='.*'))
+        requirements=dict(lang=lang_check, type='json', keyword='.*'))
 #    get next records large id
     map.connect('/{lang}next/{id}/s*keyword.{type}', controller='search', action='next',
-        requirements=dict(lang='(lg\/|ru\/)?', id='\d+', type='json', keyword='.*'))
+        requirements=dict(lang=lang_check, id='\d+', type='json', keyword='.*'))
+#    get new records large id
+    map.connect('/{lang}prev/{id}/s*keyword.{type}', controller='search', action='prev',
+        requirements=dict(lang=lang_check, id='\d+', type='json', keyword='.*'))
 #    send index template like '/'
     map.connect('/{lang}s*keyword', controller='search', action='index',
-        requirements=dict(lang='(lg\/|ru\/)?', keyword='.*'))
+        requirements=dict(lang=lang_check, keyword='.*'))
     
 #    map.connect('/{lang}about', controller='content', action='about',
 #        requirements=dict(lang='(lg\/|ru\/)?'))
     map.connect('/{lang}feedback', controller='content', action='feedback',
-        requirements=dict(lang='(lg\/|ru\/)?'))
+        requirements=dict(lang=lang_check))
 
 #    map.connect('/feedback.{type}', controller='content', action='feedback_submit', requirements=dict(keyword='.*'))
     

@@ -52,6 +52,9 @@ Locale.define('ru-LV', 'Object', {
     'Next': function(next){
         return pluralize(next, 'Следующий', 'Следующие', 'Следующие')+' '+next+' '+pluralize(next, 'результат', 'результата', 'результаты');
     },
+    'Prev': function(prev){
+        return pluralize(prev, 'Новый', 'Новые', 'Новые')+' '+prev+' '+pluralize(prev, 'результат', 'результата', 'результаты');
+    },
     'None':'Нету',
     'Month': function(month){
         month = -1*month;

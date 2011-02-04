@@ -2,6 +2,21 @@ window.addEvent('domready', function(){
     Locale.use(['lv-LV', 'ru-LV', 'lg-LG'][lang]);
     var path = ['', '/ru', '/lg'][lang]
     var window_scroll = new Fx.Scroll(window);
+    var Title = new Class({
+        initialize: function(t){
+            this['title'] = t;
+        },
+        'set': function(t){
+            document.title = t+this['title'];
+        },
+        'new_values': function(c){
+            this.set('('+c+') ');
+        },
+        'original': function(){
+            document.title=this['title'];
+        }
+    });
+    var title = new Title(document.title);
     var popup = new Popup({
 //        'onFeedback': function(form){
 //            console.info(form);
@@ -84,7 +99,8 @@ window.addEvent('domready', function(){
     });
 //    //url manager
     var req_delay = {
-        'objects_count': 0
+        'objects_count': 0,
+        'new_objects_count': 0
     };
     var SU = new UrlManager({
         'blank_page': '/design/html/blank.html',
@@ -98,10 +114,11 @@ window.addEvent('domready', function(){
             
             filter.deactiveCount();
             car_list.rebild();
-            car_list.diactiveButton();
             car_list.loading();
             window_scroll.toTop();
             req.send('objects', {'url': path+'/'+(d=='' ? 's' : d)+'.json'});
+            
+            title.original();
         },
         onNewHash: function(d){
             window.clearTimeout(req_delay['objects_count']);
@@ -109,7 +126,7 @@ window.addEvent('domready', function(){
             filter.loading();
             req_delay['objects_count'] = function(){
                 req.send('objects_count', {'url': path+'/c/'+(d=='' ? 's' : d)+'.json'});
-            }.delay(1000);
+            }.delay(500);
         }
     });
     var filter = new Filter({
@@ -220,13 +237,26 @@ window.addEvent('domready', function(){
                 }
                 
             }),
+            new_objects_count: new Request.JSON({
+                method: 'get',
+                noCache: true,
+                onFailure: showError,
+                onSuccess: function(n){
+                    if(!n['error']&&n['t']>0){
+                        title.new_values(n['t']);
+                        car_list.activateButton(1, n['t']);
+                    }
+                }
+
+            }),
             objects: new Request.JSON({
                 method: 'get',
                 noCache: true,
 //                link: 'cancel',
-//                onRequest: function(){
-//
-//                },
+                onRequest: function(){
+                    window.clearTimeout(req_delay['new_objects_count']);
+                    req.cancel('new_objects_count');
+                },
                 onFailure: showError,
                 onSuccess: function(o){
                     car_list.stopLoading();
@@ -234,14 +264,27 @@ window.addEvent('domready', function(){
                         
                     } else {
                         if(o['auto']){
-                            car_list.addObjects(o['auto']);
+                            var type = o['type']=='prev' ? 1 : 0;
+                            car_list.addObjects(o['auto'], type);
                             if(o['total']>12){
-                                car_list.activateButton(car_list.pressedButton, o['total']-12);
+                                car_list.activateButton(type, o['total']-12);
+                                if(type==1)
+                                    title.new_values(o['total']-12);
                             } else {
-                                car_list.diactiveButton(car_list.pressedButton);
+                                car_list.diactiveButton(type);
+                                if(type==1)
+                                    title.original();
                             }
-                            if(o['total']==0)
+                            if(o['total']==0){
                                 popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
+                                return
+                            }
+                            window.clearTimeout(req_delay['new_objects_count']);
+                            req.cancel('new_objects_count');
+                            req_delay['new_objects_count'] = function(){
+                                if(car_list.id[1])
+                                    req.send('new_objects_count', {'url': path+'/new/'+car_list.id[1]+'/'+(SU.lastUrl=='' ? 's' : SU.lastUrl)+'.json'});
+                            }.periodical(3*60*1000);
                         }
                     }
                 }

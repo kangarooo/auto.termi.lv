@@ -58,6 +58,7 @@ var CarList = new Class({
 //    </li>
     initialize: function(options) {
         this.setOptions(options);
+        this.ol = new Element('ol').inject(this.options.el);
         [0, 1].each(function(i){
             this.button[i] = new Element('div', {
                 'html': '',
@@ -76,7 +77,6 @@ var CarList = new Class({
             this.diactiveButton(i);
         }.bind(this));
         this.params = this.options.params;
-        this.rebild();
         //simple image template
         this.registerTemplate('image', function(data){
             img({'src': data['src'], 'alt': data['alt']})
@@ -96,7 +96,7 @@ var CarList = new Class({
         });
         //main auto template
         this.registerTemplate('auto', function(auto) {
-            li(
+            li({'class': 'auto'},
                 h2(
                     a({ href: auto['url'], 'target': '_blank'},
                     auto['name'].length>20 ? auto['name'].substr(0, 20)+'...' : auto['name']),
@@ -117,7 +117,8 @@ var CarList = new Class({
     },
     activateButton: function(bt, t){
         bt = bt==undefined ? 0 : bt;
-        this.button[bt].setStyle('display', 'block');
+//        this.button[bt].setStyle('display', 'block');
+        this.button[bt].reveal();
         this.buttonTxt[bt].set('html', this.options.lang['button'][bt](t));
     },
     loadingButton: function(bt){
@@ -129,11 +130,11 @@ var CarList = new Class({
         this.button[bt].removeClass('loading');
     },
     rebild: function(){
-        var ol = this.options.el.getElement('ol');
-        if(ol)
-            ol.destroy();
-        this.ol = new Element('ol').inject(this.options.el, 'top');
-        this.id[1] = undefined;
+        this.ol.empty();
+        [0, 1].each(function(i){
+            this.diactiveButton(i)
+            this.id[i] = undefined;
+        }.bind(this));
         return this.ol;
     },
     loading: function(){
@@ -143,21 +144,26 @@ var CarList = new Class({
         this.stopLoadingButton(this.pressedButton);
         this.options.el.removeClass('car-list-loading');
     },
-    addObjects: function(data){
-        this.render(data);
+    addObjects: function(data, type){
+        this.render(data, type);
     },
-    render: function(data) {
-        data.each(function(auto){
+    render: function(data, type) {
+        var len = data.length;
+        if(type==1)
+            new Element('li', {'class': 'delimiter'}).inject(this.ol, 'top')
+        data.each(function(auto, i, obj){
             if(!this.id[1])
                 this.id[1] = auto['id'];
+            if(type==1)
+                auto = obj[len-i-1]
+            this.id[type] = auto['id'];
             auto['name'] = auto['mark']+' '+auto['model'];
             auto['added'] = Date.parse(auto['added']).timeDiffInWords();
             auto['image'] = auto['image'] ? this.renderImages(auto) : false;
             auto['params'] = this.renderParams(auto);
             auto['url'] = auto['urls'][0];
             auto['urls'] = this.renderUrl(auto['urls']);
-            this.id[0] = auto['id'];
-            this.renderTemplate('auto', auto).inject(this.ol);
+            this.renderTemplate('auto', auto).inject(this.ol, type==1 ? 'top' : 'bottom');
         }.bind(this));
     },
     renderImages: function(data){

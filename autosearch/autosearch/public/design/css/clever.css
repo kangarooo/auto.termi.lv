@@ -259,8 +259,13 @@ chooser li {
   cursor: default;
 }
 
-.button-next {
+.button-next,
+.button-prev {
   width: 300px;
+}
+
+.button-prev {
+  margin-bottom: 0;
 }
 
 .loading:hover,
@@ -394,7 +399,7 @@ chooser li {
   list-style: none;
 }
 
-#objects ol >li {
+#objects ol li.auto {
   float: left;
   margin: 20px 0 0 20px;
   width: 350px;
@@ -407,19 +412,19 @@ chooser li {
   position: relative;
 }
 
-#objects ol >li h2 {
+#objects ol li.auto h2 {
   margin: 10px;
   padding: 0;
   font-size: 24px;
 }
 
-#objects ol >li h2 .added {
+#objects ol li.auto h2 .added {
   font-size: 12px;
   font-weight: normal;
   display: block;
 }
 
-#objects ol >li .images {
+#objects ol li.auto .images {
   position: relative;
   float: left;
   width: 160px;
@@ -427,16 +432,16 @@ chooser li {
   overflow: hidden;
 }
 
-#objects ol >li .images img {
+#objects ol li.auto .images img {
   display: none;
   margin-left: 10px;
 }
 
-#objects ol >li .images img:first-child {
+#objects ol li.auto .images img:first-child {
   display: inline;
 }
 
-#objects ol >li ul.params {
+#objects ol li.auto ul.params {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -445,28 +450,28 @@ chooser li {
   margin-top: -3px;
 }
 
-#objects ol >li ul.params li {
+#objects ol li.auto ul.params li {
   margin: 0 10px;
   padding: 0;
   line-height: 1.2;
   font-size: 12px;
 }
 
-#objects ol >li ul.params li strong {
+#objects ol li.auto ul.params li strong {
   color: #3b8b02;
   margin-right: 5px;
   font-weight: normal;
 }
 
-#objects ol >li ul.params .empty-value {
+#objects ol li.auto ul.params .empty-value {
   color: #dddddd;
 }
 
-#objects ol >li ul.params .empty-value strong {
+#objects ol li.auto ul.params .empty-value strong {
   color: #bfd8a6;
 }
 
-#objects ol >li ul.additional {
+#objects ol li.auto ul.additional {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -476,14 +481,26 @@ chooser li {
   padding: 10px;
 }
 
-#objects ol >li ul.additional li {
+#objects ol li.auto ul.additional li {
   display: inline;
   padding: 0;
   margin: 0 10px 0 0;
 }
 
-#objects ol >li ul.additional li a {
+#objects ol li.auto ul.additional li a {
   font-size: 11px;
+}
+
+#objects ol .delimiter {
+  float: none;
+  clear: both;
+  margin: 0 0 0 20px;
+  width: 250px;
+  height: 20px;
+  font-size: 1px;
+  line-height: 1px;
+  border: 0;
+  border-bottom: 1px solid #039cd8;
 }
 
 .popup-window {

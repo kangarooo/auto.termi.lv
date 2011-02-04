@@ -88,96 +88,99 @@ class SearchController(BaseController):
             .order_by(asc(Model.name))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
-#    @beaker_cache(expire=60*60*12, type='file')
-    def index(self, lang):
+    @beaker_cache(expire=60*60*12, type='file')
+    def index(self, lang=None):
         return render('search/main.html')
 
-#    @beaker_cache(expire=60*30, type='file')
+    @beaker_cache(expire=60*30, type='file')
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
         self._load_params()
         return dumps(self._params)
 
-#    @beaker_cache(expire=60*3, type='memory')
+    @beaker_cache(expire=60*3, type='memory')
     def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
-        response.headers['Content-Type'] = 'application/json'
-        if keyword is None or keyword[1:]=='':
-            return dumps({
-                'total': self.auto_q.count(),
-                'auto': self._prepare_auto(self.auto_q.limit(12))
-            })
-
-        try:
-            params = self._parse_params(keyword[1:])
-        except UrlError as msg:
-            return dumps({'error': 'UrlError', 'msg': str(msg)})
-
-        query = self._create_query(self.auto_q, params)
-        if query:
-            return dumps({
-                'total': query.count(),
-                'auto': self._prepare_auto(query.limit(12))
-            })
-        else:
-            return dumps({
-                'total': 0,
-                'auto': False
-            })
+        result = self._get(self.auto_q, keyword)
+        result['type'] = 'first'
+        return dumps(result)
             
-#    @beaker_cache(expire=60*3, type='memory')
-    def next(self, id, keyword=None):
-        import time
-        time.sleep(2)
+    @beaker_cache(expire=60*3, type='memory')
+    def next(self, lang=None, id=None, keyword=None):
+        query = self.auto_q
+        query = query.filter(Auto.id<id)
+        result = self._get(query, keyword)
+        result['type'] = 'next'
+        return dumps(result)
+
+    @beaker_cache(expire=60*3, type='memory')
+    def prev(self, lang=None, id=None, keyword=None):
+        query = self.auto_q
+        query = query.filter(Auto.id>id)
+        result = self._get(query, keyword)
+        result['type'] = 'prev'
+        return dumps(result)
+
+    @beaker_cache(expire=60*3, type='memory')
+    def total(self, lang=None, keyword=None):
+        return dumps(self._count(self.auto_q, keyword))
+
+    @beaker_cache(expire=60*3, type='memory')
+    def total_new(self, lang=None, id=None, keyword=None):
+        query = self.auto_q.filter(Auto.id>id)
+#        return dumps({'t':5})
+        return dumps(self._count(query, keyword))
+
+    def _get(self, query, keyword=None):
+#        get values by keyword
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
-            query = self.auto_q.filter(Auto.id<id)
-            return dumps({
+            return {
                 'total': query.count(),
                 'auto': self._prepare_auto(query.limit(12))
-            })
+            }
 
         try:
             params = self._parse_params(keyword[1:])
         except UrlError as msg:
-            return dumps({'error': 'UrlError', 'msg': str(msg)})
+            return {'error': 'UrlError', 'msg': str(msg)}
 
-        query = self._create_query(self.auto_q, params).filter(Auto.id<id)
+        query = self._create_query(query, params)
         if query:
-            return dumps({
+            return {
                 'total': query.count(),
                 'auto': self._prepare_auto(query.limit(12))
-            })
+            }
         else:
-            return dumps({
+            return {
                 'total': 0,
                 'auto': False
-            })
-
-#    @beaker_cache(expire=60*3, type='memory')
-    def total(self, lang=None, keyword=None):
+            }
+            
+    def _count(self, query, keyword=None):
+#        count total values by keyword
         keyword = url_decode(keyword)
         response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
-            return dumps({
-                't': self.auto_q.count()
-            })
-        
+            return {
+                't': query.count()
+            }
+
         try:
             params = self._parse_params(keyword[1:])
         except UrlError as msg:
-            return dumps({'error': 'UrlError', 'msg': str(msg)})
+            return {'error': 'UrlError', 'msg': str(msg)}
 
-        query = self._create_query(self.auto_q, params)
+        query = self._create_query(query, params)
         if query:
-            return dumps({
+            return {
                 't': query.count()
-            })
+            }
         else:
-            return dumps({
+            return {
                 't': 0
-            })
+            }
 
     def _create_query(self, query, params):
         par = dict([name, {

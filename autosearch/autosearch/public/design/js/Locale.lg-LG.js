@@ -41,6 +41,9 @@ Locale.define('lg-LG', 'Object', {
     'Next': function(next){
         return pluralize(next, 'Nuokomīs', 'Nuokomī')+' '+next+' '+pluralize(next, 'rezultats', 'rezultati');
     },
+    'Prev': function(prev){
+        return pluralize(prev, 'Jaunuokais', 'Jaunuokī')+' '+prev+' '+pluralize(prev, 'rezultats', 'rezultati');
+    },
     'None':'Nau',
     'Month': function(month){
         month = -1*month;

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: autosearch 0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2011-01-21 20:42+0200\n"
-"PO-Revision-Date: 2011-01-31 14:38+0200\n"
+"PO-Revision-Date: 2011-02-04 22:06+0200\n"
 "Last-Translator: Vaļuks <termilv@gmail.com>\n"
 "Language-Team: Latvian <termilv@gmail.com>\n"
 "Plural-Forms: true\n"
@@ -65,7 +65,7 @@ msgstr "Дизель"
 
 #: autosearch/controllers/search.py:402
 msgid "Hybrid"
-msgstr "Хибрид"
+msgstr "Гибрид"
 
 #: autosearch/controllers/search.py:403
 msgid "Manual"
@@ -89,7 +89,7 @@ msgstr "Полный"
 
 #: autosearch/controllers/search.py:405
 msgid "SUV"
-msgstr "Вседорожник"
+msgstr "Внедорожник"
 
 #: autosearch/controllers/search.py:405
 msgid "Hatchback"

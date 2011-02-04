@@ -134,8 +134,11 @@
         display: none
         cursor: default
  
-.button-next:
+.button-next, .button-prev:
     width: 300px
+
+.button-prev:
+    margin-bottom: 0
  
  
 .loading, .inactive:
@@ -234,7 +237,7 @@
         $fullwidth
         list-style: none
 
-        >li:
+        li.auto:
             float: left
             margin: $pageSitePadding 0 0 $pageSitePadding
             width: 350px
@@ -243,7 +246,6 @@
             $borderRadiusSmall
             overflow: hidden
             position: relative
-            
             h2:
                 margin: $pageSitePadding/2
                 padding: 0
@@ -306,6 +308,16 @@
                     
                     a:
                         font-size: 11px
+        .delimiter:
+            float: none
+            clear: both
+            margin: 0 0 0 $pageSitePadding
+            width: 250px
+            height: $pageSitePadding
+            font-size: 1px
+            line-height: 1px
+            border: 0
+            border-bottom: 1px solid $colorBase2
 
 .popup-window:
     position: absolute
