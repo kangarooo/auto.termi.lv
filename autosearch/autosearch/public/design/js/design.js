@@ -108,6 +108,7 @@ window.addEvent('domready', function(){
         'variables': ['m', 'y', 'c', 'f', 'g', 'k', 't', 'o', 'l', 'p'],
         'prefix': 's/',
         onChange: function(d){
+            var url = path+'/'+(d=='' ? 's' : d);
             //lets leave this two line for lazy loading
             window.clearTimeout(req_delay['objects_count']);
             req.cancel('objects_count');
@@ -116,9 +117,12 @@ window.addEvent('domready', function(){
             car_list.rebild();
             car_list.loading();
             window_scroll.toTop();
-            req.send('objects', {'url': path+'/'+(d=='' ? 's' : d)+'.json'});
+            req.send('objects', {'url': url+'.json'});
             
             title.original();
+
+            //trach to analytic
+            _gaq.push(['_trackPageview', url]);
         },
         onNewHash: function(d){
             window.clearTimeout(req_delay['objects_count']);
