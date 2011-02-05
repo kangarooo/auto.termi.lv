@@ -101,13 +101,13 @@ class SearchController(BaseController):
     @beaker_cache(expire=60*3, type='memory')
     def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
-        result = self._get(self.auto_q.order_by(desc(Auto.added)), keyword)
+        result = self._get(self.auto_q.order_by(desc(Auto.added), desc(Auto.id)), keyword)
         result['type'] = 'first'
         return dumps(result)
             
     @beaker_cache(expire=60*3, type='memory')
     def next(self, lang=None, id=None, keyword=None):
-        query = self.auto_q.order_by(desc(Auto.added))
+        query = self.auto_q.order_by(desc(Auto.added), desc(Auto.id))
         query = query.filter(Auto.id<id)
         result = self._get(query, keyword)
         result['type'] = 'next'
@@ -115,7 +115,7 @@ class SearchController(BaseController):
 
     @beaker_cache(expire=60*3, type='memory')
     def prev(self, lang=None, id=None, keyword=None):
-        query = self.auto_q.order_by(asc(Auto.added))
+        query = self.auto_q.order_by(asc(Auto.added), asc(Auto.id))
         query = query.filter(Auto.id>id)
         result = self._get(query, keyword)
         result['type'] = 'prev'
