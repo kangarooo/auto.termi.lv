@@ -14,7 +14,7 @@ from pylons import config
 
 from pylons.i18n.translation import _
 
-from pylons.decorators.cache import beaker_cache
+from autosearch.lib.cache import pre_cache
 
 from autosearch.lib.base import BaseController, render
 from autosearch.lib.base import Session
@@ -88,24 +88,24 @@ class SearchController(BaseController):
             .order_by(asc(Model.name))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 
-    @beaker_cache(expire=60*60*12, type='file')
+    @pre_cache(expire=60*60*12, type='file')
     def index(self, lang=None):
         return render('search/main.html')
 
-    @beaker_cache(expire=60*30, type='file')
+    @pre_cache(expire=60*30, type='file')
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
         self._load_params()
         return dumps(self._params)
 
-    @beaker_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory')
     def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         result = self._get(self.auto_q.order_by(desc(Auto.added), desc(Auto.id)), keyword)
         result['type'] = 'first'
         return dumps(result)
             
-    @beaker_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory')
     def next(self, lang=None, id=None, keyword=None):
         query = self.auto_q.order_by(desc(Auto.added), desc(Auto.id))
         query = query.filter(Auto.id<id)
@@ -113,7 +113,7 @@ class SearchController(BaseController):
         result['type'] = 'next'
         return dumps(result)
 
-    @beaker_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory')
     def prev(self, lang=None, id=None, keyword=None):
         query = self.auto_q.order_by(asc(Auto.added), asc(Auto.id))
         query = query.filter(Auto.id>id)
@@ -121,11 +121,11 @@ class SearchController(BaseController):
         result['type'] = 'prev'
         return dumps(result)
 
-    @beaker_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory')
     def total(self, lang=None, keyword=None):
         return dumps(self._count(self.auto_q, keyword))
 
-    @beaker_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory')
     def total_new(self, lang=None, id=None, keyword=None):
         query = self.auto_q.filter(Auto.id>id)
 #        return dumps({'t':5})
