@@ -1,17 +1,10 @@
 """currency rates"""
 from sqlalchemy import Column
-from sqlalchemy.types import TypeDecorator, SmallInteger, Integer, Float, DateTime
+from sqlalchemy.types import Integer, Float, DateTime
 
 from autosearch.model.meta import Base
 
-class Currency(TypeDecorator):
-
-    impl = SmallInteger
-    values = ['LVL', 'USD', 'EUR']
-
-    def process_result_value(self, value, dialect):
-        if value is not None:
-            return self.values[value]
+from autosearch.model.types import Currency
 
 class CurrencyRate(Base):
     __tablename__ = "currency_rate"
