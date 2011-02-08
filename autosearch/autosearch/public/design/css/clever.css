@@ -309,7 +309,7 @@ chooser li {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  border: 6px solid #aec9da;
+  border: 6px solid #67899f;
   padding: 10px;
 }
 
@@ -328,7 +328,7 @@ chooser li {
 .filter ul li {
   float: left;
   width: 33%;
-  color: #dddddd;
+  color: #aaaaaa;
 }
 
 .filter ul li .adit {
@@ -337,7 +337,7 @@ chooser li {
 
 .filter ul li .fil-name-sub {
   cursor: pointer;
-  color: #aec9da;
+  color: #67899f;
 }
 
 .filter ul li .fil-name-sub:hover {
@@ -464,7 +464,7 @@ chooser li {
 }
 
 #objects ol li.auto ul.params .empty-value {
-  color: #dddddd;
+  color: #aaaaaa;
 }
 
 #objects ol li.auto ul.params .empty-value strong {
@@ -511,7 +511,7 @@ chooser li {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  border: 10px solid #aec9da;
+  border: 10px solid #67899f;
   width: 600px;
 }
 
@@ -691,7 +691,7 @@ a:active {
 }
 
 a:visited {
-  color: #aec9da;
+  color: #67899f;
 }
 
 p {

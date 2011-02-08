@@ -170,6 +170,7 @@ var Filter = new Class({
             'round': numberFormat ? numberFormat['precision'] : 0,
             'knobs': [min, max],
             'decor': decor,
+            'possible': item['value']['value'] ? item['value']['value'] : false,
             'onChange': function(k){
                 updateSum(k.left, k.right, true);
             },

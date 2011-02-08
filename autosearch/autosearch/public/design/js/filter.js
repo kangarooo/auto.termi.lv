@@ -57,16 +57,25 @@ var filter = function(params){
                 break;
                 case 'slider':
                     (function(){
+                        var minValue, maxValue,
+                            url = '', numberFormat = false,
+                            numberPrecision = 0;
+
                         var slider = new Element('ul', {'class': 'slider'}).inject(c);
 
                         var min = new Element('li', {'class':'min', 'html': item['value']['min']}).inject(slider);
                         var max = new Element('li', {'class':'max', 'html': item['value']['max']}).inject(slider);
-                        var minValue = item['value']['min'].toFloat();
-                        var maxValue = item['value']['max'].toFloat();
+                        
+                        var possibleValue = item['value']['value'] ? item['value']['value'] : false;
+
+                        if (possibleValue){
+                            minValue = 0;
+                            maxValue = possibleValue.length-1;
+                        } else {
+                            minValue = item['value']['min'].toFloat();
+                            maxValue = item['value']['max'].toFloat();
+                        }
                         var decor = new Element('li', {'class':'decor'}).inject(slider);
-                        var url = '';
-                        var numberFormat = false;
-                        var numberPrecision = 0;
                         var min_str = item['value']['min_str'] ? item['value']['min_str'] : '';
                         (function(){
                             switch (item['url']){
@@ -82,6 +91,9 @@ var filter = function(params){
                                     numberPrecision = -3;
                                 break;
                                 case 'p':
+                                    console.info(item);
+                                    if (possibleValue)
+                                        break;
                                     numberFormat = {
                                         group: ' ',
                                         precision: 2,
@@ -92,12 +104,19 @@ var filter = function(params){
                             }
                         })();
                         var updateSum = function(left, right, isBubble){
-                            min.set('html', left==minValue&&min_str!='' ? min_str : (numberFormat ? left.format(numberFormat) : left));
-                            max.set('html', right==minValue&&min_str!='' ? min_str : (numberFormat ? right.format(numberFormat) : right));
+                            var min_value = minValue,
+                                max_value = maxValue;
+                            if(possibleValue){
+                                left = possibleValue[left];
+                                right = possibleValue[right];
+                            }
+
+                            min.set('html', left==min_value&&min_str!='' ? min_str : (numberFormat ? left.format(numberFormat) : left));
+                            max.set('html', right==min_value&&min_str!='' ? min_str : (numberFormat ? right.format(numberFormat) : right));
                             if(left==minValue&&right==maxValue)
                                 url = '';
                             else
-                                url = (left>minValue ? left : '')+'-'+(right<maxValue ? right : '');
+                                url = (left>min_value ? left : '')+'-'+(right<max_value ? right : '');
                             if(!isBubble)
                                 SU.set(item['url'], url);
                             c.activeUrl = url;
