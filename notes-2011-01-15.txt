@@ -41,3 +41,5 @@ rewrite model get code
 language translations (ru)
     vsedorozhnik -> vnedorozhnik
     hibrid -> gibrid
+    
+Make inactive links hi
