@@ -138,24 +138,29 @@ var Filter = new Class({
         var url = '';
         var numberFormats = {
             'c': {
-                precision: 1
+                'round': 1,
+                'format': false
             },
             'k': {
-                group: ' ',
-                precision: -4,
-                scientific: false
+                'round': -4,
+                'format': {
+                    group: ' ',
+                    scientific: false
+                }
             },
             'p': {
-                group: ' ',
-                precision: -2,
-                scientific: false
+                'round': -2,
+                'format': {
+                    group: ' ',
+                    scientific: false
+                }
             }
         };
         var numberFormat = numberFormats[item['url']] ? numberFormats[item['url']] : false;
-        var min_str = item['value']['min_str'] ? item['value']['min_str'] : '';
+        var min_str = item['value']['min_str'] ? item['value']['min_str'] : false;
         var updateSum = function(left, right, isBubble){
-            min.set('html', left==minValue&&min_str!='' ? min_str : (numberFormat ? left.format(numberFormat) : left));
-            max.set('html', right==minValue&&min_str!='' ? min_str : (numberFormat ? right.format(numberFormat) : right));
+            min.set('html', left==minValue&&min_str ? min_str : (numberFormat ? left.format(numberFormat['format']) : left));
+            max.set('html', right==minValue&&min_str ? min_str : (numberFormat ? right.format(numberFormat['format']) : right));
             if(left==minValue&&right==maxValue)
                 url = '';
             else
@@ -167,7 +172,7 @@ var Filter = new Class({
         };
         var dbsl = new InlineSlider(slider, {
             'range': [minValue, maxValue],
-            'round': numberFormat ? numberFormat['precision'] : 0,
+            'round': numberFormat ? numberFormat['round'] : 0,
             'knobs': [min, max],
             'decor': decor,
             'possible': item['value']['value'] ? item['value']['value'] : false,

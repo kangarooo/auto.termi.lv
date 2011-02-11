@@ -290,8 +290,8 @@ class SearchController(BaseController):
                     'url': 'c',
                     'type': 'slider',
                     'value': {
-                        'min': .2,
-                        'max': 8,
+                        'min': .5,
+                        'max': 5,
                         'type': 'float'
                     },
                 },
