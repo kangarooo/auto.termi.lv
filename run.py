@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import shlex, subprocess
 import sys
 import time
