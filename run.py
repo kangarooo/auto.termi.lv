@@ -1,7 +1,7 @@
 import shlex, subprocess
 import sys
 import time
-command_line = raw_input()
+command_line = sys.argv[2]
 args = shlex.split(command_line)
 def run(args, sleep):
     subprocess.call(args)
