@@ -21,12 +21,12 @@ function head_display($title = '')
 	<link rel="stylesheet" type="text/css" href="<?php echo $wwwPathAdmin;?>/design/css/styles.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $wwwPathAdmin;?>/design/css/content.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $wwwPathAdmin;?>/design/css/print.css"<?php echo isset($_GET['print']) ? '' : ' media="print"';?> />
-	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/editors/fckeditor2.6.3/fckeditor.js"></script>
+<!--	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/editors/fckeditor2.6.3/fckeditor.js"></script>
 	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/js/mootools-1.2.4-core-yc.js"></script>
 	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/js/mootools-1.2.4.4-more.js"></script>
 	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/js/extend.js"></script>
 	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/editors/ckeditor3.2/ckeditor.js"></script>
-	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/design.js"></script>
+	<script type="text/javascript" src="<?php echo $wwwPathAdmin;?>/design/design.js"></script>-->
 </head>
 <?php
 }
