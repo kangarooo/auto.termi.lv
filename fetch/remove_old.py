@@ -42,21 +42,26 @@ url_q = session.query(Auto)\
             .filter(Auto.added <= datetime.date.today() - datetime.timedelta(8))
 
 for a in url_q.all():
+    print a.id
     try:
-        for i in a.image:
-            os.unlink(path+'/'+i.path)
-            session.delete(i)
-            session.commit()
-        for u in a.url:
-            session.delete(u.url_content)
-            session.commit()
-            session.delete(u)
-            session.commit()
+        if a.image and len(a.image)>0:
+            for i in a.image:
+                if os.path.isfile(path+'/'+i.path):
+                    os.unlink(path+'/'+i.path)
+                session.delete(i)
+
+        if a.url and len(a.url)>0:
+            for u in a.url:
+                if u.url_content:
+                    session.delete(u.url_content)
+                session.delete(u)
         session.delete(a)
-        session.commit()
+
+        session.flush()
 
 
     except:
-        
+
         raise
-    
+
+#/www/auto.termi.lv/fetch/remove_old.py 2 /www/auto.termi.lv/log/remove_old.log >> /www/auto.termi.lv/log/remove_old-cron.log 2>&1
