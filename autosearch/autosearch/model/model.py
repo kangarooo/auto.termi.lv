@@ -13,6 +13,7 @@ class Model(Base):
     last_added = Column(DateTime())
     name = Column(Unicode(100))
     published = Column(Boolean())
+    order = Column(Integer(2))
 
     mark_id = Column(Integer, ForeignKey('mark.id'))
 

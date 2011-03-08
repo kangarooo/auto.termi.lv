@@ -1,0 +1,27 @@
+html, body
+{
+    text-align: left;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+a img
+{
+    border: 0px;
+}
+a
+{
+    outline: none;
+}
+#wrapper
+{
+    padding: 10px;
+}
+    #conteiner
+    {
+        position: relative;
+    }
+#content
+{
+    padding: 10px 0px 0px 0px;
+}

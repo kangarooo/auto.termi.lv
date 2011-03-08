@@ -1,0 +1,53 @@
+#sub-navigation, #left, #foot, #anno-1870, #logo, #print-page a
+{
+    display: none;
+}
+#holder
+{
+	background: #fff;
+	/*position: normal;*/
+}
+
+#wrapper
+{
+	position: relative;
+	background: none;
+	width: 100%;
+}
+#land #wrapper
+{
+    background: none;
+}
+
+    #dinamic-image
+    {
+        background: none !important;
+    }
+#wrapper-back
+{
+    background: none;
+}
+#land #wrapper-back
+{
+    background: none;
+}
+#middle
+{
+    overflow: hidden;
+}
+    #content
+    {
+        margin-top: 0px; /*space for header*/
+        margin-right: 0px; /*space for left*/
+        float: none;
+        width: 100%;
+    }
+        #content_fix
+        {
+           padding-right: 0px;/*back content from right*/
+        }
+#c-text, #c-text-one
+{
+    width: 100%;
+    
+}

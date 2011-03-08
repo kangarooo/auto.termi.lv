@@ -86,6 +86,7 @@ class SearchController(BaseController):
             .filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7))\
             .filter(Model.published==True)\
             .order_by(asc(Mark.name))\
+            .order_by(asc(Model.order))\
             .order_by(asc(Model.name))
         self.currency_q = Session.query(CurrencyRate).order_by(desc(CurrencyRate.added)).limit(len(Currency().values))
 

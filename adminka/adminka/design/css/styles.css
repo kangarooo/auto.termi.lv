@@ -1,0 +1,127 @@
+#top-menu ul, #top-men li
+{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    background: none;
+}
+#top-menu ul
+{
+    width: 100%;
+    background: #a5a5a5;
+    padding: 10px 0px 10px 0px;
+    position: relative;
+}
+#top-menu li
+{
+    display: inline;
+}
+#top-menu li a
+{
+    margin: 0px 2px;
+    color: #ffffff;
+}
+#top-menu li#t0 a
+{
+    font-weight: bold;
+}
+#top-menu a#logout
+{
+    position: absolute;
+    right: 0px;
+}
+#path-self ul, #path-self li
+{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    background: none;
+}
+#path-self ul
+{
+    padding: 3px 0px;
+}
+    #path-self li
+    {
+        display: inline;
+        background: url('img/narrow.png') no-repeat 0px 5px;
+    }
+        #path-self li:first-child
+        {
+            background: none;
+        }
+        #path-self li:first-child a
+        {
+            margin: 0px;
+        }
+        #path-self li a
+        {
+            margin-left: 14px;
+        }
+#top-show
+{
+	display: block;
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	background: #ededed;
+}
+#sub-menu, #sub-menu-2
+{
+    margin: 0px;
+    padding: 0px;
+}
+div.original
+{
+    border: 1px solid #000011;
+    margin: 5px 10px 5px 50px;
+    padding: 2px;
+    display: none;
+}
+span.original-text-show
+{
+    color: #e20004;
+    cursor: pointer;
+    margin-left: 10px;
+}
+    span.original-text-show:hover
+    {
+        text-decoration: underline;
+    }
+#sub-menu-2
+{
+    margin: 4px 20px;
+}
+    #sub-menu li, #sub-menu-2 li
+    {
+        margin: 0px 4px;
+        display: inline;
+    }
+    #sub-menu #active-sub-menu, #sub-menu-2 #active-sub-menu
+    {
+        font-weight: bold
+    }
+td.sub_1
+{
+    padding-left: 30px;
+}
+td.sub_2
+{
+    padding-left: 50px;
+}
+td.sub_3
+{
+    padding-left: 70px;
+}
+input.s-text
+{
+    width: 30px;
+}
+.error
+{
+    color: red;
+    font-weight: bold;
+    padding: 10px;
+}
