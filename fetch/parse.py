@@ -119,7 +119,7 @@ class Parse:
             model = model_q.one()
             model.last_added = datetime.datetime.now()
         else:
-            model = Model(last_added=datetime.datetime.now(), name=values['model'], mark_id=mark_id)
+            model = Model(last_added=datetime.datetime.now(), name=values['model'], order=0, published=False, mark_id=mark_id)
             self.session.add(model)
         mark = self.session.query(Mark).filter_by(id=model.mark_id).one()
         mark.last_added = datetime.datetime.now()
