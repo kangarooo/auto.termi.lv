@@ -82,7 +82,11 @@ Class Edit
                     break;
                     case 'yesno':
                         if($this->yesno($f)){
-                            refresh('?');
+                            if(array_key_exists('after', $key)){
+                                if($key['after']=='die')
+                                    die;
+                            }
+                            refresh($_SERVER["HTTP_REFERER"]);
                         }
                     break;
                     case 'delete':
@@ -94,7 +98,10 @@ Class Edit
                                 }
                             }
                             if($this->delete($f)){
-                                die;
+                                if(array_key_exists('after', $key)){
+                                    if($key['after']=='die')
+                                        die;
+                                }
                                 refresh($_SERVER["HTTP_REFERER"]);
                             }
                         }

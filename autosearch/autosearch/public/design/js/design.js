@@ -144,13 +144,13 @@ window.addEvent('domready', function(){
 
     var req = new Request.Queue({
         requests: {
-            filter: new Request.JSON({
+            filter: new Request.JSONP({
                 url: path+'/search/params.json',
-                method: 'get',
-                noCache: true,
+//                method: 'get',
+//                noCache: true,
                 link: 'cancel',
-                onFailure: showError,
-                onSuccess: function(f){
+//                onFailure: showError,
+                onComplete: function(f){
                     filter.draw({
                         'mark': {
                             'name': Locale.get('Filter.Models'),
@@ -220,15 +220,13 @@ window.addEvent('domready', function(){
                     SU.start();
                 }
             }),
-            objects_count: new Request.JSON({
-                method: 'get',
-                noCache: true,
-//                link: 'cancel',
+            objects_count: new Request.JSONP({
+                link: 'cancel',
 //                onRequest: function() {
 ////                    filter.loading();
 //                },
-                onFailure: showError,
-                onSuccess: function(n){
+                onTimeout: showError,
+                onComplete: function(n){
                     filter.stopLoading();
                     if(n['error']){
                         filter.updateCount(0);
@@ -241,11 +239,9 @@ window.addEvent('domready', function(){
                 }
                 
             }),
-            new_objects_count: new Request.JSON({
-                method: 'get',
-                noCache: true,
-                onFailure: showError,
-                onSuccess: function(n){
+            new_objects_count: new Request.JSONP({
+                onTimeout: showError,
+                onComplete: function(n){
                     if(!n['error']&&n['t']>0){
                         title.new_values(n['t']);
                         car_list.activateButton(1, n['t']);
@@ -253,16 +249,14 @@ window.addEvent('domready', function(){
                 }
 
             }),
-            objects: new Request.JSON({
-                method: 'get',
-                noCache: true,
-//                link: 'cancel',
+            objects: new Request.JSONP({
+                link: 'cancel',
                 onRequest: function(){
                     window.clearTimeout(req_delay['new_objects_count']);
                     req.cancel('new_objects_count');
                 },
-                onFailure: showError,
-                onSuccess: function(o){
+                onTimeout: showError,
+                onComplete: function(o){
                     car_list.stopLoading();
                     if(o['error']){
                         

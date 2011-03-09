@@ -8,7 +8,7 @@ import logging
 from dateutil.relativedelta import relativedelta
 from simplejson import dumps
 
-from pylons import response
+from pylons import response, request
 from pylons import config
 #from pylons.controllers.util import abort, redirect
 
@@ -98,14 +98,14 @@ class SearchController(BaseController):
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
         self._load_params()
-        return dumps(self._params)
+        return self._check_callback(self._params)
 
     @pre_cache(expire=60*3, type='memory')
     def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         result = self._get(self.auto_q.order_by(desc(Auto.added), desc(Auto.id)), keyword)
         result['type'] = 'first'
-        return dumps(result)
+        return self._check_callback(result)
             
     @pre_cache(expire=60*3, type='memory')
     def next(self, lang=None, id=None, keyword=None):
@@ -113,7 +113,7 @@ class SearchController(BaseController):
         query = query.filter(Auto.id<id)
         result = self._get(query, keyword)
         result['type'] = 'next'
-        return dumps(result)
+        return self._check_callback(result)
 
     @pre_cache(expire=60*3, type='memory')
     def prev(self, lang=None, id=None, keyword=None):
@@ -121,17 +121,26 @@ class SearchController(BaseController):
         query = query.filter(Auto.id>id)
         result = self._get(query, keyword)
         result['type'] = 'prev'
-        return dumps(result)
+        return self._check_callback(result)
 
     @pre_cache(expire=60*3, type='memory')
     def total(self, lang=None, keyword=None):
-        return dumps(self._count(self.auto_q, keyword))
+        return self._check_callback(self._count(self.auto_q, keyword))
 
     @pre_cache(expire=60*3, type='memory')
     def total_new(self, lang=None, id=None, keyword=None):
         query = self.auto_q.filter(Auto.id>id)
 #        return dumps({'t':5})
-        return dumps(self._count(query, keyword))
+        return self._check_callback(self._count(query, keyword))
+
+    def _check_callback(self, json):
+        """
+            check callback for jsonp
+        """
+        json = dumps(json)
+        if('callback' not in request.GET):
+            return json
+        return "{callback}({json})".format(callback=request.GET['callback'], json = json)
 
     def _get(self, query, keyword=None):
 #        get values by keyword
@@ -375,7 +384,7 @@ class SearchController(BaseController):
 #            'url': a.url.url,
             'urls': [url.url for url in a.url],
 #            'image': random.sample([{'src': '/'+config['pylons.paths']['image_cache_files']+'/'+i.path} for i in a.image], 1 if len(a.image)>1 else len(a.image)) if a.image else None,
-            'image': [{'src': '/'+config['pylons.paths']['image_cache_files']+'/'+i.path, 'url': i.url} for i in a.image],
+            'image': [{'src': config['image_domain']+'/'+config['pylons.paths']['image_cache_files']+'/'+i.path, 'url': i.url} for i in a.image],
 #            'image': None,
             'added': str(a.added),#self._time_diff(a.added),
             'year': a.year.year,

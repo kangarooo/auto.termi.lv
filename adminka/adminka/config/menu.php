@@ -12,6 +12,9 @@ $editNavigation = array(
                 , 'name'=>array(
                         'type'=>'editLink'
                 )
+                , 'last_added'=>array(
+                        'type'=>'editLink'
+                )
                 , 'mark_id'=>array(
 			'type'=>'link',
                         'possible'=>getMarks()
@@ -24,11 +27,13 @@ $editNavigation = array(
                         'type'=>'textAll'
                 )
                 , 'published'=>array(
-                        'type'=>'yesno'
+                        'type'=>'yesno',
+                        'after'=>'die'
                 )
                 , 'delete'=>array(
                         'type'=>'delete'
                         ,'function'=>'onModelDelete'
+                        , 'after'=>'die'
                 )
         )
         ,'edit_fields' => array(

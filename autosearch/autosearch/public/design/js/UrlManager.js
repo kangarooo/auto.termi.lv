@@ -62,6 +62,7 @@ var UrlManager = new Class({
         if(this.lastUrl!=hash){
             this.lastUrl = hash;
             this.fireEvent('change', hash);
+            this.newValues = this.state;
         }
     }
 });
