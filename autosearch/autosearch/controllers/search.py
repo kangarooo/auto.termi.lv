@@ -125,6 +125,8 @@ class SearchController(BaseController):
 
     @pre_cache(expire=60*3, type='memory')
     def total(self, lang=None, keyword=None):
+        import time
+#        time.sleep(10)
         return self._check_callback(self._count(self.auto_q, keyword))
 
     @pre_cache(expire=60*3, type='memory')

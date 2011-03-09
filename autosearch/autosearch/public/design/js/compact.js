@@ -2849,8 +2849,8 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                 return false;
             });
     });
-    var showError = function(xhr){
-        popup.showText(Locale.get('Error.Error'), Locale.get('Error.Error simple text').substitute({'status': xhr.status}));
+    var showError = function(){
+        popup.showText(Locale.get('Error.Error'), Locale.get('Error.Error simple text').substitute({'status': 'timeout'}));
     }
 //    popup.showText('Kļūda', 'Notikusi nenovēršama kļūda, mēs atvainojamies par neērtībām - atjaunojiet lūdzu mājaslapu');
     
@@ -2956,13 +2956,11 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
     });
 
     var req = new Request.Queue({
+        stopOnFailure: false,
         requests: {
             filter: new Request.JSONP({
                 url: path+'/search/params.json',
-//                method: 'get',
-//                noCache: true,
                 link: 'cancel',
-//                onFailure: showError,
                 onComplete: function(f){
                     filter.draw({
                         'mark': {
@@ -3038,7 +3036,12 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
 //                onRequest: function() {
 ////                    filter.loading();
 //                },
-                onTimeout: showError,
+//                timeout: 2,
+                onTimeout: function(){
+                    filter.stopLoading();
+                    filter.updateCount(0);
+                    showError();
+                },
                 onComplete: function(n){
                     filter.stopLoading();
                     if(n['error']){
@@ -3053,7 +3056,7 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                 
             }),
             new_objects_count: new Request.JSONP({
-                onTimeout: showError,
+//                onTimeout: showError,
                 onComplete: function(n){
                     if(!n['error']&&n['t']>0){
                         title.new_values(n['t']);
@@ -3068,7 +3071,10 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                     window.clearTimeout(req_delay['new_objects_count']);
                     req.cancel('new_objects_count');
                 },
-                onTimeout: showError,
+                onTimeout: function(){
+                    car_list.stopLoading();
+                    showError();
+                },
                 onComplete: function(o){
                     car_list.stopLoading();
                     if(o['error']){
@@ -3088,7 +3094,7 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                             }
                             if(o['total']==0){
                                 popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
-                                return
+                                return;
                             }
                             window.clearTimeout(req_delay['new_objects_count']);
                             req.cancel('new_objects_count');
