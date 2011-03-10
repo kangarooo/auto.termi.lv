@@ -94,20 +94,20 @@ class SearchController(BaseController):
     def index(self, lang=None):
         return render('search/main.html')
 
-    @pre_cache(expire=60*30, type='file')
+    @pre_cache(expire=60*30, type='file', query_args=True)
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
         self._load_params()
         return self._check_callback(self._params)
 
-    @pre_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory', query_args=True)
     def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         result = self._get(self.auto_q.order_by(desc(Auto.added), desc(Auto.id)), keyword)
         result['type'] = 'first'
         return self._check_callback(result)
             
-    @pre_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory', query_args=True)
     def next(self, lang=None, id=None, keyword=None):
         query = self.auto_q.order_by(desc(Auto.added), desc(Auto.id))
         query = query.filter(Auto.id<id)
@@ -115,7 +115,7 @@ class SearchController(BaseController):
         result['type'] = 'next'
         return self._check_callback(result)
 
-    @pre_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory', query_args=True)
     def prev(self, lang=None, id=None, keyword=None):
         query = self.auto_q.order_by(asc(Auto.added), asc(Auto.id))
         query = query.filter(Auto.id>id)
@@ -123,13 +123,13 @@ class SearchController(BaseController):
         result['type'] = 'prev'
         return self._check_callback(result)
 
-    @pre_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory', query_args=True)
     def total(self, lang=None, keyword=None):
         import time
 #        time.sleep(10)
         return self._check_callback(self._count(self.auto_q, keyword))
 
-    @pre_cache(expire=60*3, type='memory')
+    @pre_cache(expire=60*3, type='memory', query_args=True)
     def total_new(self, lang=None, id=None, keyword=None):
         query = self.auto_q.filter(Auto.id>id)
 #        return dumps({'t':5})
