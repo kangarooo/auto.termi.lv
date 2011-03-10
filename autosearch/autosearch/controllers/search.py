@@ -82,8 +82,6 @@ class SearchController(BaseController):
             .filter(Auto.added >= datetime.date.today() - datetime.timedelta(7))
         self.mark_q = Session.query(Mark)\
             .outerjoin(Model).options(contains_eager('model'))\
-            .filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7))\
-            .filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7))\
             .filter(Model.published==True)\
             .order_by(asc(Mark.name))\
             .order_by(asc(Model.order))\
@@ -97,7 +95,7 @@ class SearchController(BaseController):
     @pre_cache(expire=60*30, type='file', query_args=True)
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
-        self._load_params()
+        self._load_params(self.mark_q.filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7)).filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7)))
         return self._check_callback(self._params)
 
     @pre_cache(expire=60*3, type='memory', query_args=True)
@@ -153,11 +151,10 @@ class SearchController(BaseController):
                 'total': query.count(),
                 'auto': self._prepare_auto(query.limit(12))
             }
-
         try:
             params = self._parse_params(keyword[1:])
-        except UrlError as msg:
-            return {'error': 'UrlError', 'msg': str(msg)}
+        except UrlError as (msg, code):
+            return {'error': 'UrlError', 'msg': msg, 'code': code}
 
         query = self._create_query(query, params)
         if query:
@@ -182,8 +179,8 @@ class SearchController(BaseController):
 
         try:
             params = self._parse_params(keyword[1:])
-        except UrlError as msg:
-            return {'error': 'UrlError', 'msg': str(msg)}
+        except UrlError as (msg, code):
+            return {'error': 'UrlError', 'msg': msg, 'code': code}
 
         query = self._create_query(query, params)
         if query:
@@ -276,7 +273,8 @@ class SearchController(BaseController):
         self._parser = Parser([v for name, v in params.iteritems()])
         return self._parser.parse_url(url)
 
-    def _load_params(self):
+    def _load_params(self, query = False):
+        query = query if query else self.mark_q
         if self._params is None:
             self._params = {
                 'mark': {
@@ -287,7 +285,7 @@ class SearchController(BaseController):
                         'id': mark.id,
                         'name': mark.name,
                         'models': [{'id': m.id, 'name': m.name} for m in mark.model],
-                    } for mark in self.mark_q.all()]
+                    } for mark in query.all()]
                 },
                 'year': {
                     'name': 'year',

@@ -43,13 +43,13 @@ class Parser:
             if r['sub'] and 'sub' in v:
                 sub = [vs['id'] for rs in r['sub'] for vs in v['sub'] if rs.lower()==vs['name'].lower()]
                 if len(sub)!=len(r['sub']):
-                    raise UrlError(', '.join([type+'-'+str, ','.join(r['sub']), 'not much all sub']))
+                    raise UrlError(', '.join([type+'-'+str, ','.join(r['sub'])]), 'not much all sub')
             ids.append({
                 'main': v['id'],
                 'sub': sub
             })
         if len(ids)!=len(result):
-            raise UrlError(', '.join([type, 'not much all']))
+            raise UrlError(type, 'not much all')
         return ids if len(ids)>0 else None
                             
 
@@ -57,7 +57,7 @@ class Parser:
         try:
             min, max = str.split(self._delimiter[1], 1)
         except ValueError:
-            raise UrlError(', '.join([type+'-'+str, 'need 2 parametrs']))
+            raise UrlError(type+'-'+str, 'need 2 parametrs')
         
         if min=='':
             min=variable['min']
@@ -71,13 +71,13 @@ class Parser:
             min = int(min)
             max = int(max)
         if min>max:
-            raise UrlError(', '.join([type+'-'+str, 'max less then min']))
+            raise UrlError(type+'-'+str, 'max less then min')
         if max<min:
             raise
         if min<variable['min']:
-            raise UrlError(', '.join([type+'-'+str, 'min to small']))
+            raise UrlError(type+'-'+str, 'min to small')
         if max>variable['max']:
-            raise UrlError(', '.join([type+'-'+str, 'max to large']))
+            raise UrlError(type+'-'+str, 'max to large')
         return {
             'min': None if min==variable['min'] else min,
             'max': None if max==variable['max'] else max
@@ -89,7 +89,7 @@ class Parser:
         [res.append(variable.index(v)) for v in variable for s in str_v if variable.index(v) not in res and s.lower()==v.lower()]
 
         if len(res)!=len(str_v):
-            raise UrlError(', '.join([type+'-'+str, 'not much all']))
+            raise UrlError(type+'-'+str, 'not much all')
         return res
 
     def _extract_url(self, url):
@@ -99,7 +99,7 @@ class Parser:
             try:
                 type, v = url_part.split(self._delimiter[1], 1)
             except ValueError:
-                raise UrlError(', '.join([url_part, 'cannot get type and variable']))
+                raise UrlError(url_part, 'cannot get type and variable')
             
             variable = self._get_variable_params(type)
             res.append({

@@ -38,8 +38,8 @@ implement map viewer (future)
 
 rewrite model get code
 
-language translations (ru)
-    vsedorozhnik -> vnedorozhnik
-    hibrid -> gibrid
     
 Make inactive links hi
+
+2010-03-10
+on invalid url return errors for user

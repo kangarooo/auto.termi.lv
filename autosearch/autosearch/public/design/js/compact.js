@@ -2849,8 +2849,17 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                 return false;
             });
     });
-    var showError = function(){
-        popup.showText(Locale.get('Error.Error'), Locale.get('Error.Error simple text').substitute({'status': 'timeout'}));
+//    var showError =
+    var showError = {
+        'timeout': function(){
+            popup.showText(Locale.get('Error.Error'), Locale.get('Error.Error simple text').substitute({'status': 'timeout'}));
+        },
+        'urlError': function(){
+            showError.nothing();
+        },
+        'nothing': function(){
+            popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
+        }
     }
 //    popup.showText('Kļūda', 'Notikusi nenovēršama kļūda, mēs atvainojamies par neērtībām - atjaunojiet lūdzu mājaslapu');
     
@@ -3040,7 +3049,7 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                 onTimeout: function(){
                     filter.stopLoading();
                     filter.updateCount(0);
-                    showError();
+                    showError.timeout();
                 },
                 onComplete: function(n){
                     filter.stopLoading();
@@ -3073,12 +3082,14 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                 },
                 onTimeout: function(){
                     car_list.stopLoading();
-                    showError();
+                    showError.timeout();
                 },
                 onComplete: function(o){
                     car_list.stopLoading();
                     if(o['error']){
-                        
+                        if(o['error']=='UrlError'){
+                            showError.urlError();
+                        }
                     } else {
                         if(o['auto']){
                             var type = o['type']=='prev' ? 1 : 0;
@@ -3093,7 +3104,7 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
                                     title.original();
                             }
                             if(o['total']==0){
-                                popup.showText(Locale.get('Error.Nothing'), Locale.get('Error.Nothing found'));
+                                showError.nothing();
                                 return;
                             }
                             window.clearTimeout(req_delay['new_objects_count']);
