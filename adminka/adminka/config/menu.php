@@ -40,6 +40,9 @@ $editNavigation = array(
                 'id' => array(
                         'type'=>'hidden'
                 ),
+                'last_added' => array(
+                        'type' => 'text'
+                ),
                 'name' => array(
                         'type' => 'text'
                         ,'function' => 'escArgHtml'
