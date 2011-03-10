@@ -14,7 +14,7 @@ from pylons import config
 
 from pylons.i18n.translation import _
 
-from autosearch.lib.cache import pre_cache
+from autosearch.lib.cache import pre_cache, pre_jsonp
 
 from autosearch.lib.base import BaseController, render
 from autosearch.lib.base import Session
@@ -92,60 +92,58 @@ class SearchController(BaseController):
     def index(self, lang=None):
         return render('search/main.html')
 
-    @pre_cache(expire=60*30, type='file', query_args=True)
+    @pre_jsonp()
+    @pre_cache(expire=60*30, type='file')
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
         self._load_params(self.mark_q.filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7)).filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7)))
-        return self._check_callback(self._params)
+        return dumps(self._params)
 
-    @pre_cache(expire=60*3, type='memory', query_args=True)
+    @pre_jsonp()
+    @pre_cache(expire=60*3, type='memory')
     def search(self, lang=None, keyword=None):
         keyword = url_decode(keyword)
         result = self._get(self.auto_q.order_by(desc(Auto.added), desc(Auto.id)), keyword)
         result['type'] = 'first'
-        return self._check_callback(result)
+        return dumps(result)
             
-    @pre_cache(expire=60*3, type='memory', query_args=True)
+    @pre_jsonp()
+    @pre_cache(expire=60*3, type='memory')
     def next(self, lang=None, id=None, keyword=None):
         query = self.auto_q.order_by(desc(Auto.added), desc(Auto.id))
         query = query.filter(Auto.id<id)
         result = self._get(query, keyword)
         result['type'] = 'next'
-        return self._check_callback(result)
+        return dumps(result)
 
-    @pre_cache(expire=60*3, type='memory', query_args=True)
+    @pre_jsonp()
+    @pre_cache(expire=60*3, type='memory')
     def prev(self, lang=None, id=None, keyword=None):
         query = self.auto_q.order_by(asc(Auto.added), asc(Auto.id))
         query = query.filter(Auto.id>id)
         result = self._get(query, keyword)
         result['type'] = 'prev'
-        return self._check_callback(result)
+        return dumps(result)
 
-    @pre_cache(expire=60*3, type='memory', query_args=True)
+    
+    @pre_jsonp()
+    @pre_cache(expire=60*3, type='memory')
     def total(self, lang=None, keyword=None):
         import time
 #        time.sleep(10)
-        return self._check_callback(self._count(self.auto_q, keyword))
+        return dumps(self._count(self.auto_q, keyword))
 
-    @pre_cache(expire=60*3, type='memory', query_args=True)
+    @pre_jsonp()
+    @pre_cache(expire=60*3, type='memory')
     def total_new(self, lang=None, id=None, keyword=None):
         query = self.auto_q.filter(Auto.id>id)
 #        return dumps({'t':5})
-        return self._check_callback(self._count(query, keyword))
-
-    def _check_callback(self, json):
-        """
-            check callback for jsonp
-        """
-        json = dumps(json)
-        if('callback' not in request.GET):
-            return json
-        return "{callback}({json})".format(callback=request.GET['callback'], json = json)
+        return dumps(self._count(query, keyword))
 
     def _get(self, query, keyword=None):
 #        get values by keyword
         keyword = url_decode(keyword)
-        response.headers['Content-Type'] = 'application/json'
+#        response.headers['Content-Type'] = 'application/json'
         if keyword is None or keyword[1:]=='':
             return {
                 'total': query.count(),
