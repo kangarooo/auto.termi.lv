@@ -1405,7 +1405,7 @@ var CarList = new Class({
                 h2(
                     a({ href: auto['url'], 'target': '_blank'},
                     auto['name'].length>20 ? auto['name'].substr(0, 20)+'...' : auto['name']),
-                    span({ 'class': 'added'}, auto['added'])
+                    span({ 'class': 'added', 'datetime': auto['added']}, auto['added_text'])
                 ),
                 auto['image'] ? div({'class': 'images'},
                     auto['image']
@@ -1461,7 +1461,8 @@ var CarList = new Class({
                 this.id[1] = auto['id'];
             this.id[type] = auto['id'];
             auto['name'] = auto['mark']+' '+auto['model'];
-            auto['added'] = Date.parse(auto['added']).timeDiffInWords();
+            auto['added'] = auto['added'];
+            auto['added_text'] = Date.parse(auto['added']).timeDiffInWords();
             auto['image'] = auto['image'] ? this.renderImages(auto) : false;
             auto['params'] = this.renderParams(auto);
             auto['url'] = auto['urls'][0];
@@ -3120,6 +3121,15 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
         }
     });
     req.send('filter');
+    //update diff timer for all element once at minute
+    (function(){
+        $$('.added').each(function(el){
+            var d = el.get('datetime');
+            if(!d)
+                return
+            el.set('html', Date.parse(d).timeDiffInWords());
+        });
+    }).periodical(60*1000);
 
     //header
 //    [

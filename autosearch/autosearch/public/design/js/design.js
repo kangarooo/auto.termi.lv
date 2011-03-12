@@ -307,6 +307,15 @@ window.addEvent('domready', function(){
         }
     });
     req.send('filter');
+    //update diff timer for all element once at minute
+    (function(){
+        $$('.added').each(function(el){
+            var d = el.get('datetime');
+            if(!d)
+                return
+            el.set('html', Date.parse(d).timeDiffInWords());
+        });
+    }).periodical(60*1000);
 
     //header
 //    [

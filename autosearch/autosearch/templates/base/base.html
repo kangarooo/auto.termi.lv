@@ -30,7 +30,7 @@
                 <div id="copyright">
                     <ul id="f-menu">
                         <li><a href="{{h.language_path_prefix()}}/feedback" title="{{_('Feedback')}}">{{_('Feedback')}}</a></li>
-                        <li><a href="http://autotermi.uservoice.com/forums/99509-general" target="_blank" onclick="UserVoice.Popin.show(uservoiceOptions); return false;">{{_('New idea')}}</a></li>
+{#                        <li><a href="http://autotermi.uservoice.com/forums/99509-general" target="_blank" onclick="UserVoice.Popin.show(uservoiceOptions); return false;">{{_('New idea')}}</a></li>#}
                     </ul>
                     <div id="f-other">
                         <a href="#wrap" title="{{_('Back to top')}}">{{_('Back to top')}}</a> &uarr;
@@ -48,6 +48,7 @@
 
             </script>
         {% endif %}
+        {#
         <script type="text/javascript">
           var uservoiceOptions = {
             key: 'autotermi',
@@ -63,6 +64,6 @@
           }
           _loadSuper = window.onload;
           window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
-        </script>
+        </script> #}
     </body>
 </html>
