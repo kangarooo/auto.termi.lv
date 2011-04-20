@@ -113,7 +113,8 @@ class Auto(Base):
     currency = Column(Currency(1))                      #valūta
     
     telephone = Column(String(32))                      #telefons
-#    url_id = Column(Integer, ForeignKey('url.id'))      #saite
+    published = Column(Boolean())
+    correct = Column(Boolean())
 
     model = relation('Model', backref=backref('auto', order_by=id))
 #    url = relation('Url', backref=backref('auto', order_by=id))

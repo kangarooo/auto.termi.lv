@@ -10,6 +10,7 @@ class Mark(Base):
     id = Column(Integer, primary_key=True)
     last_added = Column(DateTime())
     name = Column(Unicode(100))
+    total = Column(Integer(8))
 
 #    def __init__(self, name=''):
 #        self.name = name

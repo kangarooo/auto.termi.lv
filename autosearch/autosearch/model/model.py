@@ -12,6 +12,7 @@ class Model(Base):
     id = Column(Integer, primary_key=True)
     last_added = Column(DateTime())
     name = Column(Unicode(100))
+    total = Column(Integer(8))
     published = Column(Boolean())
     order = Column(Integer(2))
 

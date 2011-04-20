@@ -91,14 +91,14 @@ var CarList = new Class({
         //additional template
         this.registerTemplate('url', function(data){
             li(
-                a({'href': data['href'], 'target': '_blank'}, data['source'])
+                a({'href': data['href'], 'target': '_new'}, data['source'])
             );
         });
         //main auto template
         this.registerTemplate('auto', function(auto) {
             li({'class': 'auto'},
                 h2(
-                    a({ href: auto['url'], 'target': '_blank'},
+                    a({ href: auto['url'], 'target': '_new'},
                     auto['name'].length>20 ? auto['name'].substr(0, 20)+'...' : auto['name']),
                     span({ 'class': 'added', 'datetime': auto['added']}, auto['added_text'])
                 ),
@@ -254,7 +254,7 @@ var CarList = new Class({
                 if(value['tehpassport_is']===false)
                     return this.options.lang['none'];
                 if(check(type, value)){
-                    var m = Date.parse(value[type]).diff(new Date(), 'month');
+                    var m = Date.parse(value[type]).diff(new Date().set('date', 1), 'month');
                     /*if(m>=0)
                         return this.options.lang['one month'];
                     m = -1*m;

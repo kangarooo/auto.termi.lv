@@ -24,40 +24,11 @@ load_environment(conf.global_conf, conf.local_conf)
 from autosearch.model.meta import Session
 from autosearch.model.currency_rate import CurrencyRate, Currency
 
-LOG_FILENAME = sys.argv[2]
-logger = logging.getLogger("get currency parser")
-logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler(LOG_FILENAME)
-fh.setLevel(logging.DEBUG)
-fh.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-logger.addHandler(fh)
+import parse.Fetch
 
-class Fetch:
-    url = ''
+import parse.logger
 
-    def get_content(self, url):
-        time.sleep(2)
-        self._console('fetch: '+url)
-        try:
-            request = urllib2.Request(url)
-            request.add_header('User-Agent', 'termibot/0.1 (+http://termi.lv)')
-            cont = urllib2.urlopen(request, None, 30)
-            return {
-                'content': cont.read(),
-                'code': 200,
-                'charset': cont.headers['content-type'].split('charset=')[-1]}
-        except urllib2.URLError, e:
-            if hasattr(e, 'reason'):
-                return {
-                    'content': '',
-                    'code': 408,
-                    'reason': e.reason
-                }
-            elif hasattr(e, 'code'):
-                return {
-                    'content': e.read(),
-                    'code': e.code
-                }
+class Fetch(parse.Fetch.Fetch):
 
     def parse_rss(self, url):
         parse = self.get_content(url)
@@ -74,9 +45,7 @@ class Fetch:
             rate = unicode(item.find('rate').text.strip())
             if id in need:
                 currency[id] = float(rate)/float(units)
-#            if not self._check_url(link):
-#                response = self.get_content(link)
-#                self._add_new_link(link, unicode(response['content'], response['charset']), response['code'])
+
         currency['LVL'] = 1
         for c in currency:
             self._add_new(need.index(c), currency[c])
@@ -88,8 +57,10 @@ class Fetch:
             self._console('added')
 
     def _console(self, msg):
-        logger.info(msg)
+        log.info(msg)
 
 
+log = parse.logger.Logger(sys.argv[2], "get currency parser")
 fetch = Fetch()
+
 fetch.parse_rss('http://www.bank.lv/vk/xml.xml')

@@ -23,12 +23,14 @@ var Filter = new Class({
             }).inject(list);
             var name = new Element('span', {'class': 'f-name', 'html': item['name']}).inject(c);
             var next = this[item['type']](c, item, this.options.SU);
-            if (['l', 'o'].contains(item['url']))
+            if (['l', 'o'].contains(item['url'])){
                 name.addClass('clickable').addEvents({
                     'click': function(){
                         next.get('reveal').toggle();
                     }
-                }).fireEvent('click');
+                });
+                next.setStyle('display', 'none');
+            }
         }.bind(this));
         this.drawButton();
     },

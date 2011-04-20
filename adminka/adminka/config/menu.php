@@ -15,6 +15,9 @@ $editNavigation = array(
                 , 'last_added'=>array(
                         'type'=>'editLink'
                 )
+                , 'total'=>array(
+                        'type'=>'editLink'
+                )
                 , 'mark_id'=>array(
 			'type'=>'link',
                         'possible'=>getMarks()
@@ -44,6 +47,10 @@ $editNavigation = array(
                         'type' => 'text'
                 ),
                 'name' => array(
+                        'type' => 'text'
+                        ,'function' => 'escArgHtml'
+                ),
+                'total' => array(
                         'type' => 'text'
                         ,'function' => 'escArgHtml'
                 )

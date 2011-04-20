@@ -4,7 +4,6 @@ from decorator import decorator
 from pylons import request
 
 def pre_cache(*args, **kwargs):
-    print 'cache'
     if config["debug"]:
         decorate = lambda f: f
     else:

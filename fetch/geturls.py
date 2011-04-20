@@ -6,11 +6,7 @@ import sys
 import datetime
 import time
 
-import logging
-import urllib2
-
 import lxml.html
-
 
 PATH = os.path.realpath(os.path.dirname(sys.argv[0]))
 sys.path.append(PATH+'/../autosearch')
@@ -25,58 +21,12 @@ from autosearch.model.meta import Session
 from autosearch.model.url import Url
 from autosearch.model.url_content import UrlContent
 
+import parse.Fetch
 
+import parse.logger
 
-
-
-
-LOG_FILENAME = sys.argv[2]
-logger = logging.getLogger("get urls parser")
-logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler(LOG_FILENAME)
-fh.setLevel(logging.DEBUG)
-fh.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-logger.addHandler(fh)
-#logger.debug("debug message")
-#logger.info("info message")
-#logger.warn("warn message")
-#logger.error("error message")
-#logger.critical("critical message")
-
-
-
-class Fetch:
-    url = ''
-
-    def get_content(self, url):
-        time.sleep(10)
-        self._console('fetch: '+url)
-        try:
-            request = urllib2.Request(url)
-            request.add_header('User-Agent', 'termibot/0.1 (+http://termi.lv)')
-            cont = urllib2.urlopen(request, None, 30)
-            return {
-                'content': cont.read(),
-                'code': 200,
-                'charset': cont.headers['content-type'].split('charset=')[-1]}
-        except urllib2.URLError, e:
-            if hasattr(e, 'reason'):
-                return {
-                    'content': '',
-                    'code': 408,
-                    'reason': e.reason
-                }
-            elif hasattr(e, 'code'):
-                return {
-                    'content': e.read(),
-                    'code': e.code
-                }
-            return {
-                'content': '',
-                'code': 0,
-                'reason': ''
-            }
-
+class Fetch(parse.Fetch.Fetch):
+    
     def parse_rss(self, url):
         parse = self.get_content(url)
         if parse['code'] is not 200:
@@ -89,6 +39,7 @@ class Fetch:
 #            i don't know why, by here works only with tail (not with text)
             link = unicode(item.find('link').tail.strip())
             if not self._check_url(link, Session):
+                time.sleep(10)
                 response = self.get_content(link)
                 self._add_new_link(link, unicode(response['content'], response['charset']), response['code'])
 
@@ -100,7 +51,7 @@ class Fetch:
         try:
             if self._check_url(url, session):
                 return False
-            u = Url(added=datetime.datetime.now(), url=url)
+            u = Url(added=datetime.datetime.now(), last_checked=datetime.datetime.now(), url=url)
             session.add(u)
             session.flush()
             u_content = UrlContent(added=datetime.datetime.now(),
@@ -116,8 +67,11 @@ class Fetch:
             raise
 
     def _console(self, msg):
-        logger.info(msg)
+        log.info(msg)
 
+
+
+log = parse.logger.Logger(sys.argv[2], "get urls parser")
 
 fetch = Fetch()
 

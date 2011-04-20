@@ -13,6 +13,7 @@ class Url(Base):
 
     id = Column(Integer, primary_key=True)
     added = Column(DateTime())
+    last_checked = Column(DateTime())
     auto_id = Column(Integer, ForeignKey('auto.id'))
     url = Column(Unicode(500))
 

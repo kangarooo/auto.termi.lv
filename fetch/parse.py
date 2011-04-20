@@ -7,7 +7,6 @@ import Image as ImageManipulator
 import urllib
 import random
 import string
-import logging
 
 PATH = os.path.realpath(os.path.dirname(sys.argv[0]))
 
@@ -31,18 +30,14 @@ from sqlalchemy import desc
 
 from sqlalchemy.orm import contains_eager
 
-from urlparse import urlparse
-from HtmlParser import HtmlParser
+#from urlparse import urlparse
+#from HtmlParser import HtmlParser
 
-from ParserParams import SEARCH_VALUES, SEARCH_PARAMS
+from parse.ParserParams import SEARCH_VALUES, SEARCH_PARAMS
 
-LOG_FILENAME = sys.argv[2]
-logger = logging.getLogger("get urls parser")
-logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler(LOG_FILENAME)
-fh.setLevel(logging.DEBUG)
-fh.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-logger.addHandler(fh)
+import parse.logger
+import parse.Parse
+log = parse.logger.Logger(sys.argv[2], "parse urls")
 
 #                m-(mark)
 #                y-(izlaiduma gads)
@@ -60,56 +55,22 @@ for mark in marks:
     SEARCH_PARAMS[0]['params']['possible'].append(SEARCH_VALUES[mark['name']] if mark['name'] in SEARCH_VALUES else mark['name'])
 
 
-class Parse:
-
+class SaveCar(parse.Parse.ParseCar):
+    
     def __init__(self, p, session):
-        self.search_params = p
+        super(SaveCar, self).__init__(p)
         self.session = session
 
     def get_params(self, url):
-        urlparams = urlparse(url.url)
-        html = HtmlParser(url.url_content.content, urlparams.scheme+'://'+urlparams.netloc)
-        errors = []
-        results = []
-        for i in range(len(self.search_params)):
-            param = self.search_params[i]
-            if 'eval' in param:
-                eval_param = param['eval'].split('.')
-                if len(eval_param)==2:
-                    param[eval_param[0]][eval_param[1]] = eval(param['eval_string'])
-            res = html.get(param['possible'], param['params'])
-            if res is None:
-                errors.append(' '.join(param['possible']))
-                if 'critical' in param and not param['critical']:
-                    results.append({'result': None})
-                else:
-    #                write errors
-                    logger.info('error: '+url.url+': '+(';'.join(errors)))
-                    url.url_content.error = ';'.join(errors)
-                    url.url_content.parsed = True
-                    self.session.flush()
-                    return None
-            else:
-                results.append(res)
-        new_car = {}
-        for r in range(len(results)):
-            if 'tehpassport'==self.search_params[r]['name']:
-                if 'type' in results[r]:
-                    if results[r]['type'] == 'possible':
-                        new_car['tehpassport_is'] = False if results[r]['result'] is 0 else True
-                        new_car['tehpassport'] = None
-                    elif results[r]['type'] == 'regex':
-                        new_car['tehpassport_is'] = None
-                        new_car['tehpassport'] = results[r]['result']
-            else:
-                new_car[self.search_params[r]['name']] = results[r]['result']
-            new_car['images'] = html.get_image()
-#        return None
-        self.add_auto(new_car, url)
-        logger.info('parsed: '+url.url)
-        url.url_content.error = unicode(';'.join(errors))
+        res = super(SaveCar, self).get_params(url.url, url.url_content.content)
+
+        url.url_content.error = unicode(';'.join(res['errors']))
         url.url_content.parsed = True
         self.session.flush()
+        if not res['parsed']:
+            return None
+
+        self.add_auto(res['new_car'], url)
 
     def add_auto(self, values, url):
         values['model'] = unicode(values['model'])
@@ -119,7 +80,7 @@ class Parse:
             model = model_q.one()
             model.last_added = datetime.datetime.now()
         else:
-            model = Model(last_added=datetime.datetime.now(), name=values['model'], order=0, published=False, mark_id=mark_id)
+            model = Model(last_added=datetime.datetime.now(), name=values['model'], order=0, published=False, total=0, mark_id=mark_id)
             self.session.add(model)
         mark = self.session.query(Mark).filter_by(id=model.mark_id).one()
         mark.last_added = datetime.datetime.now()
@@ -144,6 +105,8 @@ class Parse:
             price = values['price'],
             currency = values['currency'],
             telephone = values['telephone'],
+            published = True,
+            correct = True,
 #            url_id = url.id
         )
         self.session.add(auto)
@@ -202,10 +165,10 @@ class Parse:
 session = Session()
 url_q = session.query(Url).outerjoin(UrlContent).options(contains_eager('url_content'))
 
-parser = Parse(SEARCH_PARAMS, session)
+parser = SaveCar(SEARCH_PARAMS, session)
 
 
-for url in url_q.filter(UrlContent.parsed==False).order_by(desc(Url.added)).limit(5):
+for url in url_q.filter(UrlContent.parsed==False).order_by(desc(Url.added)).limit(10):
     try:
         parser.get_params(url)
         session.commit()

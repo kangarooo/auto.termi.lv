@@ -95,7 +95,7 @@ SEARCH_PARAMS = [{
                     'help': [u'marka']
                 },
                 'eval': 'params.before',
-                'eval_string': 'results[-1]["match"]'
+                'eval_string': 'results["mark"]["match"]'
             }, {
                 'name': 'year',
                 'critical': False,

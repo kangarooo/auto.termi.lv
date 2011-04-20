@@ -79,7 +79,8 @@ class SearchController(BaseController):
             .outerjoin(Mark).options(contains_eager('model.mark'))\
             .options(eagerload('url'))\
             .options(eagerload('image'))\
-            .filter(Auto.added >= datetime.date.today() - datetime.timedelta(7))
+            .filter(Auto.published==True)
+#            .filter(Auto.added >= datetime.date.today() - datetime.timedelta(7))
         self.mark_q = Session.query(Mark)\
             .outerjoin(Model).options(contains_eager('model'))\
             .filter(Model.published==True)\
@@ -96,7 +97,8 @@ class SearchController(BaseController):
     @pre_cache(expire=60*30, type='file')
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
-        self._load_params(self.mark_q.filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7)).filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7)))
+#        self._load_params(self.mark_q.filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7)).filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7)))
+        self._load_params(self.mark_q.filter(Mark.total>0).filter(Model.total>0))
         return dumps(self._params)
 
     @pre_jsonp()
@@ -215,14 +217,16 @@ class SearchController(BaseController):
 
             elif v['name']=='tehpassport':
 #                tehpassport slider, this is important, so i put it here
+                today = datetime.date.today()
+                today_month = datetime.date(year=today.year, month=today.month, day=1)
                 if v['value']['min']:
-                    query = query.filter(Auto.tehpassport>=(datetime.date.today()+relativedelta(months=+v['value']['min'])))
+                    query = query.filter(Auto.tehpassport>=(today_month+relativedelta(months=+v['value']['min'])))
                     if v['value']['max']:
-                        query = query.filter(Auto.tehpassport<=(datetime.date.today()+relativedelta(months=+v['value']['max'])))
+                        query = query.filter(Auto.tehpassport<=(today_month+relativedelta(months=+v['value']['max'])))
                 elif v['value']['max']==0:
                     query = query.filter(Auto.tehpassport_is==False)
                 elif v['value']['max']:
-                    query = query.filter(or_(Auto.tehpassport_is==False, Auto.tehpassport<=(datetime.date.today()+relativedelta(months=+v['value']['max']))))
+                    query = query.filter(or_(Auto.tehpassport_is==False, Auto.tehpassport<=(today_month+relativedelta(months=+v['value']['max']))))
 
             elif v['name']=='price':
                 """filter with currency of price"""
@@ -291,7 +295,14 @@ class SearchController(BaseController):
                     'type': 'slider',
                     'value': {
                         'min': 1950,
-                        'max': 2011
+                        'max': 2011,
+                        'value': [1950, 1960, 1970,
+                            1975, 1980,
+                            1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990,
+                            1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
+                            2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+                            2011,
+                        ]
                     },
                 },
                 'engine': {
@@ -301,7 +312,13 @@ class SearchController(BaseController):
                     'value': {
                         'min': .5,
                         'max': 5,
-                        'type': 'float'
+                        'type': 'float',
+                        'value': [.5, 1,
+                            1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
+                            2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0,
+                            3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0,
+                            4.5, 5.0
+                        ]
                     },
                 },
                 'engine_type': {
@@ -322,7 +339,12 @@ class SearchController(BaseController):
                     'type': 'slider',
                     'value': {
                         'min': 10000,
-                        'max': 1000000
+                        'max': 1000000,
+                        'value': [
+                            10000, 50000, 100000,
+                            200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000,
+                            1000000
+                        ]
                     },
                 },
                 'tehpassport': {

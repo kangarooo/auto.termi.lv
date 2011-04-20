@@ -36,13 +36,11 @@ session = Session()
 url_q = session.query(Auto)\
             .outerjoin(Model).options(contains_eager('model'))\
             .outerjoin(Mark).options(contains_eager('model.mark'))\
-            .options(eagerload('url'))\
-            .options(eagerload('url.url_content'))\
-            .options(eagerload('image'))\
             .filter(Auto.added <= datetime.date.today() - datetime.timedelta(8))
 
 for a in url_q.all():
     print a.id
+
     try:
         if a.image and len(a.image)>0:
             for i in a.image:
@@ -57,11 +55,11 @@ for a in url_q.all():
                 session.delete(u)
         session.delete(a)
 
-        session.flush()
+        session.commit()
 
 
     except:
-
+        session.rollback()
         raise
 
 #/www/auto.termi.lv/fetch/remove_old.py 2 /www/auto.termi.lv/log/remove_old.log >> /www/auto.termi.lv/log/remove_old-cron.log 2>&1
