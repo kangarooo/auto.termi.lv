@@ -32,16 +32,19 @@ class Fetch(parse.Fetch.Fetch):
         if parse['code'] is not 200:
             self._console('error: '+str(parse['code'])+parse['content'])
             return False
-        rss = lxml.html.fromstring(parse['content'])
+        rss = lxml.etree.fromstring(parse['content'])
         for item in rss.xpath("./channel/item"):
-            if item.text_content().lower().find(u'pārdod')==-1:
-                continue
+#            if item.text_content().lower().find(u'pārdod')==-1:
+#                continue
 #            i don't know why, by here works only with tail (not with text)
-            link = unicode(item.find('link').tail.strip())
+            link = unicode(item.find('link').text.strip())
             if not self._check_url(link, Session):
                 time.sleep(10)
                 response = self.get_content(link)
-                self._add_new_link(link, unicode(response['content'], response['charset']), response['code'])
+                response['content'] = unicode(response['content'], response['charset'])
+                if response['content'].lower().find(u'pārdod')==-1:
+                    continue
+                self._add_new_link(link, response['content'], response['code'])
 
     def _check_url(self, url, session):
         return session.query(Url).filter_by(url=url).count()>0
