@@ -1,4 +1,5 @@
 window.addEvent('domready', function(){
+//    return;
     Locale.use(['lv-LV', 'ru-LV', 'lg-LG'][lang]);
     var path = ['', '/ru', '/lg'][lang]
     var window_scroll = new Fx.Scroll(window);
@@ -65,7 +66,7 @@ window.addEvent('domready', function(){
 //    })();
 //    return;
     var car_list = new CarList({
-        'el': document.id('objects'),
+        'el': document.id('objects').set('html', ''),
         'params': [
             {'name': Locale.get('Object.'+'Year'), 'value': 'year'},
             {'name': Locale.get('Object.'+'Engine'), 'value': 'engine'},

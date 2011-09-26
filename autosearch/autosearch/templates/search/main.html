@@ -10,8 +10,66 @@
 <div class="liquid">
     <div class="liquid-wrap">
         <div id="objects">
-            
-            {% block car_list %}{% endblock %}
+            {% block car_list %}
+            <ol>
+                {% for auto in c.data.auto %}
+                <li class="auto">
+                    <h2>
+                        <a href="{{ auto.urls.0 }}">{{ [auto.mark, auto.model]|join(' ')|truncate(20, True) }}</a>
+                        <span class="added">{{ auto.added }}</span>
+                    </h2>
+                    {% if auto.image %}
+                         <div class="images">
+                            {% for i in auto.image %}
+                                <img src="{{ i.src }}" alt="{{ auto.mark }} {{ auto.model }}" />
+                            {% endfor %}
+                         </div>
+                   {% endif %}
+                   <ul class="params">
+                       <li{% if not auto.year %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Year') }}</strong>
+                           <span class="value">{{ auto.year|default('-', True) }}</span>
+                       </li>
+                       <li{% if not auto.engine %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Engine') }}</strong>
+                           <span class="value">{{ auto.engine|default('-', True) }} {{ auto.gear_type|default('-', True) }}</span>
+                       </li>
+                       <li{% if not auto.gearbox %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Gearbox') }}</strong>
+                           <span class="value">{{ auto.gearbox|default('-', True) }} {{ auto.drive_type|default('-', True) }}</span>
+                       </li>
+                       <li{% if not auto.mileage %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Mileage') }}</strong>
+                           <span class="value">{{ auto.mileage|default('-', True) }} km</span>
+                       </li>
+                       <li{% if not auto.tehpassport %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Tehpassport') }}</strong>
+                           <span class="value">{{ auto.tehpassport|default('-', True) }}</span>
+                       </li>
+                       <li{% if not auto.car_type %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Car type') }}</strong>
+                           <span class="value">{{ auto.car_type|default('-', True) }}</span>
+                       </li>
+                       <li{% if not auto.place %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Place') }}</strong>
+                           <span class="value">{{ auto.place|default('-', True) }}</span>
+                       </li>
+                       <li{% if not auto.price %} class="empty-value"{% endif %}>
+                           <strong class="type">{{ _('Price') }}</strong>
+                           <span class="value">{{ auto.price|default('-', True) }} {{ auto.currency|default('-', True) }}</span>
+                       </li>
+                   </ul>
+                   {% if auto.urls %}
+                   <ul class="additional">
+                       {% for url in auto.urls %}
+                       <li>{{ url|urlize(25, True) }}</li>
+                       {% endfor %}
+                   </ul>
+                   {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+            {% endblock %}
         </div>
     </div>
 

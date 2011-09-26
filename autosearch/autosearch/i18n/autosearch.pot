@@ -8,28 +8,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: autosearch 0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-01-31 14:35+0200\n"
+"POT-Creation-Date: 2011-09-26 23:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.5\n"
+"Generated-By: Babel 0.9.6\n"
 
-#: autosearch/controllers/content.py:27
+#: autosearch/controllers/content.py:26
 msgid "About title"
 msgstr ""
 
-#: autosearch/controllers/content.py:28
+#: autosearch/controllers/content.py:27
 msgid "About content page"
 msgstr ""
 
-#: autosearch/controllers/content.py:33
+#: autosearch/controllers/content.py:32
 msgid "Feedback title"
 msgstr ""
 
-#: autosearch/controllers/content.py:34
+#: autosearch/controllers/content.py:33
 msgid "Feedback content page"
 msgstr ""
 
@@ -41,203 +41,203 @@ msgstr ""
 msgid "Error Message"
 msgstr ""
 
-#: autosearch/controllers/search.py:321
+#: autosearch/controllers/search.py:359
 msgid "none"
 msgstr ""
 
-#: autosearch/controllers/search.py:402
+#: autosearch/controllers/search.py:446
 msgid "Gasoline"
 msgstr ""
 
-#: autosearch/controllers/search.py:402
+#: autosearch/controllers/search.py:446
 msgid "Gas"
 msgstr ""
 
-#: autosearch/controllers/search.py:402
+#: autosearch/controllers/search.py:446
 msgid "Diesel"
 msgstr ""
 
-#: autosearch/controllers/search.py:402
+#: autosearch/controllers/search.py:446
 msgid "Hybrid"
 msgstr ""
 
-#: autosearch/controllers/search.py:403
+#: autosearch/controllers/search.py:447
 msgid "Manual"
 msgstr ""
 
-#: autosearch/controllers/search.py:403
+#: autosearch/controllers/search.py:447
 msgid "Auto"
 msgstr ""
 
-#: autosearch/controllers/search.py:404
+#: autosearch/controllers/search.py:448
 msgid "Rear"
 msgstr ""
 
-#: autosearch/controllers/search.py:404
+#: autosearch/controllers/search.py:448
 msgid "Front"
 msgstr ""
 
-#: autosearch/controllers/search.py:404
+#: autosearch/controllers/search.py:448
 msgid "Four"
 msgstr ""
 
-#: autosearch/controllers/search.py:405
+#: autosearch/controllers/search.py:449
 msgid "SUV"
 msgstr ""
 
-#: autosearch/controllers/search.py:405
+#: autosearch/controllers/search.py:449
 msgid "Hatchback"
 msgstr ""
 
-#: autosearch/controllers/search.py:405
+#: autosearch/controllers/search.py:449
 msgid "Cabriolet"
 msgstr ""
 
-#: autosearch/controllers/search.py:406
+#: autosearch/controllers/search.py:450
 msgid "Coupe"
 msgstr ""
 
-#: autosearch/controllers/search.py:406
+#: autosearch/controllers/search.py:450
 msgid "Minibus"
 msgstr ""
 
-#: autosearch/controllers/search.py:406
+#: autosearch/controllers/search.py:450
 msgid "Minivan"
 msgstr ""
 
-#: autosearch/controllers/search.py:406
+#: autosearch/controllers/search.py:450
 msgid "Pickup"
 msgstr ""
 
-#: autosearch/controllers/search.py:406
+#: autosearch/controllers/search.py:450
 msgid "Sedan"
 msgstr ""
 
-#: autosearch/controllers/search.py:406
+#: autosearch/controllers/search.py:450
 msgid "Universal"
 msgstr ""
 
-#: autosearch/controllers/search.py:407
+#: autosearch/controllers/search.py:451
 msgid "Riga"
 msgstr ""
 
-#: autosearch/controllers/search.py:407
+#: autosearch/controllers/search.py:451
 msgid "Riga dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:407
+#: autosearch/controllers/search.py:451
 msgid "Jurmala dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:407
+#: autosearch/controllers/search.py:451
 msgid "Aizkraukle dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:407
+#: autosearch/controllers/search.py:451
 msgid "Aluksne dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:408
+#: autosearch/controllers/search.py:452
 msgid "Balvi dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:408
+#: autosearch/controllers/search.py:452
 msgid "Bauska dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:408
+#: autosearch/controllers/search.py:452
 msgid "Cesis dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:408
+#: autosearch/controllers/search.py:452
 msgid "Daugavpils dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:408
+#: autosearch/controllers/search.py:452
 msgid "Dobele dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:409
+#: autosearch/controllers/search.py:453
 msgid "Gulbene dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:409
+#: autosearch/controllers/search.py:453
 msgid "Jelgava dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:409
+#: autosearch/controllers/search.py:453
 msgid "Jekabpils dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:409
+#: autosearch/controllers/search.py:453
 msgid "Kraslava dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:409
+#: autosearch/controllers/search.py:453
 msgid "Kuldiga dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:410
+#: autosearch/controllers/search.py:454
 msgid "Liepaja dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:410
+#: autosearch/controllers/search.py:454
 msgid "Limbazi dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:410
+#: autosearch/controllers/search.py:454
 msgid "Ludza dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:410
+#: autosearch/controllers/search.py:454
 msgid "Madona dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:410
+#: autosearch/controllers/search.py:454
 msgid "Ogre dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:411
+#: autosearch/controllers/search.py:455
 msgid "Preili dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:411
+#: autosearch/controllers/search.py:455
 msgid "Rezekne dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:411
+#: autosearch/controllers/search.py:455
 msgid "Saldus dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:411
+#: autosearch/controllers/search.py:455
 msgid "Talsi dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:411
+#: autosearch/controllers/search.py:455
 msgid "Tukums dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:412
+#: autosearch/controllers/search.py:456
 msgid "Valka dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:412
+#: autosearch/controllers/search.py:456
 msgid "Valmiera dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:412
+#: autosearch/controllers/search.py:456
 msgid "Ventspils dis."
 msgstr ""
 
-#: autosearch/controllers/search.py:413
+#: autosearch/controllers/search.py:457
 msgid "LVL"
 msgstr ""
 
-#: autosearch/controllers/search.py:413
+#: autosearch/controllers/search.py:457
 msgid "USD"
 msgstr ""
 
-#: autosearch/controllers/search.py:413
+#: autosearch/controllers/search.py:457
 msgid "EUR"
 msgstr ""
 
@@ -265,27 +265,43 @@ msgstr ""
 msgid "Back to top"
 msgstr ""
 
-#: autosearch/templates/base/base.html:33
-msgid "New idea"
-msgstr ""
-
 #: autosearch/templates/base/content.html:5
 msgid "Back to filter"
 msgstr ""
 
 #: autosearch/templates/search/car_list.html:20
+#: autosearch/templates/search/main.html:30
 msgid "Year"
 msgstr ""
 
 #: autosearch/templates/search/car_list.html:24
+#: autosearch/templates/search/main.html:58
 msgid "Price"
 msgstr ""
 
 #: autosearch/templates/search/car_list.html:28
+#: autosearch/templates/search/main.html:54
 msgid "Place"
 msgstr ""
 
 #: autosearch/templates/search/car_list.html:32
+#: autosearch/templates/search/main.html:46
 msgid "Tehpassport"
+msgstr ""
+
+#: autosearch/templates/search/main.html:34
+msgid "Engine"
+msgstr ""
+
+#: autosearch/templates/search/main.html:38
+msgid "Gearbox"
+msgstr ""
+
+#: autosearch/templates/search/main.html:42
+msgid "Mileage"
+msgstr ""
+
+#: autosearch/templates/search/main.html:50
+msgid "Car type"
 msgstr ""
 
