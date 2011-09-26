@@ -17,6 +17,7 @@ from pylons.i18n.translation import _
 from autosearch.lib.cache import pre_cache, pre_jsonp
 
 from autosearch.lib.base import BaseController, render
+from pylons import tmpl_context as c
 from autosearch.lib.base import Session
 from autosearch.lib.parser import *
 
@@ -91,6 +92,7 @@ class SearchController(BaseController):
 
     @pre_cache(expire=60*60*12, type='file')
     def index(self, lang=None):
+        c.data = self._get(self.auto_q.order_by(desc(Auto.added), desc(Auto.id)), u'')
         return render('search/main.html')
 
     @pre_jsonp()
@@ -409,18 +411,18 @@ class SearchController(BaseController):
             'added': str(a.added),#self._time_diff(a.added),
             'year': a.year.year,
             'engine': a.engine,
-            'engine_type': _(a.engine_type),
+            'engine_type': _(a.engine_type) if a.engine_type else None,
             'gearbox': a.gearbox,
-            'gear_type': _(a.gear_type),
-            'drive_type': _(a.drive_type),
+            'gear_type': _(a.gear_type) if a.gear_type else None,
+            'drive_type': _(a.drive_type) if a.drive_type else None,
             'mileage': a.mileage,
             'tehpassport_is': a.tehpassport_is,
             'tehpassport': str(a.tehpassport) if a.tehpassport else None,
-            'car_type': _(a.car_type),
-            'place': _(a.place),
+            'car_type': _(a.car_type) if a.car_type else None,
+            'place': _(a.place) if a.place else None,
             'color': a.color,
             'price': a.price,
-            'currency': _(a.currency),
+            'currency': _(a.currency) if a.currency else None,
             'telephone': a.telephone,
         } for a in auto]
 

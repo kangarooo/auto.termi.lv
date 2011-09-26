@@ -1066,12 +1066,14 @@ var Popup = new Class({
             }).inject(list);
             var name = new Element('span', {'class': 'f-name', 'html': item['name']}).inject(c);
             var next = this[item['type']](c, item, this.options.SU);
-            if (['l', 'o'].contains(item['url']))
+            if (['l', 'o'].contains(item['url'])){
                 name.addClass('clickable').addEvents({
                     'click': function(){
                         next.get('reveal').toggle();
                     }
-                }).fireEvent('click');
+                });
+                next.setStyle('display', 'none');
+            }
         }.bind(this));
         this.drawButton();
     },
@@ -1396,14 +1398,14 @@ var CarList = new Class({
         //additional template
         this.registerTemplate('url', function(data){
             li(
-                a({'href': data['href'], 'target': '_blank'}, data['source'])
+                a({'href': data['href'], 'target': '_new'}, data['source'])
             );
         });
         //main auto template
         this.registerTemplate('auto', function(auto) {
             li({'class': 'auto'},
                 h2(
-                    a({ href: auto['url'], 'target': '_blank'},
+                    a({ href: auto['url'], 'target': '_new'},
                     auto['name'].length>20 ? auto['name'].substr(0, 20)+'...' : auto['name']),
                     span({ 'class': 'added', 'datetime': auto['added']}, auto['added_text'])
                 ),
@@ -1559,7 +1561,7 @@ var CarList = new Class({
                 if(value['tehpassport_is']===false)
                     return this.options.lang['none'];
                 if(check(type, value)){
-                    var m = Date.parse(value[type]).diff(new Date(), 'month');
+                    var m = Date.parse(value[type]).diff(new Date().set('date', 1), 'month');
                     /*if(m>=0)
                         return this.options.lang['one month'];
                     m = -1*m;
@@ -2813,6 +2815,7 @@ HistoryManager = new Class({
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-20807015-1']);
 _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
+//    return;
     Locale.use(['lv-LV', 'ru-LV', 'lg-LG'][lang]);
     var path = ['', '/ru', '/lg'][lang]
     var window_scroll = new Fx.Scroll(window);
@@ -2879,7 +2882,7 @@ _gaq.push(['_trackPageview']);window.addEvent('domready', function(){
 //    })();
 //    return;
     var car_list = new CarList({
-        'el': document.id('objects'),
+        'el': document.id('objects').set('html', ''),
         'params': [
             {'name': Locale.get('Object.'+'Year'), 'value': 'year'},
             {'name': Locale.get('Object.'+'Engine'), 'value': 'engine'},
