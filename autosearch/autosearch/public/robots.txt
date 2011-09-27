@@ -1,4 +1,7 @@
 User-agent: *
+Allow: /
+Allow: /lg
+Allow: /ru
 Disallow: /i
 Disallow: /s
 Disallow: /c
