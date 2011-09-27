@@ -100,7 +100,11 @@ class SearchController(BaseController):
     def params(self, lang=None):
         response.headers['Content-Type'] = 'application/json'
 #        self._load_params(self.mark_q.filter(Mark.last_added >= datetime.date.today() - datetime.timedelta(7)).filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7)))
-        self._load_params(self.mark_q.filter(Mark.total>0).filter(Model.total>0))
+#        self._load_params(self.mark_q.filter(Mark.total>0).filter(Model.total>0))
+        self._load_params(self.mark_q
+            .filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7))
+            .filter(Model.last_added >= datetime.date.today() - datetime.timedelta(7))
+        )
         return dumps(self._params)
 
     @pre_jsonp()
