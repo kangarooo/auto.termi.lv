@@ -36,7 +36,7 @@ session = Session()
 url_q = session.query(Auto)\
             .outerjoin(Model).options(contains_eager('model'))\
             .outerjoin(Mark).options(contains_eager('model.mark'))\
-            .filter(Auto.added <= datetime.date.today() - datetime.timedelta(8))
+            .filter(Auto.added <= datetime.date.today() - datetime.timedelta(2))
 
 for a in url_q.all():
     print a.id

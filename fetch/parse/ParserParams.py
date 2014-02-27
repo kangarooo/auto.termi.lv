@@ -86,7 +86,8 @@ SEARCH_PARAMS = [{
                 'possible': [u'marka'],
                 'params': {
                     'possible': []
-                }
+                },
+                'critical': True,
             }, {
                 'name': 'model',
                 'possible': [u'modelis'],
@@ -160,7 +161,7 @@ SEARCH_PARAMS = [{
                 'possible': [u'tehniskā apskate līdz', u'tehniskā apskate'],
                 'params': {
                     'possible': [[u'bez apskates', u'nav']],
-                    'regex': '[0-9]{2}[.]{1}[0-9]{4}',
+                    'regex': '((01)|(02)|(03)|(04)|(05)|(06)|(07)|(08)|(09)|(10)|(11)|(12))[.]{1}[0-9]{4}',
                     'prelambda': lambda x: x.replace(' ', '').replace(',', '.').replace('/', '.'),
                     'lambda': lambda x: datetime.datetime.strptime(x, '%m.%Y').date(),
                 }
